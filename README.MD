@@ -1,6 +1,6 @@
 ## **Documentação do Cluster Apuana**
 
-A página da web do cluster foi gerada utilizando a ferramenta Sphinx, utilizando a linguagem Python para gerar páginas na web. Recomenda-se uma leitura nos primeiros passos para melhor entendimento de como a ferramenta funciona. Esta documentação seguiu rigorosamente os passos descritos no site oficial. Segue link : <https://www.sphinx-doc.org/en/master/usage/quickstart.html>
+A página da web do cluster foi gerada utilizando a ferramenta Sphinx, que utiliza a linguagem Python para gerar páginas na web. Recomenda-se uma leitura nos primeiros passos para melhor entendimento de como a ferramenta funciona. Esta documentação seguiu rigorosamente os passos descritos no site oficial. Segue link : <https://www.sphinx-doc.org/en/master/usage/quickstart.html>
 ### Comandos necessários para gerar a redenrização na web utilizando a ferramenta Sphinx do Python
 
 ### Considera-se que um ambiente virtual foi criado para comportar todos os pacotes necessários
