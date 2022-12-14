@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>The module command &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The module command</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-module-command">
+<h1>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>For a list of available modules, simply use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module avail
+<span class="go">--------------------------------------------------------------------------------------------------------------- Global Aliases ---------------------------------------------------------------------------------------------------------------</span>
+<span class="go">    cuda/10.0 -&gt; cudatoolkit/10.0    cuda/9.2      -&gt; cudatoolkit/9.2                                 pytorch/1.4.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1    tensorflow/1.15 -&gt; python/3.7/tensorflow/1.15</span>
+<span class="go">    cuda/10.1 -&gt; cudatoolkit/10.1    mujoco-py     -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.0       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0    tensorflow/2.2  -&gt; python/3.7/tensorflow/2.2</span>
+<span class="go">    cuda/10.2 -&gt; cudatoolkit/10.2    mujoco-py/2.0 -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1</span>
+<span class="go">    cuda/11.0 -&gt; cudatoolkit/11.0    pytorch       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1    tensorflow          -&gt; python/3.7/tensorflow/2.2</span>
+<span class="go">    cuda/9.0  -&gt; cudatoolkit/9.0     pytorch/1.4.0 -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.0    tensorflow-cpu/1.15 -&gt; python/3.7/tensorflow/1.15</span>
+
+<span class="go">--------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Core ---------------------------------------------------------------------------------------------------</span>
+<span class="go">    Mila       (S,L)    anaconda/3 (D)    go/1.13.5        miniconda/2        mujoco/1.50        python/2.7    python/3.6        python/3.8           singularity/3.0.3    singularity/3.2.1    singularity/3.5.3 (D)</span>
+<span class="go">    anaconda/2          go/1.12.4         go/1.14   (D)    miniconda/3 (D)    mujoco/2.0  (D)    python/3.5    python/3.7 (D)    singularity/2.6.1    singularity/3.1.1    singularity/3.4.2</span>
+
+<span class="go">------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Compiler -------------------------------------------------------------------------------------------------</span>
+<span class="go">    python/3.7/mujoco-py/2.0</span>
+
+<span class="go">--------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Cuda ---------------------------------------------------------------------------------------------------</span>
+<span class="go">    cuda/10.0/cudnn/7.3        cuda/10.0/nccl/2.4         cuda/10.1/nccl/2.4     cuda/11.0/nccl/2.7        cuda/9.0/nccl/2.4     cudatoolkit/9.0     cudatoolkit/10.1        cudnn/7.6/cuda/10.0/tensorrt/7.0</span>
+<span class="go">    cuda/10.0/cudnn/7.5        cuda/10.1/cudnn/7.5        cuda/10.2/cudnn/7.6    cuda/9.0/cudnn/7.3        cuda/9.2/cudnn/7.6    cudatoolkit/9.2     cudatoolkit/10.2        cudnn/7.6/cuda/10.1/tensorrt/7.0</span>
+<span class="go">    cuda/10.0/cudnn/7.6 (D)    cuda/10.1/cudnn/7.6 (D)    cuda/10.2/nccl/2.7     cuda/9.0/cudnn/7.5 (D)    cuda/9.2/nccl/2.4     cudatoolkit/10.0    cudatoolkit/11.0 (D)    cudnn/7.6/cuda/9.0/tensorrt/7.0</span>
+
+<span class="go">------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Pytorch --------------------------------------------------------------------------------------------------</span>
+<span class="go">    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.4.1    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.5.1 (D)    python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0</span>
+<span class="go">    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.5.0    python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1        python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1 (D)</span>
+
+<span class="go">------------------------------------------------------------------------------------------------ /cvmfs/config.mila.quebec/modules/Tensorflow ------------------------------------------------------------------------------------------------</span>
+<span class="go">    python/3.7/tensorflow/1.15    python/3.7/tensorflow/2.0    python/3.7/tensorflow/2.2 (D)</span>
+</pre></div>
+</div>
+<p>Modules can be loaded using the <code class="docutils literal notranslate"><span class="pre">load</span></code> command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load &lt;module&gt;</span>
+</pre></div>
+</div>
+<p>To search for a module or a software, use the command <code class="docutils literal notranslate"><span class="pre">spider</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module spider search_term</span>
+</pre></div>
+</div>
+<p>E.g.: by default, <code class="docutils literal notranslate"><span class="pre">python2</span></code> will refer to the os-shipped installation of <code class="docutils literal notranslate"><span class="pre">python2.7</span></code> and <code class="docutils literal notranslate"><span class="pre">python3</span></code> to <code class="docutils literal notranslate"><span class="pre">python3.6</span></code>.
+If you want to use <code class="docutils literal notranslate"><span class="pre">python3.7</span></code> you can type:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load python3.7</span>
+</pre></div>
+</div>
+</section>
+<section id="available-software">
+<h1>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Modules are divided in 5 main sections:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Section</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Core</p></td>
+<td><p>Base interpreter and software (Python, go, etc…)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler</p></td>
+<td><p>Interpreter-dependent software (<em>see the note below</em>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Cuda</p></td>
+<td><p>Toolkits, cudnn and related libraries</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pytorch/Tensorflow</p></td>
+<td><p>Pytorch/TF built with a specific Cuda/Cudnn
+version for Mila’s GPUs (<em>see the related paragraph</em>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Modules which are nested (../../..) usually depend on other software/module
+loaded alongside the main module.  No need to load the dependent software,
+the complex naming scheme allows an automatic detection of the dependent
+module(s):</p>
+<p>i.e.: Loading <code class="docutils literal notranslate"><span class="pre">cudnn/7.6/cuda/9.0/tensorrt/7.0</span></code> will load <code class="docutils literal notranslate"><span class="pre">cudnn/7.6</span></code> and
+<code class="docutils literal notranslate"><span class="pre">cuda/9.0</span></code> alongside</p>
+<p><code class="docutils literal notranslate"><span class="pre">python/3.X</span></code> is a particular dependency which can be served through
+<code class="docutils literal notranslate"><span class="pre">python/3.X</span></code> or <code class="docutils literal notranslate"><span class="pre">anaconda/3</span></code> and is not automatically loaded to let the
+user pick his favorite flavor.</p>
+</div>
+</section>
+<section id="default-package-location">
+<h1>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Python by default uses the user site package first and packages provided by
+<code class="docutils literal notranslate"><span class="pre">module</span></code> last to not interfere with your installation.  If you want to skip
+packages installed in your site-packages folder (in your /home directory), you
+have to start Python with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag.</p>
+<p>To check which package is loaded at import, you can print <code class="docutils literal notranslate"><span class="pre">package.__file__</span></code>
+to get the full path of the package.</p>
+<p><em>Example:</em></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
+<span class="gp">$ </span>python -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<span class="go">/home/mila/my_home/.local/lib/python3.7/site-packages/torch/__init__.py   &lt;== package from your own site-package</span>
+</pre></div>
+</div>
+<p>Now with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
+<span class="gp">$ </span>python -s -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<span class="go">/cvmfs/ai.mila.quebec/apps/x86_64/debian/pytorch/python3.7-cuda10.1-cudnn7.6-v1.5.0/lib/python3.7/site-packages/torch/__init__.py&#39;</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">The module command</a></li>
+<li><a class="reference internal" href="#available-software">Available Software</a></li>
+<li><a class="reference internal" href="#default-package-location">Default package location</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_portability_modules.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The module command</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

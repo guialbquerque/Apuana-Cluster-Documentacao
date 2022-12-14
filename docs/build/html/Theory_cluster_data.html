@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Processing data &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Processing data</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="processing-data">
+<h1>Processing data<a class="headerlink" href="#processing-data" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>For processing large amounts of data common for deep learning, either
+for dataset preprocessing or training, several techniques exist. Each
+has typical uses and limitations.</p>
+<section id="data-parallelism">
+<h2>Data parallelism<a class="headerlink" href="#data-parallelism" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>The first technique is called <strong>data parallelism</strong> (aka task
+parallelism in formal computer science). You simply run lots of
+processes each handling a portion of the data you want to
+process. This is by far the easiest technique to use and should be
+favored whenever possible. A common example of this is
+hyperparameter optimisation.</p>
+<p>For really small computations the time to setup multiple processes
+might be longer than the processing time and lead to waste. This can
+be addressed by bunching up some of the processes together by doing
+sequential processing of sub-partitions of the data.</p>
+<p>For the cluster systems it is also inadvisable to launch thousands of
+jobs and even if each job would run for a reasonable amount of time
+(several minutes at minimum), it would be best to make larger groups
+until the amount of jobs is in the low hundreds at most.</p>
+<p>Finally another thing to keep in mind is that the transfer bandwidth
+is limited between the filesystems (see <span class="xref std std-ref">Filesystem concerns</span>)
+and the compute nodes and if you run too many jobs using too much data
+at once they may end up not being any faster because they will spend
+their time waiting for data to arrive.</p>
+</section>
+<section id="model-parallelism">
+<h2>Model parallelism<a class="headerlink" href="#model-parallelism" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>The second technique is called <strong>model parallelism</strong> (which doesn’t
+have a single equivalent in formal computer science). It is used
+mostly when a single instance of a model will not fit in a computing
+resource (such as the GPU memory being too small for all the
+parameters).</p>
+<p>In this case, the model is split into its constituent parts, each
+processed independently and their intermediate results communicated
+with each other to arrive at a final result.</p>
+<p>This is generally harder but necessary to work with larger, more
+powerful models like GPT.</p>
+</section>
+<section id="communication-concerns">
+<h2>Communication concerns<a class="headerlink" href="#communication-concerns" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>The main difference of these two approaches is the need for
+communication between the multiple processes. Some common training
+methods, like stochastic gradient descent sit somewhere between the
+two, because they require some communication, but not a lot. Most
+people classify it as data parallelism since it sits closer to that
+end.</p>
+<p>In general for data parallelism tasks or tasks that communicate
+infrequently it doesn’t make a lot of difference where the processes
+sit because the communication bandwidth and latency will not have a
+lot of impact on the time it takes to complete the job.  The
+individual tasks can generally be scheduled independently.</p>
+<p>On the contrary for model parallelism you need to pay more attention
+to where your tasks are.  In this case it is usually required to use
+the facilities of the workload manager to group the tasks so that they
+are on the same machine or machines that are closely linked to ensure
+optimal communication.  What is the best allocation depends on the
+specific cluster architecture available and the technologies it
+support (such as <a class="reference external" href="https://en.wikipedia.org/wiki/InfiniBand">InfiniBand</a>,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Remote_direct_memory_access">RDMA</a>,
+<a class="reference external" href="https://en.wikipedia.org/wiki/NVLink">NVLink</a> or others)</p>
+</section>
+<section id="filesystem-concerns">
+<h2>Filesystem concerns<a class="headerlink" href="#filesystem-concerns" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>When working on a cluster, you will generally encounter several
+different filesystems.  Usually there will be names such as ‘home’,
+‘scratch’, ‘datasets’, ‘projects’, ‘tmp’.</p>
+<p>The reason for having different filesystems available instead of a
+single giant one is to provide for different use cases. For example,
+the ‘datasets’ filesystem would be optimized for fast reads but have
+slow write performance. This is because datasets are usually written
+once and then read very often for training.</p>
+<p>Different filesystems have different performance levels. For instance, backed
+up filesystems (such as <code class="docutils literal notranslate"><span class="pre">$PROJECT</span></code> in Digital Research Alliance of Canada
+clusters) provide more space and can handle large files but cannot sustain
+highly parallel accesses typically required for high speed model training.</p>
+<p>The set of filesystems provided by the cluster you are using should be
+detailed in the documentation for that cluster and the names can
+differ from those above. You should pay attention to their recommended
+use case in the documentation and use the appropriate filesystem for
+the appropriate job. There are cases where a job ran hundreds of times
+slower because it tried to use a filesystem that wasn’t a good fit for
+the job.</p>
+<p>One last thing to pay attention to is the data retention policy for
+the filesystems. This has two subpoints: how long is the data kept
+for, and are there backups.</p>
+<p>Some filesystems will have a limit on how long they keep their
+files. Typically the limit is some number of days (like 90 days) but
+can also be ‘as long as the job runs’ for some.</p>
+<p>As for backups, some filesystems will not have a limit for data, but
+will also not have backups. For those it is important to maintain a
+copy of any crucial data somewhere else. The data will not be
+purposefully deleted, but the filesystem may fail and lose all or part
+of its data. If you have any data that is crucial for a paper or your
+thesis keep an additional copy of it somewhere else.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Processing data</a><ul>
+<li><a class="reference internal" href="#data-parallelism">Data parallelism</a></li>
+<li><a class="reference internal" href="#model-parallelism">Model parallelism</a></li>
+<li><a class="reference internal" href="#communication-concerns">Communication concerns</a></li>
+<li><a class="reference internal" href="#filesystem-concerns">Filesystem concerns</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Theory_cluster_data.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Processing data</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

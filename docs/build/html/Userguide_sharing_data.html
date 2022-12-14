@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Sharing Data with ACLs &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="prev" title="Singularity" href="Userguide_singularity.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="Userguide_singularity.html" title="Singularity"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sharing Data with ACLs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sharing-data-with-acls">
+<h1>Sharing Data with ACLs<a class="headerlink" href="#sharing-data-with-acls" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Regular permissions bits are extremely blunt tools: They control access through
+only three sets of bits owning user, owning group and all others. Therefore,
+access is either too narrow (<code class="docutils literal notranslate"><span class="pre">0700</span></code> allows access only by oneself) or too wide
+(<code class="docutils literal notranslate"><span class="pre">770</span></code> gives all permissions to everyone in the same group, and <code class="docutils literal notranslate"><span class="pre">777</span></code> to
+literally everyone).</p>
+<p>ACLs (Access Control Lists) are an expansion of the permissions bits that allow
+more fine-grained, granular control of accesses to a file. They can be used to
+permit specific users access to files and folders even if conservative default
+permissions would have denied them such access.</p>
+<p>As an illustrative example, to use ACLs to allow <code class="docutils literal notranslate"><span class="pre">$USER</span></code> (<strong>oneself</strong>) to
+share with <code class="docutils literal notranslate"><span class="pre">$USER2</span></code> (<strong>another person</strong>) a “playground” folder hierarchy in
+Mila’s scratch filesystem at a location</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">/network/scratch/${USER:0:1}/$USER/X/Y/Z/...</span></code></p>
+</div></blockquote>
+<p>in a safe and secure fashion that allows both users to read, write, execute,
+search and delete each others’ files:</p>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><strong>1.</strong> Grant <strong>oneself</strong> permissions to access any <strong>future</strong> files/folders created
+by the other <em>(or oneself)</em></div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">-d</span></code> renders this permission a “default” / inheritable one)</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">setfacl -Rdm user:${USER}:rwx  /network/scratch/${USER:0:1}/$USER/X/Y/Z/</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<blockquote>
+<div><p>The importance of doing this seemingly-redundant step first is that files</p>
+</div></blockquote>
+<dl class="simple">
+<dt>and folders are <strong>always</strong> owned by only one person, almost always their</dt><dd><p>creator (the UID will be the creator’s, the GID typically as well). If that
+user is not yourself, you will not have access to those files unless the
+other person specifically gives them to you – or these files inherited a
+default ACL allowing you full access.</p>
+</dd>
+</dl>
+<p><strong>This</strong> is the inherited, default ACL serving that purpose.</p>
+</div>
+<div class="line-block">
+<div class="line"><strong>2.</strong> Grant <strong>the other</strong> permission to access any <strong>future</strong> files/folders created
+by the other <em>(or oneself)</em></div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">-d</span></code> renders this permission a “default” / inheritable one)</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">setfacl -Rdm user:${USER2}:rwx /network/scratch/${USER:0:1}/$USER/X/Y/Z/</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><strong>3.</strong> Grant <strong>the other</strong> permission to access any <strong>existing</strong> files/folders created
+by <em>oneself</em>.</div>
+<div class="line">Such files and folders were created before the new default ACLs were added
+above and thus did not inherit them from their parent folder at the moment of
+their creation.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">setfacl -Rm  user:${USER2}:rwx /network/scratch/${USER:0:1}/$USER/X/Y/Z/</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>The purpose of granting permissions first for <em>future</em> files and then for
+<em>existing</em> files is to prevent a <strong>race condition</strong> whereby after the first <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> command the other person could create files to which the
+second <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> command does not apply.</p>
+</div>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><strong>4.</strong> Grant <strong>another</strong> permission to search through one’s hierarchy down to the
+shared location in question.</div>
+</div>
+<ul class="simple">
+<li><p><strong>Non</strong>-recursive (!!!!)</p></li>
+<li><dl class="simple">
+<dt>May also grant <code class="docutils literal notranslate"><span class="pre">:rx</span></code> in unlikely event others listing your folders on the</dt><dd><p>path is not troublesome or desirable.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">setfacl -m   user:${USER2}:x   /network/scratch/${USER:0:1}/$USER/X/Y/</span>
+<span class="go">setfacl -m   user:${USER2}:x   /network/scratch/${USER:0:1}/$USER/X/</span>
+<span class="go">setfacl -m   user:${USER2}:x   /network/scratch/${USER:0:1}/$USER/</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<blockquote>
+<div><p>In order to access a file, all folders from the root (<code class="docutils literal notranslate"><span class="pre">/</span></code>) down to the
+parent folder in question must be searchable (<code class="docutils literal notranslate"><span class="pre">+x</span></code>) by the concerned user.
+This is already the case for all users for folders such as <code class="docutils literal notranslate"><span class="pre">/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">/network</span></code> and <code class="docutils literal notranslate"><span class="pre">/network/scratch</span></code>, but users must explicitly grant access
+to some or all users either through base permissions or by adding ACLs, for
+at least <code class="docutils literal notranslate"><span class="pre">/network/scratch/${USER:0:1}/$USER</span></code>, <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> and subfolders.</p>
+</div></blockquote>
+<dl>
+<dt>To bluntly allow <strong>all</strong> users to search through a folder (<strong>think twice!</strong>),</dt><dd><p>the following command can be used:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">chmod a+x /network/scratch/${USER:0:1}/$USER/</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<blockquote>
+<div><p>For more information on <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> and path resolution/access checking,
+consider the following documentation viewing commands:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">setfacl</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">path_resolution</span></code></p></li>
+</ul>
+</div>
+<section id="viewing-and-verifying-acls">
+<h2>Viewing and Verifying ACLs<a class="headerlink" href="#viewing-and-verifying-acls" title="Link permanente para este cabeçalho">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">getfacl /path/to/folder/or/file</span>
+<span class="go">            1:  # file: somedir/</span>
+<span class="go">            2:  # owner: lisa</span>
+<span class="go">            3:  # group: staff</span>
+<span class="go">            4:  # flags: -s-</span>
+<span class="go">            5:  user::rwx</span>
+<span class="go">            6:  user:joe:rwx               #effective:r-x</span>
+<span class="go">            7:  group::rwx                 #effective:r-x</span>
+<span class="go">            8:  group:cool:r-x</span>
+<span class="go">            9:  mask::r-x</span>
+<span class="go">            10:  other::r-x</span>
+<span class="go">            11:  default:user::rwx</span>
+<span class="go">            12:  default:user:joe:rwx       #effective:r-x</span>
+<span class="go">            13:  default:group::r-x</span>
+<span class="go">            14:  default:mask::r-x</span>
+<span class="go">            15:  default:other::---</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">getfacl</span></code></p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Sharing Data with ACLs</a><ul>
+<li><a class="reference internal" href="#viewing-and-verifying-acls">Viewing and Verifying ACLs</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Tópico anterior</h4>
+    <p class="topless"><a href="Userguide_singularity.html"
+                          title="capítulo anterior">Singularity</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_sharing_data.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="right" >
+          <a href="Userguide_singularity.html" title="Singularity"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sharing Data with ACLs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

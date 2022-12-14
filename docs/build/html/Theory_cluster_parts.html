@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Parts of a computing cluster &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parts of a computing cluster</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parts-of-a-computing-cluster">
+<h1>Parts of a computing cluster<a class="headerlink" href="#parts-of-a-computing-cluster" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>To provide high performance computation capabilities, clusters can
+combine hundreds to thousands of computers, called <em>nodes</em>, which are all
+inter-connected with a high-performance communication network. Most nodes are
+designed for high-performance computations, but clusters can also use
+specialized nodes to offer parallel file systems, databases, login nodes and
+even the cluster scheduling functionality as pictured in the image below.</p>
+<img alt="_images/cluster_overview2.png" src="_images/cluster_overview2.png" />
+<p>We will overview the different types of nodes which you can encounter on a
+typical cluster.</p>
+<section id="the-login-nodes">
+<h2>The login nodes<a class="headerlink" href="#the-login-nodes" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>To execute computing processes on a cluster, you must first connect to a
+cluster and this is accomplished through a <em>login node</em>. These so-called
+login nodes are the entry point to most clusters.</p>
+<p>Another entry point to some clusters such as the Mila cluster is the JupyterHub
+web interface, but we’ll read about that later. For now let’s return to the
+subject of this section; Login nodes. To connect to these, you would typically
+use a remote shell connection. The most usual tool to do so is SSH. You’ll hear
+and read a lot about this tool. Imagine it as a very long (and somewhat
+magical) extension cord which connects the computer you are using now, such as
+your laptop, to a remote computer’s terminal shell. You might already know what
+a terminal shell is if you ever used the command line.</p>
+</section>
+<section id="the-compute-nodes">
+<h2>The compute nodes<a class="headerlink" href="#the-compute-nodes" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>In the field of artificial intelligence, you will usually be on the hunt for
+GPUs. In most clusters, the compute nodes are the ones with GPU capacity.</p>
+<p>While there is a general paradigm to tend towards a homogeneous configuration
+for nodes, this is not always possible in the field of artificial intelligence
+as the hardware evolve rapidly as is being complemented by new hardware and so
+on. Hence, you will often read about computational node classes. Some of which
+might have different GPU models or even no GPU at all. For the Mila cluster you
+will find this information in the <span class="xref std std-ref">Node profile description</span> section. For
+now, you should note that is important to keep in mind that you should be aware
+of <em>which</em> nodes your code is running on.  More on that later.</p>
+</section>
+<section id="the-storage-nodes">
+<h2>The storage nodes<a class="headerlink" href="#the-storage-nodes" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Some computers on a cluster function to only store and serve files.  While the
+name of these computers might matter to some, as a user, you’ll only be
+concerned about the path to the data. More on that in the <span class="xref std std-ref">Processing
+data</span> section.</p>
+</section>
+<section id="different-nodes-for-different-uses">
+<h2>Different nodes for different uses<a class="headerlink" href="#different-nodes-for-different-uses" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>It is important to note here the difference in intended uses between the
+compute nodes and the login nodes. While the compute nodes are meant for heavy
+computation, the login nodes are not.</p>
+<p>The login nodes however are used by everyone who uses the cluster and care must
+be taken not to overburden these nodes. Consequently, only very short and light
+processes should be run on these otherwise the cluster may become inaccessible.
+In other words, please refrain from executing long or compute intensive
+processes on login nodes because it affects all other users. In some cases, you
+will also find that doing so might get you into trouble.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Parts of a computing cluster</a><ul>
+<li><a class="reference internal" href="#the-login-nodes">The login nodes</a></li>
+<li><a class="reference internal" href="#the-compute-nodes">The compute nodes</a></li>
+<li><a class="reference internal" href="#the-storage-nodes">The storage nodes</a></li>
+<li><a class="reference internal" href="#different-nodes-for-different-uses">Different nodes for different uses</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Theory_cluster_parts.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parts of a computing cluster</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

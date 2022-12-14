@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Overview &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Overview</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="what-is-singularity">
+<h2>What is Singularity?<a class="headerlink" href="#what-is-singularity" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Running Docker on SLURM is a security problem (e.g. running as root, being able
+to mount any directory).  The alternative is to use Singularity, which is a
+popular solution in the world of HPC.</p>
+<p>There is a good level of compatibility between Docker and Singularity,
+and we can find many exaggerated claims about able to convert containers
+from Docker to Singularity without any friction.
+Oftentimes, Docker images from DockerHub are 100% compatible with Singularity,
+and they can indeed be used without friction, but things get messy when
+we try to convert our own Docker build files to Singularity recipes.</p>
+</section>
+<section id="links-to-official-documentation">
+<h2>Links to official documentation<a class="headerlink" href="#links-to-official-documentation" title="Link permanente para este cabeçalho">¶</a></h2>
+<ul class="simple">
+<li><p>official <a class="reference external" href="https://singularity-docs.readthedocs.io/en/latest/">Singularity user guide</a> (this is the one you will use most often)</p></li>
+<li><p>official <a class="reference external" href="https://sylabs.io/guides/latest/admin-guide/">Singularity admin guide</a></p></li>
+</ul>
+</section>
+<section id="overview-of-the-steps-used-in-practice">
+<h2>Overview of the steps used in practice<a class="headerlink" href="#overview-of-the-steps-used-in-practice" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Most often, the process to create and use a Singularity container is:</p>
+<ul class="simple">
+<li><p>on your Linux computer (at home or work)</p>
+<ul>
+<li><p>select a Docker image from DockerHub (e.g. <em>pytorch/pytorch</em>)</p></li>
+<li><p>make a recipe file for Singularity that starts with that DockerHub image</p></li>
+<li><p>build the recipe file, thus creating the image file (e.g. <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>)</p></li>
+<li><p>test your singularity container before send it over to the cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rsync</span> <span class="pre">-av</span> <span class="pre">my-pytorch-image.sif</span> <span class="pre">&lt;login-node&gt;:Documents/my-singularity-images</span></code></p></li>
+</ul>
+</li>
+<li><p>on the login node for that cluster</p>
+<ul>
+<li><p>queue your jobs with <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">...</span></code></p></li>
+<li><p>(note that your jobs will copy over the <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code> to $SLURM_TMPDIR
+and will then launch Singularity with that image)</p></li>
+<li><p>do something else while you wait for them to finish</p></li>
+<li><p>queue more jobs with the same <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>,
+reusing it many times over</p></li>
+</ul>
+</li>
+</ul>
+<p>In the following sections you will find specific examples or tips to accomplish
+in practice the steps highlighted above.</p>
+</section>
+<section id="nope-not-on-macos">
+<h2>Nope, not on MacOS<a class="headerlink" href="#nope-not-on-macos" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Singularity does not work on MacOS, as of the time of this writing in 2021.
+Docker does not <em>actually</em> run on MacOS, but there Docker silently installs a
+virtual machine running Linux, which makes it a pleasant experience,
+and the user does not need to care about the details of how Docker does it.</p>
+<p>Given its origins in HPC, Singularity does not provide that kind of seamless
+experience on MacOS, even though it’s technically possible to run it
+inside a Linux virtual machine on MacOS.</p>
+</section>
+<section id="where-to-build-images">
+<h2>Where to build images<a class="headerlink" href="#where-to-build-images" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Building Singularity images is a rather heavy task, which can take 20 minutes
+if you have a lot of steps in your recipe. This makes it a bad task to run on
+the login nodes of our clusters, especially if it needs to be run regularly.</p>
+<p>On the Mila cluster, we are lucky to have unrestricted internet access on the compute
+nodes, which means that anyone can request an interactive CPU node (no need for GPU)
+and build their images there without problem.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Do not build Singularity images from scratch every time your run a
+job in a large batch.  This will be a colossal waste of GPU time as well as
+internet bandwidth.  If you setup your workflow properly (e.g. using bind
+paths for your code and data), you can spend months reusing the same
+Singularity image <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#what-is-singularity">What is Singularity?</a></li>
+<li><a class="reference internal" href="#links-to-official-documentation">Links to official documentation</a></li>
+<li><a class="reference internal" href="#overview-of-the-steps-used-in-practice">Overview of the steps used in practice</a></li>
+<li><a class="reference internal" href="#nope-not-on-macos">Nope, not on MacOS</a></li>
+<li><a class="reference internal" href="#where-to-build-images">Where to build images</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_singularity_overview.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Overview</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

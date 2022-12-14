@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Primeiros Passos &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="next" title="What is a computer cluster?" href="Theory_cluster.html" />
+    <link rel="prev" title="Arquitetura Cluster Apuana" href="cluster_cin.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="Theory_cluster.html" title="What is a computer cluster?"
+             accesskey="N">próximo</a> |</li>
+        <li class="right" >
+          <a href="cluster_cin.html" title="Arquitetura Cluster Apuana"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Primeiros Passos</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="primeiros-passos">
+<h1>Primeiros Passos<a class="headerlink" href="#primeiros-passos" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="conectando-a-maquina-de-acesso">
+<h2>Conectando a Maquina de Acesso<a class="headerlink" href="#conectando-a-maquina-de-acesso" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>O envio de tarefas para o cluster precisa ser feito a partir de uma maquina de acesso, a entrada na maquina de acesso é realizado através do SSH</p>
+<p><strong>ssh &lt;login&gt;&#64;slurm-client1.cin.ufpe.br</strong></p>
+<p>Uma vez conectado na máquina de acesso é possível alocar e editar seus jobs a partir de comandos <strong>slurm</strong>. Primeiramente, você precisará preparar seu ambiente de
+trabalho no servidor que você utilizará. Jobs que utilizam máquinas virtuais (<strong>Docker e afins</strong>) não serão aprovados, pois abrem brechas de segurança. Qualquer
+biblioteca que necessite de instalação, por favor, nos contate e faremos a instalação o mais rápido possível. Para acessar o servidor que realizará o processamento,
+utilize o comando “<strong>salloc</strong>”, como no exemplo abaixo:</p>
+<p><strong>salloc</strong></p>
+<p>Nossos servidores já tem o gerenciador de pacotes <strong>conda</strong> para qualquer projeto que for realizado em Python. Os comandos de git também estão disponíveis e prontos
+para uso. Após a preparação do seu ambiente, volte para o nodo de login com o comando “<strong>exit</strong>” e rode o seu job com o comando <strong>srun</strong>. Exemplo:</p>
+<p><strong>srun –gpus=N_GPUS –cpus-per-task=N_CPUS nvidia-smi</strong></p>
+</section>
+<section id="bibliotecas-disponiveis">
+<h2>Bibliotecas disponíveis<a class="headerlink" href="#bibliotecas-disponiveis" title="Link permanente para este cabeçalho">¶</a></h2>
+<ul class="simple">
+<li><p>Pytorch = 1.10.2 com Python = 3.9.15</p></li>
+<li><p>Tensorflow = 2.10.0 com Python  = 3.10.8</p></li>
+</ul>
+</section>
+<section id="exemplo-com-repositorio-do-publico-do-github">
+<h2>Exemplo com repositório do público do GitHub<a class="headerlink" href="#exemplo-com-repositorio-do-publico-do-github" title="Link permanente para este cabeçalho">¶</a></h2>
+<p><strong>Primeiro é necessário clonar o repositório. Obs.: o diretório home do usuário é sincronizado entre todas as máquinas.</strong></p>
+<ol class="arabic simple">
+<li><p>git clone <a class="reference external" href="https://github.com/username/repoName.git">https://github.com/username/repoName.git</a></p></li>
+</ol>
+<p>Depois de clonar o repositório, é criado um script .sh. Uma das alternativas é utilizando nano:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nano test_slurm.sh</span>
+</pre></div>
+</div>
+<p>Em seguida, o usuário preenche o script com as diretivas do SBATCH que ele acha necessário e depois com os comandos que devem ser executados no node.</p>
+<p>test_slurm.sh</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/sh
+<span class="gp">#</span>SBATCH -o slurm-%j.out  <span class="c1"># Write the log here</span>
+<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:1    <span class="c1"># Ask for 1 GPU</span>
+<span class="gp">#</span>SBATCH --output<span class="o">=</span>job_output.txt
+<span class="gp">#</span>SBATCH --error<span class="o">=</span>job_error.txt
+
+<span class="go">. &quot;/usr/local/anaconda3/etc/profile.d/conda.sh&quot;</span>
+<span class="go">conda create –-name myenv</span>
+<span class="go">conda activate myenv</span>
+<span class="go">conda install python=3.9</span>
+<span class="go">conda install pytorch</span>
+<span class="go">conda install pandas</span>
+<span class="go">conda install matplotlib</span>
+<span class="go">conda install seaborn</span>
+<span class="go">conda install IPython</span>
+<span class="go">python repoName/thisScript.py</span>
+</pre></div>
+</div>
+<p>Perceba a criação de um novo ambiente e em seguida sua ativação. Aqui foi realizado o dowgrade da versão do Python de 3.10 para 3.9. Isto foi feito porque
+ainda existem bugs da classe DataLoader do PyTorch ao utilizar o python 3.10. O conda é bastante versátil neste aspecto, pois pode-se escolher a versão do
+python e das dependencias mais adequadas para o funcionamento do seu código.</p>
+<p>Um exemplo de script que faz uso de tensorflow é apresentado abaixo:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/sh
+<span class="gp">#</span>SBATCH -o slurm-%j.out  <span class="c1"># Write the log here</span>
+<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:1    <span class="c1"># Ask for 1 GPU</span>
+<span class="gp">#</span>SBATCH --output<span class="o">=</span>job_output.txt
+<span class="gp">#</span>SBATCH --error<span class="o">=</span>job_error.txt
+
+<span class="go">. &quot;/usr/local/anaconda3/etc/profile.d/conda.sh&quot;</span>
+<span class="go">conda create -n myenv</span>
+<span class="go">conda activate myenv</span>
+<span class="go">conda install  tensorflow</span>
+<span class="go">python repoName/thisScript.py</span>
+</pre></div>
+</div>
+<p>Para agendar o job faça:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch test_slurm.sh</span>
+</pre></div>
+</div>
+<p>Para verificar a posição do job na fila faça:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">squeue</span>
+</pre></div>
+</div>
+<p>Para cancelar o job faça:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">scancel job_id</span>
+</pre></div>
+</div>
+</section>
+<section id="exemplo-com-repositorio-privado-do-github">
+<h2>Exemplo com repositório privado do GitHub<a class="headerlink" href="#exemplo-com-repositorio-privado-do-github" title="Link permanente para este cabeçalho">¶</a></h2>
+<p><strong>Clonando um repositório privado</strong></p>
+<ol class="arabic simple">
+<li><p>Foto do perfil -&gt; Settings -&gt; Developer settings -&gt; Personal access tokens -&gt; Tokens (classic) -&gt; Generate new token (classic) -&gt; configurar da forma que desejar -&gt; gerar token (salvar em um local seguro para reutilizar)</p></li>
+<li><p>Copie o token e clone o repositório substituindo o nome do usuário e o token no comando</p></li>
+<li><p>git clone <a class="reference external" href="https://username:token&#64;github.com/username/repoName.git">https://username:token&#64;github.com/username/repoName.git</a></p></li>
+</ol>
+<p>Em seguida, basta repetir os outros passos do exemplo com repositório público do GitHub.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Primeiros Passos</a><ul>
+<li><a class="reference internal" href="#conectando-a-maquina-de-acesso">Conectando a Maquina de Acesso</a></li>
+<li><a class="reference internal" href="#bibliotecas-disponiveis">Bibliotecas disponíveis</a></li>
+<li><a class="reference internal" href="#exemplo-com-repositorio-do-publico-do-github">Exemplo com repositório do público do GitHub</a></li>
+<li><a class="reference internal" href="#exemplo-com-repositorio-privado-do-github">Exemplo com repositório privado do GitHub</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Tópico anterior</h4>
+    <p class="topless"><a href="cluster_cin.html"
+                          title="capítulo anterior">Arquitetura Cluster Apuana</a></p>
+  </div>
+  <div>
+    <h4>Próximo tópico</h4>
+    <p class="topless"><a href="Theory_cluster.html"
+                          title="próximo capítulo">What is a computer cluster?</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="right" >
+          <a href="Theory_cluster.html" title="What is a computer cluster?"
+             >próximo</a> |</li>
+        <li class="right" >
+          <a href="cluster_cin.html" title="Arquitetura Cluster Apuana"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Primeiros Passos</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

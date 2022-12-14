@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Running your code &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="prev" title="Computing infrastructure and policies" href="information.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="information.html" title="Computing infrastructure and policies"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Running your code</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="running-your-code">
+<h1>Running your code<a class="headerlink" href="#running-your-code" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="slurm-commands-guide">
+<h2>SLURM commands guide<a class="headerlink" href="#slurm-commands-guide" title="Link permanente para este cabeçalho">¶</a></h2>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>The SLURM <a class="reference external" href="https://slurm.schedmd.com/documentation.html">documentation</a>
+provides extensive information on the available commands to query the cluster
+status or submit jobs.</p>
+<p>Below are some basic examples of how to use SLURM.</p>
+</section>
+<section id="submitting-jobs">
+<h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Link permanente para este cabeçalho">¶</a></h3>
+<section id="batch-job">
+<h4>Batch job<a class="headerlink" href="#batch-job" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>In order to submit a batch job, you have to create a script containing the main
+command(s) you would like to execute on the allocated resources/nodes.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
+<span class="gp">#</span>SBATCH --job-name<span class="o">=</span><span class="nb">test</span>
+<span class="gp">#</span>SBATCH --output<span class="o">=</span>job_output.txt
+<span class="gp">#</span>SBATCH --error<span class="o">=</span>job_error.txt
+<span class="gp">#</span>SBATCH --ntasks<span class="o">=</span><span class="m">1</span>
+<span class="gp">#</span>SBATCH --time<span class="o">=</span><span class="m">10</span>:00
+<span class="gp">#</span>SBATCH --mem<span class="o">=</span>100Gb
+
+<span class="go">module load python/3.5</span>
+<span class="go">python my_script.py</span>
+</pre></div>
+</div>
+<p>Your job script is then submitted to SLURM with <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> (<a class="reference external" href="https://slurm.schedmd.com/sbatch.html">ref.</a>)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sbatch job_script
+<span class="go">sbatch: Submitted batch job 4323674</span>
+</pre></div>
+</div>
+<p>The <em>working directory</em> of the job will be the one where your executed <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Dica</p>
+<p>Slurm directives can be specified on the command line alongside <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> or
+inside the job script with a line starting with <code class="docutils literal notranslate"><span class="pre">#SBATCH</span></code>.</p>
+</div>
+</section>
+<section id="interactive-job">
+<h4>Interactive job<a class="headerlink" href="#interactive-job" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Workload managers usually run batch jobs to avoid having to watch its
+progression and let the scheduler run it as soon as resources are available. If
+you want to get access to a shell while leveraging cluster resources, you can
+submit an interactive jobs where the main executable is a shell with the
+<code class="docutils literal notranslate"><span class="pre">srun/salloc</span></code> (<a class="reference external" href="https://slurm.schedmd.com/srun.html">srun</a>/<a class="reference external" href="https://slurm.schedmd.com/salloc.html">salloc</a>) commands</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">salloc</span>
+</pre></div>
+</div>
+<p>Will start an interactive job on the first node available with the default
+resources set in SLURM (1 task/1 CPU).  <code class="docutils literal notranslate"><span class="pre">srun</span></code> accepts the same arguments as
+<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> with the exception that the environment is not passed.</p>
+<div class="admonition tip">
+<p class="admonition-title">Dica</p>
+<p>To pass your current environment to an interactive job, add
+<code class="docutils literal notranslate"><span class="pre">--preserve-env</span></code> to <code class="docutils literal notranslate"><span class="pre">srun</span></code>.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">salloc</span></code> can also be used and is mostly a wrapper around <code class="docutils literal notranslate"><span class="pre">srun</span></code> if provided
+without more info but it gives more flexibility if for example you want to get
+an allocation on multiple nodes.</p>
+</section>
+</section>
+<section id="job-submission-arguments">
+<h3>Job submission arguments<a class="headerlink" href="#job-submission-arguments" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>In order to accurately select the resources for your job, several arguments are
+available. The most important ones are:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Argument</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-n, –ntasks=&lt;number&gt;</p></td>
+<td><p>The number of task in your script, usually =1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-c, –cpus-per-task=&lt;ncpus&gt;</p></td>
+<td><p>The number of cores for each task</p></td>
+</tr>
+<tr class="row-even"><td><p>-t, –time=&lt;time&gt;</p></td>
+<td><p>Time requested for your job</p></td>
+</tr>
+<tr class="row-odd"><td><p>–mem=&lt;size[units]&gt;</p></td>
+<td><p>Memory requested for all your tasks</p></td>
+</tr>
+<tr class="row-even"><td><p>–gres=&lt;list&gt;</p></td>
+<td><p>Select generic resources such as GPUs for your job: <code class="docutils literal notranslate"><span class="pre">--gres=gpu:GPU_MODEL</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Dica</p>
+<p>Always consider requesting the adequate amount of resources to improve the
+scheduling of your job (small jobs always run first).</p>
+</div>
+</section>
+<section id="checking-job-status">
+<h3>Checking job status<a class="headerlink" href="#checking-job-status" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>To display <em>jobs</em> currently in queue, use <code class="docutils literal notranslate"><span class="pre">squeue</span></code> and to get only your jobs type</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>squeue -u <span class="nv">$USER</span>
+<span class="go">JOBID   USER          NAME    ST  START_TIME         TIME NODES CPUS TRES_PER_NMIN_MEM NODELIST (REASON) COMMENT</span>
+<span class="go">133     my_username   myjob   R   2019-03-28T18:33   0:50     1    2        N/A  7000M node1 (None) (null)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>The maximum number of jobs able to be submitted to the system per user is 1000 (MaxSubmitJobs=1000)
+at any given time from the given association. If this limit is reached, new submission requests
+will be denied until existing jobs in this association complete.</p>
+</div>
+</section>
+<section id="removing-a-job">
+<h3>Removing a job<a class="headerlink" href="#removing-a-job" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>To cancel your job simply use <code class="docutils literal notranslate"><span class="pre">scancel</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">scancel 4323674</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="partitioning">
+<h2>Partitioning<a class="headerlink" href="#partitioning" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Since we don’t have many GPUs on the cluster, resources must be shared as fairly
+as possible.  The <code class="docutils literal notranslate"><span class="pre">--partition=/-p</span></code> flag of SLURM allows you to set the
+priority you need for a job.  Each job assigned with a priority can preempt jobs
+with a lower priority: <code class="docutils literal notranslate"><span class="pre">unkillable</span> <span class="pre">&gt;</span> <span class="pre">main</span> <span class="pre">&gt;</span> <span class="pre">long</span></code>. Once preempted, your job is
+killed without notice and is automatically re-queued on the same partition until
+resources are available. (To leverage a different preemption mechanism, see the
+<span class="xref std std-ref">Handling preemption</span>)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 30%" />
+<col style="width: 14%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Max Resource Usage</p></th>
+<th class="head"><p>Max Time</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--partition=unkillable</p></td>
+<td><p>6  CPUs, mem=32G,  1 GPU</p></td>
+<td><p>2 days</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>--partition=unkillable-cpu</p></td>
+<td><p>2  CPUs, mem=16G</p></td>
+<td><p>2 days</p></td>
+<td><p>CPU-only jobs</p></td>
+</tr>
+<tr class="row-even"><td><p>--partition=short-unkillable</p></td>
+<td><p>24 CPUs, mem=128G, 4 GPUs</p></td>
+<td><p>3 hours (!)</p></td>
+<td><p>Large but short jobs</p></td>
+</tr>
+<tr class="row-odd"><td><p>--partition=main</p></td>
+<td><p>8  CPUs, mem=48G,  2 GPUs</p></td>
+<td><p>5 days</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>--partition=main-cpu</p></td>
+<td><p>8  CPUs, mem=64G</p></td>
+<td><p>5 days</p></td>
+<td><p>CPU-only jobs</p></td>
+</tr>
+<tr class="row-odd"><td><p>--partition=long</p></td>
+<td><p>no limit of resources</p></td>
+<td><p>7 days</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>--partition=long-cpu</p></td>
+<td><p>no limit of resources</p></td>
+<td><p>7 days</p></td>
+<td><p>CPU-only jobs</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<blockquote>
+<div><p>Historically, before the 2022 introduction of CPU-only nodes (e.g. the <code class="docutils literal notranslate"><span class="pre">cn-f</span></code>
+series), CPU jobs ran side-by-side with the GPU jobs on GPU nodes. To prevent
+them obstructing any GPU job, they were always lowest-priority and preemptible.
+This was implemented by automatically assigning them to one of the now-obsolete
+partitions <code class="docutils literal notranslate"><span class="pre">cpu_jobs</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu_jobs_low</span></code> or <code class="docutils literal notranslate"><span class="pre">cpu_jobs_low-grace</span></code>.</p>
+</div></blockquote>
+<dl>
+<dt><strong>Do not use these partition names anymore</strong>. Prefer the <code class="docutils literal notranslate"><span class="pre">*-cpu</span></code> partition</dt><dd><p>names defined above.</p>
+<p>For backwards-compatibility purposes, the legacy partition names are translated
+to their effective equivalent <code class="docutils literal notranslate"><span class="pre">long-cpu</span></code>, but they will eventually be removed
+entirely.</p>
+</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<dl class="simple">
+<dt><em>As a convenience</em>, should you request the <code class="docutils literal notranslate"><span class="pre">unkillable</span></code>, <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">long</span></code></dt><dd><p>partition for a CPU-only job, the partition will be translated to its <code class="docutils literal notranslate"><span class="pre">-cpu</span></code>
+equivalent automatically.</p>
+</dd>
+</dl>
+</div>
+<p>For instance, to request an unkillable job with 1 GPU, 4 CPUs, 10G of RAM and
+12h of computation do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch --gres=gpu:1 -c 4 --mem=10G -t 12:00:00 --partition=unkillable &lt;job.sh&gt;</span>
+</pre></div>
+</div>
+<p>You can also make it an interactive job using <code class="docutils literal notranslate"><span class="pre">salloc</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">salloc --gres=gpu:1 -c 4 --mem=10G -t 12:00:00 --partition=unkillable</span>
+</pre></div>
+</div>
+<p>The Mila cluster has many different types of nodes/GPUs. To request a specific
+type of node/GPU, you can add specific feature requirements to your job
+submission command.</p>
+<p>To access those special nodes you need to request them explicitly by adding the
+flag <code class="docutils literal notranslate"><span class="pre">--constraint=&lt;name&gt;</span></code>.  The full list of nodes in the Mila Cluster can be
+accessed <span class="xref std std-ref">Node profile description</span>.</p>
+<p><em>Example:</em></p>
+<p>To request a machine with 2 GPUs using NVLink, you can use</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch -c 4 --gres=gpu:2 --constraint=nvlink</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Particularities</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>12GB/16GB/24GB/32GB/48GB</p></td>
+<td><p>Request a specific amount of <em>GPU</em> memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>volta/turing/ampere</p></td>
+<td><p>Request a specific <em>GPU</em> architecture</p></td>
+</tr>
+<tr class="row-even"><td><p>nvlink</p></td>
+<td><p>Machine with GPUs using the NVLink interconnect technology</p></td>
+</tr>
+</tbody>
+</table>
+<section id="information-on-partitions-nodes">
+<h3>Information on partitions/nodes<a class="headerlink" href="#information-on-partitions-nodes" title="Link permanente para este cabeçalho">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">sinfo</span></code> (<a class="reference external" href="https://slurm.schedmd.com/sinfo.html">ref.</a>) provides most of the
+information about available nodes and partitions/queues to submit jobs to.</p>
+<p>Partitions are a group of nodes usually sharing similar features. On a
+partition, some job limits can be applied which will override those asked for a
+job (i.e. max time, max CPUs, etc…)</p>
+<p>To display available <em>partitions</em>, simply use</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sinfo
+<span class="go">PARTITION AVAIL TIMELIMIT NODES STATE  NODELIST</span>
+<span class="go">batch     up     infinite     2 alloc  node[1,3,5-9]</span>
+<span class="go">batch     up     infinite     6 idle   node[10-15]</span>
+<span class="go">cpu       up     infinite     6 idle   cpu_node[1-15]</span>
+<span class="go">gpu       up     infinite     6 idle   gpu_node[1-15]</span>
+</pre></div>
+</div>
+<p>To display available <em>nodes</em> and their status, you can use</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sinfo -N -l
+<span class="go">NODELIST    NODES PARTITION STATE  CPUS MEMORY TMP_DISK WEIGHT FEATURES REASON</span>
+<span class="go">node[1,3,5-9]   2 batch     allocated 2    246    16000     0  (null)   (null)</span>
+<span class="go">node[2,4]       2 batch     drain     2    246    16000     0  (null)   (null)</span>
+<span class="go">node[10-15]     6 batch     idle      2    246    16000     0  (null)   (null)</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>And to get statistics on a job running or terminated, use <code class="docutils literal notranslate"><span class="pre">sacct</span></code> with some of
+the fields you want to display</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sacct --format<span class="o">=</span>User,JobID,Jobname,partition,state,time,start,end,elapsed,nnodes,ncpus,nodelist,workdir -u <span class="nv">$USER</span>
+<span class="go">    User        JobID    JobName  Partition      State  Timelimit               Start                 End    Elapsed   NNodes      NCPUS        NodeList              WorkDir</span>
+<span class="go">--------- ------------ ---------- ---------- ---------- ---------- ------------------- ------------------- ---------- -------- ---------- --------------- --------------------</span>
+<span class="go">my_usern+ 2398         run_extra+      batch    RUNNING 130-05:00+ 2019-03-27T18:33:43             Unknown 1-01:07:54        1         16 node9           /home/mila/my_usern+</span>
+<span class="go">my_usern+ 2399         run_extra+      batch    RUNNING 130-05:00+ 2019-03-26T08:51:38             Unknown 2-10:49:59        1         16 node9           /home/mila/my_usern+</span>
+</pre></div>
+</div>
+<p>Or to get the list of all your previous jobs, use the <code class="docutils literal notranslate"><span class="pre">--start=YYYY-MM-DD</span></code> flag. You can check <code class="docutils literal notranslate"><span class="pre">sacct(1)</span></code> for further information about additional time formats.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sacct -u $USER --start=2019-01-01</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">scontrol</span></code> (<a class="reference external" href="https://slurm.schedmd.com/scontrol.html">ref.</a>) can be used to
+provide specific information on a job (currently running or recently terminated)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scontrol show job <span class="m">43123</span>
+<span class="go">JobId=43123 JobName=python_script.py</span>
+<span class="go">UserId=my_username(1500000111) GroupId=student(1500000000) MCS_label=N/A</span>
+<span class="go">Priority=645895 Nice=0 Account=my_username QOS=normal</span>
+<span class="go">JobState=RUNNING Reason=None Dependency=(null)</span>
+<span class="go">Requeue=1 Restarts=3 BatchFlag=1 Reboot=0 ExitCode=0:0</span>
+<span class="go">RunTime=2-10:41:57 TimeLimit=130-05:00:00 TimeMin=N/A</span>
+<span class="go">SubmitTime=2019-03-26T08:47:17 EligibleTime=2019-03-26T08:49:18</span>
+<span class="go">AccrueTime=2019-03-26T08:49:18</span>
+<span class="go">StartTime=2019-03-26T08:51:38 EndTime=2019-08-03T13:51:38 Deadline=N/A</span>
+<span class="go">PreemptTime=None SuspendTime=None SecsPreSuspend=0</span>
+<span class="go">LastSchedEval=2019-03-26T08:49:18</span>
+<span class="go">Partition=slurm_partition AllocNode:Sid=login-node-1:14586</span>
+<span class="go">ReqNodeList=(null) ExcNodeList=(null)</span>
+<span class="go">NodeList=node2</span>
+<span class="go">BatchHost=node2</span>
+<span class="go">NumNodes=1 NumCPUs=16 NumTasks=1 CPUs/Task=16 ReqB:S:C:T=0:0:*:*</span>
+<span class="go">TRES=cpu=16,mem=32000M,node=1,billing=3</span>
+<span class="go">Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*</span>
+<span class="go">MinCPUsNode=16 MinMemoryNode=32000M MinTmpDiskNode=0</span>
+<span class="go">Features=(null) DelayBoot=00:00:00</span>
+<span class="go">OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)</span>
+<span class="go">WorkDir=/home/mila/my_username</span>
+<span class="go">StdErr=/home/mila/my_username/slurm-43123.out</span>
+<span class="go">StdIn=/dev/null</span>
+<span class="go">StdOut=/home/mila/my_username/slurm-43123.out</span>
+<span class="go">Power=</span>
+</pre></div>
+</div>
+<p>Or more info on a node and its resources</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scontrol show node node9
+<span class="go">NodeName=node9 Arch=x86_64 CoresPerSocket=4</span>
+<span class="go">CPUAlloc=16 CPUTot=16 CPULoad=1.38</span>
+<span class="go">AvailableFeatures=(null)</span>
+<span class="go">ActiveFeatures=(null)</span>
+<span class="go">Gres=(null)</span>
+<span class="go">NodeAddr=10.252.232.4 NodeHostName=mila20684000000 Port=0 Version=18.08</span>
+<span class="go">OS=Linux 4.15.0-1036 #38-Ubuntu SMP Fri Dec 7 02:47:47 UTC 2018</span>
+<span class="go">RealMemory=32000 AllocMem=32000 FreeMem=23262 Sockets=2 Boards=1</span>
+<span class="go">State=ALLOCATED+CLOUD ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A</span>
+<span class="go">Partitions=slurm_partition</span>
+<span class="go">BootTime=2019-03-26T08:50:01 SlurmdStartTime=2019-03-26T08:51:15</span>
+<span class="go">CfgTRES=cpu=16,mem=32000M,billing=3</span>
+<span class="go">AllocTRES=cpu=16,mem=32000M</span>
+<span class="go">CapWatts=n/a</span>
+<span class="go">CurrentWatts=0 LowestJoules=0 ConsumedJoules=0</span>
+<span class="go">ExtSensorsJoules=n/s ExtSensorsWatts=0 ExtSensorsTemp=n/s</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="useful-commands">
+<h2>Useful Commands<a class="headerlink" href="#useful-commands" title="Link permanente para este cabeçalho">¶</a></h2>
+<dl class="simple">
+<dt>salloc</dt><dd><p>Get an interactive job and give you a shell. (ssh like) CPU only</p>
+</dd>
+<dt>salloc --gres=gpu:1 -c 2 --mem=12000</dt><dd><p>Get an interactive job with one GPU, 2 CPUs and 12000 MB RAM</p>
+</dd>
+<dt>sbatch</dt><dd><p>start a batch job (same options as salloc)</p>
+</dd>
+<dt>sattach --pty &lt;jobid&gt;.0</dt><dd><p>Re-attach a dropped interactive job</p>
+</dd>
+<dt>sinfo</dt><dd><p>status of all nodes</p>
+</dd>
+<dt>sinfo -Ogres:27,nodelist,features -tidle,mix,alloc</dt><dd><p>List GPU type and FEATURES that you can request</p>
+</dd>
+<dt>savail</dt><dd><p>(Custom) List available gpu</p>
+</dd>
+<dt>scancel &lt;jobid&gt;</dt><dd><p>Cancel a job</p>
+</dd>
+<dt>squeue</dt><dd><p>summary status of all active jobs</p>
+</dd>
+<dt>squeue -u $USER</dt><dd><p>summary status of all YOUR active jobs</p>
+</dd>
+<dt>squeue -j &lt;jobid&gt;</dt><dd><p>summary status of a specific job</p>
+</dd>
+<dt>squeue -Ojobid,name,username,partition,state,timeused,nodelist,gres,tres</dt><dd><p>status of all jobs including requested resources (see the SLURM squeue doc for all output options)</p>
+</dd>
+<dt>scontrol show job &lt;jobid&gt;</dt><dd><p>Detailed status of a running job</p>
+</dd>
+<dt>sacct -j &lt;job_id&gt; -o NodeList</dt><dd><p>Get the node where a finished job ran</p>
+</dd>
+<dt>sacct -u $USER -S &lt;start_time&gt; -E &lt;stop_time&gt;</dt><dd><p>Find info about old jobs</p>
+</dd>
+<dt>sacct -oJobID,JobName,User,Partition,Node,State</dt><dd><p>List of current and recent jobs</p>
+</dd>
+</dl>
+</section>
+<section id="special-gpu-requirements">
+<h2>Special GPU requirements<a class="headerlink" href="#special-gpu-requirements" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Specific GPU <em>architecture</em> and <em>memory</em> can be easily requested through the
+<code class="docutils literal notranslate"><span class="pre">--gres</span></code> flag by using either</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--gres=gpu:architecture:number</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--gres=gpu:memory:number</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--gres=gpu:model:number</span></code></p></li>
+</ul>
+<p><em>Example:</em></p>
+<p>To request 1 GPU with <em>at least</em> 16GB of memory use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch -c <span class="m">4</span> --gres<span class="o">=</span>gpu:16gb:1
+</pre></div>
+</div>
+<p>The full list of GPU and their features can be accessed <span class="xref std std-ref">here</span>.</p>
+</section>
+<section id="example-script">
+<h2>Example script<a class="headerlink" href="#example-script" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Here is a <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> script that follows good practices on the Mila cluster:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH --partition=unkillable                           # Ask for unkillable job</span>
+<span class="c1">#SBATCH --cpus-per-task=2                                # Ask for 2 CPUs</span>
+<span class="c1">#SBATCH --gres=gpu:1                                     # Ask for 1 GPU</span>
+<span class="c1">#SBATCH --mem=10G                                        # Ask for 10 GB of RAM</span>
+<span class="c1">#SBATCH --time=3:00:00                                   # The job will run for 3 hours</span>
+<span class="c1">#SBATCH -o /network/scratch/&lt;u&gt;/&lt;username&gt;/slurm-%j.out  # Write the log on scratch</span>
+
+<span class="c1"># 1. Load the required modules</span>
+module --quiet load anaconda/3
+
+<span class="c1"># 2. Load your environment</span>
+conda activate <span class="s2">&quot;&lt;env_name&gt;&quot;</span>
+
+<span class="c1"># 3. Copy your dataset on the compute node</span>
+cp /network/datasets/&lt;dataset&gt; <span class="nv">$SLURM_TMPDIR</span>
+
+<span class="c1"># 4. Launch your job, tell it to save the model in $SLURM_TMPDIR</span>
+<span class="c1">#    and look for the dataset into $SLURM_TMPDIR</span>
+python main.py --path <span class="nv">$SLURM_TMPDIR</span> --data_path <span class="nv">$SLURM_TMPDIR</span>
+
+<span class="c1"># 5. Copy whatever you want to save on $SCRATCH</span>
+cp <span class="nv">$SLURM_TMPDIR</span>/&lt;to_save&gt; /network/scratch/&lt;u&gt;/&lt;username&gt;/
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Running your code</a><ul>
+<li><a class="reference internal" href="#slurm-commands-guide">SLURM commands guide</a><ul>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#submitting-jobs">Submitting jobs</a><ul>
+<li><a class="reference internal" href="#batch-job">Batch job</a></li>
+<li><a class="reference internal" href="#interactive-job">Interactive job</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#job-submission-arguments">Job submission arguments</a></li>
+<li><a class="reference internal" href="#checking-job-status">Checking job status</a></li>
+<li><a class="reference internal" href="#removing-a-job">Removing a job</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#partitioning">Partitioning</a><ul>
+<li><a class="reference internal" href="#information-on-partitions-nodes">Information on partitions/nodes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#useful-commands">Useful Commands</a></li>
+<li><a class="reference internal" href="#special-gpu-requirements">Special GPU requirements</a></li>
+<li><a class="reference internal" href="#example-script">Example script</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Tópico anterior</h4>
+    <p class="topless"><a href="information.html"
+                          title="capítulo anterior">Computing infrastructure and policies</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_running_code.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="right" >
+          <a href="information.html" title="Computing infrastructure and policies"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Running your code</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

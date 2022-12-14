@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Arquitetura Cluster Apuana &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="next" title="Primeiros Passos" href="usage.html" />
+    <link rel="prev" title="Apuana Cluster Documentação" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Primeiros Passos"
+             accesskey="N">próximo</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Apuana Cluster Documentação"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Arquitetura Cluster Apuana</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="arquitetura-cluster-apuana">
+<h1>Arquitetura Cluster Apuana<a class="headerlink" href="#arquitetura-cluster-apuana" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="visao-geral-da-arquitetura-e-acesso">
+<h2>Visão geral da arquitetura e acesso<a class="headerlink" href="#visao-geral-da-arquitetura-e-acesso" title="Link permanente para este cabeçalho">¶</a></h2>
+<img alt="_images/arquitetura-cluster.png" src="_images/arquitetura-cluster.png" />
+</section>
+<section id="visao-geral-de-funcionamento-do-cluster">
+<h2>Visão geral de funcionamento do cluster<a class="headerlink" href="#visao-geral-de-funcionamento-do-cluster" title="Link permanente para este cabeçalho">¶</a></h2>
+<img alt="_images/cluster_overview2.png" src="_images/cluster_overview2.png" />
+<ul>
+<li><dl class="simple">
+<dt>Login Nodes</dt><dd><p>slurm-client[1-2]
+slurm (srun, salloc, sbatch)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Management</dt><dd><p>slurm-manager[1-2]
+slurmctld
+slurmdbdb</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Compute Nodes</dt><dd><p>cluster-node[1-5]
+slurmd</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Storage:</dt><dd><p>$SLURM_TMPDIR</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Parallel Storage</dt><dd><p>slurmdbdb database</p>
+</dd>
+</dl>
+</li>
+<li><p>Storage (baseado no MILA)</p>
+<p>$HOME</p>
+<p>$DATASETS</p>
+<p>$SCRATCH</p>
+<p>$PROJECTS</p>
+<p>$ARCHIVE</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="politica-de-alocacao-de-recursos">
+<h1>Política de Alocação de Recursos<a class="headerlink" href="#politica-de-alocacao-de-recursos" title="Link permanente para este cabeçalho">¶</a></h1>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Quota destinada aos pesquisadores (geralmente professores do CIn)</dt><dd><p>Pesquisadores definem quem está em seu grupo de pesquisa
+Todos em um grupo de pesquisa usam a quota do pesquisador</p>
+</dd>
+</dl>
+</li>
+<li><p>Quota destinada a cada pesquisador depende da quantidade de recursos que ele investiu no cluster</p></li>
+<li><p>Uma quota mínima será fornecida a todos os professores do CIn e aos pesquisadores participantes do Projeto Hiper.</p></li>
+</ul>
+</section>
+<section id="politica-de-uso">
+<h1>Política de Uso<a class="headerlink" href="#politica-de-uso" title="Link permanente para este cabeçalho">¶</a></h1>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Fila de jobs:</dt><dd><p>Cada usuário submete um job ao SLURM
+Na submissão do job, o usuário especifica os recursos que precisa (GPUs, CPUs, RAM)
+Quanto mais recursos ele solicita menor prioridade
+Usuários com mais quota possuem maior prioridade</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Categorias de tempo execução:</dt><dd><p>Jobs de longa duração (ex.: 7 dias sem ser finalizado usando poucos recursos)
+Jobs de curta média (ex.: 1 dia) sem ser finalizado usando quantidade média de recursos
+Jobs de curta duração (ex.: 2 horas) sem sofrer preempção usando maior quantidade de recursos</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Preempção:</dt><dd><p>Após um certo tempo mínimo de execução um job pode sofrer preempção para dar espaço para outros jobs (em situações de sobrecarga)
+Ao sofrer preempção o job volta para a fila de espera e será retomado quando houver recursos para ele
+O usuário é responsável por implementar o salvamento e carregamento do estado do seu job (checkpointing)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="pontos-importantes-sobre-a-seguranca">
+<h1>Pontos Importantes Sobre a Segurança<a class="headerlink" href="#pontos-importantes-sobre-a-seguranca" title="Link permanente para este cabeçalho">¶</a></h1>
+<ul class="simple">
+<li><p>Acesso externo indevido</p></li>
+<li><dl class="simple">
+<dt>Privacidade de dados</dt><dd><p>Datasets públicos (preferencialmente compartilhados)
+Datasets privados (compartilhados entre os membros de um grupo de pesquisa)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Uso indevido de recursos</dt><dd><p>Computação/armazenamento fora da cota de uso
+Mineração de criptomoedas (dentro ou fora da cota)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Arquitetura Cluster Apuana</a><ul>
+<li><a class="reference internal" href="#visao-geral-da-arquitetura-e-acesso">Visão geral da arquitetura e acesso</a></li>
+<li><a class="reference internal" href="#visao-geral-de-funcionamento-do-cluster">Visão geral de funcionamento do cluster</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#politica-de-alocacao-de-recursos">Política de Alocação de Recursos</a></li>
+<li><a class="reference internal" href="#politica-de-uso">Política de Uso</a></li>
+<li><a class="reference internal" href="#pontos-importantes-sobre-a-seguranca">Pontos Importantes Sobre a Segurança</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Tópico anterior</h4>
+    <p class="topless"><a href="index.html"
+                          title="capítulo anterior">Apuana Cluster Documentação</a></p>
+  </div>
+  <div>
+    <h4>Próximo tópico</h4>
+    <p class="topless"><a href="usage.html"
+                          title="próximo capítulo">Primeiros Passos</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cluster_cin.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Primeiros Passos"
+             >próximo</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Apuana Cluster Documentação"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Arquitetura Cluster Apuana</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Using containers on clusters &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using containers on clusters</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="using-containers-on-clusters">
+<span id="using-containers"></span><h1>Using containers on clusters<a class="headerlink" href="#using-containers-on-clusters" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="how-to-use-containers-on-clusters">
+<h2>How to use containers on clusters<a class="headerlink" href="#how-to-use-containers-on-clusters" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>On every cluster with Slurm, datasets and intermediate results should go in
+<code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> while the final experiment results should go in <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>.
+In order to use the container you built, you need to copy it on the cluster you
+want to use.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>You should always store your container in $SCRATCH !</p>
+</div>
+<p>Then reserve a node with srun/sbatch, copy the container and your dataset on the
+node given by SLURM (i.e in <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>) and execute the code
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code> within the container <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+<p>Remember that <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">/tmp_log</span></code> and <code class="docutils literal notranslate"><span class="pre">/final_log</span></code> were created in the
+previous section. Now each time, we’ll use singularity, we are explicitly
+telling it to mount <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> on the cluster’s node in the folder
+<code class="docutils literal notranslate"><span class="pre">/dataset</span></code> inside the container with the option <code class="docutils literal notranslate"><span class="pre">-B</span></code> such that each dataset
+downloaded by PyTorch in <code class="docutils literal notranslate"><span class="pre">/dataset</span></code> will be available in <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>.</p>
+<p>This will allow us to have code and scripts that are invariant to the cluster
+environment. The option <code class="docutils literal notranslate"><span class="pre">-H</span></code> specify what will be the container’s home. For
+example, if you have your code in <code class="docutils literal notranslate"><span class="pre">$HOME/Project12345/Version35/</span></code> you can
+specify <code class="docutils literal notranslate"><span class="pre">-H</span> <span class="pre">$HOME/Project12345/Version35:/home</span></code>, thus the container will only
+have access to the code inside <code class="docutils literal notranslate"><span class="pre">Version35</span></code>.</p>
+<p>If you want to run multiple commands inside the container you can use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ \</span>
+<span class="go">    -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ \</span>
+<span class="gp">    $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; bash -c <span class="s1">&#39;pwd &amp;&amp; ls &amp;&amp; python &lt;YOUR_CODE&gt;&#39;</span>
+</pre></div>
+</div>
+<section id="example-interactive-case-srun-salloc">
+<h3>Example: Interactive case (srun/salloc)<a class="headerlink" href="#example-interactive-case-srun-salloc" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Once you get an interactive session with SLURM, copy <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_DATASET&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">0</span>. Get an interactive session
+<span class="gp">$ </span>srun --gres<span class="o">=</span>gpu:1
+<span class="gp"># </span><span class="m">1</span>. Copy your container on the compute node
+<span class="gp">$ </span>rsync -avz <span class="nv">$SCRATCH</span>/&lt;YOUR_CONTAINER&gt; <span class="nv">$SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">2</span>. Copy your dataset on the compute node
+<span class="gp">$ </span>rsync -avz <span class="nv">$SCRATCH</span>/&lt;YOUR_DATASET&gt; <span class="nv">$SLURM_TMPDIR</span>
+</pre></div>
+</div>
+<p>Then use <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">shell</span></code> to get a shell inside the container</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">3</span>. Get a shell <span class="k">in</span> your environment
+<span class="gp">$ </span>singularity shell --nv <span class="se">\</span>
+        -H <span class="nv">$HOME</span>:/home <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/dataset/ <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/tmp_log/ <span class="se">\</span>
+        -B <span class="nv">$SCRATCH</span>:/final_log/ <span class="se">\</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">4</span>. Execute your code
+<span class="go">&lt;Singularity_container&gt;$ python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+<p><strong>or</strong> use <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">exec</span></code> to execute <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">3</span>. Execute your code
+<span class="gp">$ </span>singularity <span class="nb">exec</span> --nv <span class="se">\</span>
+        -H <span class="nv">$HOME</span>:/home <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/dataset/ <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/tmp_log/ <span class="se">\</span>
+        -B <span class="nv">$SCRATCH</span>:/final_log/ <span class="se">\</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; <span class="se">\</span>
+        python &lt;YOUR_CODE&gt;
+</pre></div>
+</div>
+<p>You can create also the following alias to make your life easier.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span>alias my_env=&#39;singularity exec --nv \
+        -H $HOME:/home \
+        -B $SLURM_TMPDIR:/dataset/ \
+        -B $SLURM_TMPDIR:/tmp_log/ \
+        -B $SCRATCH:/final_log/ \
+        $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;&#39;
+</pre></div>
+</div>
+<p>This will allow you to run any code with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">my_env python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="example-sbatch-case">
+<h3>Example: sbatch case<a class="headerlink" href="#example-sbatch-case" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>You can also create a <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> script:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
+<span class="gp">#</span>SBATCH --cpus-per-task<span class="o">=</span><span class="m">6</span>         <span class="c1"># Ask for 6 CPUs</span>
+<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:1              <span class="c1"># Ask for 1 GPU</span>
+<span class="gp">#</span>SBATCH --mem<span class="o">=</span>10G                 <span class="c1"># Ask for 10 GB of RAM</span>
+<span class="gp">#</span>SBATCH --time<span class="o">=</span><span class="m">0</span>:10:00            <span class="c1"># The job will run for 10 minutes</span>
+
+<span class="gp"># </span><span class="m">1</span>. Copy your container on the compute node
+<span class="go">rsync -avz $SCRATCH/&lt;YOUR_CONTAINER&gt; $SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">2</span>. Copy your dataset on the compute node
+<span class="go">rsync -avz $SCRATCH/&lt;YOUR_DATASET&gt; $SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">3</span>. Executing your code with singularity
+<span class="go">singularity exec --nv \</span>
+<span class="go">        -H $HOME:/home \</span>
+<span class="go">        -B $SLURM_TMPDIR:/dataset/ \</span>
+<span class="go">        -B $SLURM_TMPDIR:/tmp_log/ \</span>
+<span class="go">        -B $SCRATCH:/final_log/ \</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; <span class="se">\</span>
+        python <span class="s2">&quot;&lt;YOUR_CODE&gt;&quot;</span>
+<span class="gp"># </span><span class="m">4</span>. Copy whatever you want to save on <span class="nv">$SCRATCH</span>
+<span class="go">rsync -avz $SLURM_TMPDIR/&lt;to_save&gt; $SCRATCH</span>
+</pre></div>
+</div>
+</section>
+<section id="issue-with-pybullet-and-opengl-libraries">
+<h3>Issue with PyBullet and OpenGL libraries<a class="headerlink" href="#issue-with-pybullet-and-opengl-libraries" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>If you are running certain gym environments that require <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you may
+encounter a problem when running your singularity instance with the Nvidia
+drivers using the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag. This happens because the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag also
+provides the OpenGL libraries:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">libGL.so.1 =&gt; /.singularity.d/libs/libGL.so.1</span>
+<span class="go">libGLX.so.0 =&gt; /.singularity.d/libs/libGLX.so.0</span>
+</pre></div>
+</div>
+<p>If you don’t experience those problems with <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you probably don’t need
+to address this. Otherwise, you can resolve those problems by <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span>
+<span class="pre">-y</span> <span class="pre">libosmesa6-dev</span> <span class="pre">mesa-utils</span> <span class="pre">mesa-utils-extra</span> <span class="pre">libgl1-mesa-glx</span></code>, and then making
+sure that your <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> points to those libraries before the ones in
+<code class="docutils literal notranslate"><span class="pre">/.singularity.d/libs</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">%</span>environment
+<span class="gp">        # </span>...
+<span class="go">        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/mesa:$LD_LIBRARY_PATH</span>
+</pre></div>
+</div>
+</section>
+<section id="apuana-cluster">
+<h3>Apuana cluster<a class="headerlink" href="#apuana-cluster" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>On the Apuana cluster <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> is not yet defined, you should add the
+experiment results you want to keep in <code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;/</span></code>. In
+order to use the sbatch script above and to match other cluster environment’s
+names, you can define <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> as an alias for
+<code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;</span></code> with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">echo &quot;export SCRATCH=/network/scratch/${USER:0:1}/$USER&quot; &gt;&gt; ~/.bashrc</span>
+</pre></div>
+</div>
+<p>Then, you can follow the general procedure explained above.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Using containers on clusters</a><ul>
+<li><a class="reference internal" href="#how-to-use-containers-on-clusters">How to use containers on clusters</a><ul>
+<li><a class="reference internal" href="#example-interactive-case-srun-salloc">Example: Interactive case (srun/salloc)</a></li>
+<li><a class="reference internal" href="#example-sbatch-case">Example: sbatch case</a></li>
+<li><a class="reference internal" href="#issue-with-pybullet-and-opengl-libraries">Issue with PyBullet and OpenGL libraries</a></li>
+<li><a class="reference internal" href="#apuana-cluster">Apuana cluster</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_singularity_on_clusters.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using containers on clusters</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

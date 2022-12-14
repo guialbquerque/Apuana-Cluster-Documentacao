@@ -1,0 +1,792 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Singularity &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="next" title="Sharing Data with ACLs" href="Userguide_sharing_data.html" />
+    <link rel="prev" title="Portability concerns and solutions" href="Userguide_portability.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="Userguide_sharing_data.html" title="Sharing Data with ACLs"
+             accesskey="N">próximo</a> |</li>
+        <li class="right" >
+          <a href="Userguide_portability.html" title="Portability concerns and solutions"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Singularity</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="singularity">
+<h1>Singularity<a class="headerlink" href="#singularity" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link permanente para este cabeçalho">¶</a></h2>
+<section id="what-is-singularity">
+<h3>What is Singularity?<a class="headerlink" href="#what-is-singularity" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Running Docker on SLURM is a security problem (e.g. running as root, being able
+to mount any directory).  The alternative is to use Singularity, which is a
+popular solution in the world of HPC.</p>
+<p>There is a good level of compatibility between Docker and Singularity,
+and we can find many exaggerated claims about able to convert containers
+from Docker to Singularity without any friction.
+Oftentimes, Docker images from DockerHub are 100% compatible with Singularity,
+and they can indeed be used without friction, but things get messy when
+we try to convert our own Docker build files to Singularity recipes.</p>
+</section>
+<section id="links-to-official-documentation">
+<h3>Links to official documentation<a class="headerlink" href="#links-to-official-documentation" title="Link permanente para este cabeçalho">¶</a></h3>
+<ul class="simple">
+<li><p>official <a class="reference external" href="https://singularity-docs.readthedocs.io/en/latest/">Singularity user guide</a> (this is the one you will use most often)</p></li>
+<li><p>official <a class="reference external" href="https://sylabs.io/guides/latest/admin-guide/">Singularity admin guide</a></p></li>
+</ul>
+</section>
+<section id="overview-of-the-steps-used-in-practice">
+<h3>Overview of the steps used in practice<a class="headerlink" href="#overview-of-the-steps-used-in-practice" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Most often, the process to create and use a Singularity container is:</p>
+<ul class="simple">
+<li><p>on your Linux computer (at home or work)</p>
+<ul>
+<li><p>select a Docker image from DockerHub (e.g. <em>pytorch/pytorch</em>)</p></li>
+<li><p>make a recipe file for Singularity that starts with that DockerHub image</p></li>
+<li><p>build the recipe file, thus creating the image file (e.g. <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>)</p></li>
+<li><p>test your singularity container before send it over to the cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rsync</span> <span class="pre">-av</span> <span class="pre">my-pytorch-image.sif</span> <span class="pre">&lt;login-node&gt;:Documents/my-singularity-images</span></code></p></li>
+</ul>
+</li>
+<li><p>on the login node for that cluster</p>
+<ul>
+<li><p>queue your jobs with <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">...</span></code></p></li>
+<li><p>(note that your jobs will copy over the <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code> to $SLURM_TMPDIR
+and will then launch Singularity with that image)</p></li>
+<li><p>do something else while you wait for them to finish</p></li>
+<li><p>queue more jobs with the same <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>,
+reusing it many times over</p></li>
+</ul>
+</li>
+</ul>
+<p>In the following sections you will find specific examples or tips to accomplish
+in practice the steps highlighted above.</p>
+</section>
+<section id="nope-not-on-macos">
+<h3>Nope, not on MacOS<a class="headerlink" href="#nope-not-on-macos" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Singularity does not work on MacOS, as of the time of this writing in 2021.
+Docker does not <em>actually</em> run on MacOS, but there Docker silently installs a
+virtual machine running Linux, which makes it a pleasant experience,
+and the user does not need to care about the details of how Docker does it.</p>
+<p>Given its origins in HPC, Singularity does not provide that kind of seamless
+experience on MacOS, even though it’s technically possible to run it
+inside a Linux virtual machine on MacOS.</p>
+</section>
+<section id="where-to-build-images">
+<h3>Where to build images<a class="headerlink" href="#where-to-build-images" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Building Singularity images is a rather heavy task, which can take 20 minutes
+if you have a lot of steps in your recipe. This makes it a bad task to run on
+the login nodes of our clusters, especially if it needs to be run regularly.</p>
+<p>On the Mila cluster, we are lucky to have unrestricted internet access on the compute
+nodes, which means that anyone can request an interactive CPU node (no need for GPU)
+and build their images there without problem.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Do not build Singularity images from scratch every time your run a
+job in a large batch.  This will be a colossal waste of GPU time as well as
+internet bandwidth.  If you setup your workflow properly (e.g. using bind
+paths for your code and data), you can spend months reusing the same
+Singularity image <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>.</p>
+</div>
+</section>
+</section>
+<section id="building-the-containers">
+<h2>Building the containers<a class="headerlink" href="#building-the-containers" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Building a container is like creating a new environment except that containers
+are much more powerful since they are self-contained systems.  With
+singularity, there are two ways to build containers.</p>
+<p>The first one is by yourself, it’s like when you got a new Linux laptop and you
+don’t really know what you need, if you see that something is missing, you
+install it. Here you can get a vanilla container with Ubuntu called a sandbox,
+you log in and you install each packages by yourself.  This procedure can take
+time but will allow you to understand how things work and what you need. This is
+recommended if you need to figure out how things will be compiled or if you want
+to install packages on the fly. We’ll refer to this procedure as singularity
+sandboxes.</p>
+<p>The second way is more like you know what you want, so you write a list of
+everything you need, you send it to singularity and it will install everything
+for you. Those lists are called singularity recipes.</p>
+<section id="first-way-build-and-use-a-sandbox">
+<h3>First way: Build and use a sandbox<a class="headerlink" href="#first-way-build-and-use-a-sandbox" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>You might ask yourself: <em>On which machine should I build a container?</em></p>
+<p>First of all, you need to choose where you’ll build your container. This
+operation requires <strong>memory and high cpu usage</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Do NOT build containers on any login nodes !</p>
+</div>
+<ul>
+<li><dl>
+<dt>(Recommended for beginner) If you need to <strong>use apt-get</strong>, you should <a href="#id1"><span class="problematic" id="id2">**</span></a>build</dt><dd><p>the container on your laptop** with sudo privileges. You’ll only need to
+install singularity on your laptop. Windows/Mac users can look <a class="reference external" href="https://www.sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac">there</a> and
+Ubuntu/Debian users can use directly:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install singularity-container</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><p>If you <strong>can’t install singularity</strong> on your laptop and you <strong>don’t need apt-get</strong>, you can reserve a <strong>cpu node on the Mila cluster</strong> to build your container.</p></li>
+</ul>
+<p>In this case, in order to avoid too much I/O over the network, you should define
+the singularity cache locally:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export SINGULARITY_CACHEDIR=$SLURM_TMPDIR</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>If you <strong>can’t install singularity</strong> on your laptop and you <a href="#id3"><span class="problematic" id="id4">**</span></a>want to use</dt><dd><p>apt-get**, you can use <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> to build your containers and read
+<a class="reference internal" href="#recipe-section">Recipe_section</a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<section id="download-containers-from-the-web">
+<h4>Download containers from the web<a class="headerlink" href="#download-containers-from-the-web" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Hopefully, you may not need to create containers from scratch as many have been
+already built for the most common deep learning software. You can find most of
+them on <a class="reference external" href="https://hub.docker.com/">dockerhub</a>.</p>
+<p>Go on <a class="reference external" href="https://hub.docker.com/">dockerhub</a> and select the container you want to pull.</p>
+<p>For example, if you want to get the latest PyTorch version with GPU support
+(Replace <em>runtime</em> by <em>devel</em> if you need the full Cuda toolkit):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull docker://pytorch/pytorch:1.0.1-cuda10.0-cudnn7-runtime</span>
+</pre></div>
+</div>
+<p>Or the latest TensorFlow:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull docker://tensorflow/tensorflow:latest-gpu-py3</span>
+</pre></div>
+</div>
+<p>Currently the pulled image <code class="docutils literal notranslate"><span class="pre">pytorch.simg</span></code> or <code class="docutils literal notranslate"><span class="pre">tensorflow.simg</span></code> is read-only
+meaning that you won’t be able to install anything on it.  Starting now, PyTorch
+will be taken as example. If you use TensorFlow, simply replace every
+<strong>pytorch</strong> occurrences by <strong>tensorflow</strong>.</p>
+</section>
+<section id="how-to-add-or-install-stuff-in-a-container">
+<h4>How to add or install stuff in a container<a class="headerlink" href="#how-to-add-or-install-stuff-in-a-container" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>The first step is to transform your read only container
+<code class="docutils literal notranslate"><span class="pre">pytorch-1.0.1-cuda10.0-cudnn7-runtime.simg</span></code> in a writable version that will
+allow you to add packages.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Depending on the version of singularity you are using, singularity
+will build a container with the extension .simg or .sif. If you’re using
+.sif files, replace every occurences of .simg by .sif.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Dica</p>
+<p>If you want to use <strong>apt-get</strong> you have to put <strong>sudo</strong> ahead of the
+following commands</p>
+</div>
+<p>This command will create a writable image in the folder <code class="docutils literal notranslate"><span class="pre">pytorch</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity build --sandbox pytorch pytorch-1.0.1-cuda10.0-cudnn7-runtime.simg</span>
+</pre></div>
+</div>
+<p>Then you’ll need the following command to log inside the container.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity shell --writable -H $HOME:/home pytorch</span>
+</pre></div>
+</div>
+<p>Once you get into the container, you can use pip and install anything you need
+(Or with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> if you built the container with sudo).</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Singularity mounts your home folder, so if you install things into
+the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> of your container, they will be installed in your real
+<code class="docutils literal notranslate"><span class="pre">$HOME</span></code>!</p>
+</div>
+<p>You should install your stuff in /usr/local instead.</p>
+</section>
+<section id="creating-useful-directories">
+<h4>Creating useful directories<a class="headerlink" href="#creating-useful-directories" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>One of the benefits of containers is that you’ll be able to use them across
+different clusters. However for each cluster the datasets and experiments
+folder location can be different. In order to be invariant to those locations,
+we will create some useful mount points inside the container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir /dataset</span>
+<span class="go">mkdir /tmp_log</span>
+<span class="go">mkdir /final_log</span>
+</pre></div>
+</div>
+<p>From now, you won’t need to worry anymore when you write your code to specify
+where to pick up your dataset. Your dataset will always be in <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>
+independently of the cluster you are using.</p>
+</section>
+<section id="testing">
+<h4>Testing<a class="headerlink" href="#testing" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>If you have some code that you want to test before finalizing your container,
+you have two choices.  You can either log into your container and run Python
+code inside it with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity shell --nv pytorch</span>
+</pre></div>
+</div>
+<p>Or you can execute your command directly with</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv pytorch Python YOUR_CODE.py</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Dica</p>
+<p>—nv allows the container to use gpus. You don’t need this if you
+don’t plan to use a gpu.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Don’t forget to clear the cache of the packages you installed in
+the containers.</p>
+</div>
+</section>
+<section id="creating-a-new-image-from-the-sandbox">
+<h4>Creating a new image from the sandbox<a class="headerlink" href="#creating-a-new-image-from-the-sandbox" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Once everything you need is installed inside the container, you need to convert
+it back to a read-only singularity image with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity build pytorch_final.simg pytorch</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="second-way-use-recipes">
+<span id="recipe-section"></span><h3>Second way: Use recipes<a class="headerlink" href="#second-way-use-recipes" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>A singularity recipe is a file including specifics about installation software,
+environment variables, files to add, and container metadata.  It is a starting
+point for designing any custom container. Instead of pulling a container and
+installing your packages manually, you can specify in this file the packages
+you want and then build your container from this file.</p>
+<p>Here is a toy example of a singularity recipe installing some stuff:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span><span class="c1">################ Header: Define the base system you want to use ################</span>
+<span class="gp"># </span>Reference of the kind of base you want to use <span class="o">(</span>e.g., docker, debootstrap, shub<span class="o">)</span>.
+<span class="go">Bootstrap: docker</span>
+<span class="gp"># </span>Select the docker image you want to use <span class="o">(</span>Here we choose tensorflow<span class="o">)</span>
+<span class="go">From: tensorflow/tensorflow:latest-gpu-py3</span>
+
+<span class="gp">#</span><span class="c1">################ Section: Defining the system #################################</span>
+<span class="gp"># </span>Commands <span class="k">in</span> the %post section are executed within the container.
+<span class="gp">%</span>post
+<span class="go">        echo &quot;Installing Tools with apt-get&quot;</span>
+<span class="go">        apt-get update</span>
+<span class="go">        apt-get install -y cmake libcupti-dev libyaml-dev wget unzip</span>
+<span class="go">        apt-get clean</span>
+<span class="go">        echo &quot;Installing things with pip&quot;</span>
+<span class="go">        pip install tqdm</span>
+<span class="go">        echo &quot;Creating mount points&quot;</span>
+<span class="go">        mkdir /dataset</span>
+<span class="go">        mkdir /tmp_log</span>
+<span class="go">        mkdir /final_log</span>
+
+
+<span class="gp"># </span>Environment variables that should be sourced at runtime.
+<span class="gp">%</span>environment
+<span class="gp">        # </span>use bash as default shell
+<span class="go">        SHELL=/bin/bash</span>
+<span class="go">        export SHELL</span>
+</pre></div>
+</div>
+<p>A recipe file contains two parts: the <code class="docutils literal notranslate"><span class="pre">header</span></code> and <code class="docutils literal notranslate"><span class="pre">sections</span></code>. In the
+<code class="docutils literal notranslate"><span class="pre">header</span></code> you specify which base system you want to use, it can be any docker
+or singularity container. In <code class="docutils literal notranslate"><span class="pre">sections</span></code>, you can list the things you want to
+install in the subsection <code class="docutils literal notranslate"><span class="pre">post</span></code> or list the environment’s variable you need
+to source at each runtime in the subsection <code class="docutils literal notranslate"><span class="pre">environment</span></code>. For a more detailed
+description, please look at the <a class="reference external" href="https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#container-recipes">singularity documentation</a>.</p>
+<p>In order to build a singularity container from a singularity recipe file, you
+should use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo singularity build &lt;NAME_CONTAINER&gt; &lt;YOUR_RECIPE_FILES&gt;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>You always need to use sudo when you build a container from a
+recipe. As there is no access to sudo on the cluster, a personal computer or
+the use singularity hub is needed to build a container</p>
+</div>
+<section id="build-recipe-on-singularity-hub">
+<h4>Build recipe on singularity hub<a class="headerlink" href="#build-recipe-on-singularity-hub" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Singularity hub allows users to build containers from recipes directly on
+singularity-hub’s cloud meaning that you don’t need to build containers by
+yourself.  You need to register on <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> and link your
+singularity-hub account to your GitHub account, then:</p>
+<blockquote>
+<div><blockquote>
+<div><ol class="arabic simple">
+<li><p>Create a new github repository.</p></li>
+<li><p>Add a collection on <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> and select the github repository your created.</p></li>
+<li><p>Clone the github repository on your computer.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone &lt;url&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>Write the singularity recipe and save it as a file named <strong>Singularity</strong>.</p></li>
+<li><p>Git add <strong>Singularity</strong>, commit and push on the master branch</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git add Singularity
+$ git commit
+$ git push origin master
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<p>At this point, robots from singularity-hub will build the container for you, you
+will be able to download your container from the website or directly with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull shub://&lt;github_username&gt;/&lt;repository_name&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="example-recipe-with-openai-gym-mujoco-and-miniworld">
+<h4>Example: Recipe with OpenAI gym, MuJoCo and Miniworld<a class="headerlink" href="#example-recipe-with-openai-gym-mujoco-and-miniworld" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Here is an example on how you can use a singularity recipe to install complex
+environment such as OpenAI gym, MuJoCo and Miniworld on a PyTorch based
+container. In order to use MuJoCo, you’ll need to copy the key stored on the
+Mila cluster in <cite>/ai/apps/mujoco/license/mjkey.txt</cite> to your current directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>This is a dockerfile that sets up a full Gym install with <span class="nb">test</span> dependencies
+<span class="go">Bootstrap: docker</span>
+
+<span class="gp"># </span>Here we ll build our container upon the pytorch container
+<span class="go">From: pytorch/pytorch:1.0-cuda10.0-cudnn7-runtime</span>
+
+<span class="gp"># </span>Now we<span class="s1">&#39;ll copy the mjkey file located in the current directory inside the container&#39;</span>s root
+<span class="gp"># </span>directory
+<span class="gp">%</span>files
+<span class="go">        mjkey.txt</span>
+
+<span class="gp"># </span>Then we put everything we need to install
+<span class="gp">%</span>post
+<span class="go">        export PATH=$PATH:/opt/conda/bin</span>
+<span class="go">        apt -y update &amp;&amp; \</span>
+<span class="go">        apt install -y keyboard-configuration &amp;&amp; \</span>
+<span class="go">        apt install -y \</span>
+<span class="go">        python3-dev \</span>
+<span class="go">        python-pyglet \</span>
+<span class="go">        python3-opengl \</span>
+<span class="go">        libhdf5-dev \</span>
+<span class="go">        libjpeg-dev \</span>
+<span class="go">        libboost-all-dev \</span>
+<span class="go">        libsdl2-dev \</span>
+<span class="go">        libosmesa6-dev \</span>
+<span class="go">        patchelf \</span>
+<span class="go">        ffmpeg \</span>
+<span class="go">        xvfb \</span>
+<span class="go">        libhdf5-dev \</span>
+<span class="go">        openjdk-8-jdk \</span>
+<span class="go">        wget \</span>
+<span class="go">        git \</span>
+<span class="go">        unzip &amp;&amp; \</span>
+<span class="go">        apt clean &amp;&amp; \</span>
+<span class="go">        rm -rf /var/lib/apt/lists/*</span>
+<span class="go">        pip install h5py</span>
+
+<span class="gp">        # </span>Download Gym and MuJoCo
+<span class="go">        mkdir /Gym &amp;&amp; cd /Gym</span>
+<span class="go">        git clone https://github.com/openai/gym.git || true &amp;&amp; \</span>
+<span class="go">        mkdir /Gym/.mujoco &amp;&amp; cd /Gym/.mujoco</span>
+<span class="go">        wget https://www.roboti.us/download/mjpro150_linux.zip  &amp;&amp; \</span>
+<span class="go">        unzip mjpro150_linux.zip &amp;&amp; \</span>
+<span class="go">        wget https://www.roboti.us/download/mujoco200_linux.zip &amp;&amp; \</span>
+<span class="go">        unzip mujoco200_linux.zip &amp;&amp; \</span>
+<span class="go">        mv mujoco200_linux mujoco200</span>
+
+<span class="gp">        # </span>Export global environment variables
+<span class="go">        export MUJOCO_PY_MJKEY_PATH=/Gym/.mujoco/mjkey.txt</span>
+<span class="go">        export MUJOCO_PY_MUJOCO_PATH=/Gym/.mujoco/mujoco150/</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mjpro150/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mujoco200/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/bin</span>
+<span class="go">        cp /mjkey.txt /Gym/.mujoco/mjkey.txt</span>
+<span class="gp">        # </span>Install Python dependencies
+<span class="go">        wget https://raw.githubusercontent.com/openai/mujoco-py/master/requirements.txt</span>
+<span class="go">        pip install -r requirements.txt</span>
+<span class="gp">        # </span>Install Gym and MuJoCo
+<span class="go">        cd /Gym/gym</span>
+<span class="go">        pip install -e &#39;.[all]&#39;</span>
+<span class="gp">        # </span>Change permission to use mujoco_py as non sudoer user
+<span class="go">        chmod -R 777 /opt/conda/lib/python3.6/site-packages/mujoco_py/</span>
+<span class="go">        pip install --upgrade minerl</span>
+
+<span class="gp"># </span>Export global environment variables
+<span class="gp">%</span>environment
+<span class="go">        export SHELL=/bin/sh</span>
+<span class="go">        export MUJOCO_PY_MJKEY_PATH=/Gym/.mujoco/mjkey.txt</span>
+<span class="go">        export MUJOCO_PY_MUJOCO_PATH=/Gym/.mujoco/mujoco150/</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mjpro150/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mujoco200/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/bin</span>
+<span class="go">        export PATH=/Gym/gym/.tox/py3/bin:$PATH</span>
+
+<span class="gp">%</span>runscript
+<span class="go">        exec /bin/sh &quot;$@&quot;</span>
+</pre></div>
+</div>
+<p>Here is the same recipe but written for TensorFlow:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>This is a dockerfile that sets up a full Gym install with <span class="nb">test</span> dependencies
+<span class="go">Bootstrap: docker</span>
+
+<span class="gp"># </span>Here we ll build our container upon the tensorflow container
+<span class="go">From: tensorflow/tensorflow:latest-gpu-py3</span>
+
+<span class="gp"># </span>Now we<span class="s1">&#39;ll copy the mjkey file located in the current directory inside the container&#39;</span>s root
+<span class="gp"># </span>directory
+<span class="gp">%</span>files
+<span class="go">        mjkey.txt</span>
+
+<span class="gp"># </span>Then we put everything we need to install
+<span class="gp">%</span>post
+<span class="go">        apt -y update &amp;&amp; \</span>
+<span class="go">        apt install -y keyboard-configuration &amp;&amp; \</span>
+<span class="go">        apt install -y \</span>
+<span class="go">        python3-setuptools \</span>
+<span class="go">        python3-dev \</span>
+<span class="go">        python-pyglet \</span>
+<span class="go">        python3-opengl \</span>
+<span class="go">        libjpeg-dev \</span>
+<span class="go">        libboost-all-dev \</span>
+<span class="go">        libsdl2-dev \</span>
+<span class="go">        libosmesa6-dev \</span>
+<span class="go">        patchelf \</span>
+<span class="go">        ffmpeg \</span>
+<span class="go">        xvfb \</span>
+<span class="go">        wget \</span>
+<span class="go">        git \</span>
+<span class="go">        unzip &amp;&amp; \</span>
+<span class="go">        apt clean &amp;&amp; \</span>
+<span class="go">        rm -rf /var/lib/apt/lists/*</span>
+
+<span class="gp">        # </span>Download Gym and MuJoCo
+<span class="go">        mkdir /Gym &amp;&amp; cd /Gym</span>
+<span class="go">        git clone https://github.com/openai/gym.git || true &amp;&amp; \</span>
+<span class="go">        mkdir /Gym/.mujoco &amp;&amp; cd /Gym/.mujoco</span>
+<span class="go">        wget https://www.roboti.us/download/mjpro150_linux.zip  &amp;&amp; \</span>
+<span class="go">        unzip mjpro150_linux.zip &amp;&amp; \</span>
+<span class="go">        wget https://www.roboti.us/download/mujoco200_linux.zip &amp;&amp; \</span>
+<span class="go">        unzip mujoco200_linux.zip &amp;&amp; \</span>
+<span class="go">        mv mujoco200_linux mujoco200</span>
+
+<span class="gp">        # </span>Export global environment variables
+<span class="go">        export MUJOCO_PY_MJKEY_PATH=/Gym/.mujoco/mjkey.txt</span>
+<span class="go">        export MUJOCO_PY_MUJOCO_PATH=/Gym/.mujoco/mujoco150/</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mjpro150/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mujoco200/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/bin</span>
+<span class="go">        cp /mjkey.txt /Gym/.mujoco/mjkey.txt</span>
+
+<span class="gp">        # </span>Install Python dependencies
+<span class="go">        wget https://raw.githubusercontent.com/openai/mujoco-py/master/requirements.txt</span>
+<span class="go">        pip install -r requirements.txt</span>
+<span class="gp">        # </span>Install Gym and MuJoCo
+<span class="go">        cd /Gym/gym</span>
+<span class="go">        pip install -e &#39;.[all]&#39;</span>
+<span class="gp">        # </span>Change permission to use mujoco_py as non sudoer user
+<span class="go">        chmod -R 777 /usr/local/lib/python3.5/dist-packages/mujoco_py/</span>
+
+<span class="gp">        # </span>Then install miniworld
+<span class="go">        cd /usr/local/</span>
+<span class="go">        git clone https://github.com/maximecb/gym-miniworld.git</span>
+<span class="go">        cd gym-miniworld</span>
+<span class="go">        pip install -e .</span>
+
+<span class="gp"># </span>Export global environment variables
+<span class="gp">%</span>environment
+<span class="go">        export SHELL=/bin/bash</span>
+<span class="go">        export MUJOCO_PY_MJKEY_PATH=/Gym/.mujoco/mjkey.txt</span>
+<span class="go">        export MUJOCO_PY_MUJOCO_PATH=/Gym/.mujoco/mujoco150/</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mjpro150/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/Gym/.mujoco/mujoco200/bin</span>
+<span class="go">        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/bin</span>
+<span class="go">        export PATH=/Gym/gym/.tox/py3/bin:$PATH</span>
+
+<span class="gp">%</span>runscript
+<span class="go">        exec /bin/bash &quot;$@&quot;</span>
+</pre></div>
+</div>
+<p>Keep in mind that those environment variables are sourced at runtime and not at
+build time. This is why, you should also define them in the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section
+since they are required to install MuJoCo.</p>
+</section>
+</section>
+</section>
+<section id="using-containers-on-clusters">
+<span id="using-containers"></span><h2>Using containers on clusters<a class="headerlink" href="#using-containers-on-clusters" title="Link permanente para este cabeçalho">¶</a></h2>
+<section id="how-to-use-containers-on-clusters">
+<h3>How to use containers on clusters<a class="headerlink" href="#how-to-use-containers-on-clusters" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>On every cluster with Slurm, datasets and intermediate results should go in
+<code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> while the final experiment results should go in <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>.
+In order to use the container you built, you need to copy it on the cluster you
+want to use.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>You should always store your container in $SCRATCH !</p>
+</div>
+<p>Then reserve a node with srun/sbatch, copy the container and your dataset on the
+node given by SLURM (i.e in <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>) and execute the code
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code> within the container <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+<p>Remember that <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">/tmp_log</span></code> and <code class="docutils literal notranslate"><span class="pre">/final_log</span></code> were created in the
+previous section. Now each time, we’ll use singularity, we are explicitly
+telling it to mount <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> on the cluster’s node in the folder
+<code class="docutils literal notranslate"><span class="pre">/dataset</span></code> inside the container with the option <code class="docutils literal notranslate"><span class="pre">-B</span></code> such that each dataset
+downloaded by PyTorch in <code class="docutils literal notranslate"><span class="pre">/dataset</span></code> will be available in <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>.</p>
+<p>This will allow us to have code and scripts that are invariant to the cluster
+environment. The option <code class="docutils literal notranslate"><span class="pre">-H</span></code> specify what will be the container’s home. For
+example, if you have your code in <code class="docutils literal notranslate"><span class="pre">$HOME/Project12345/Version35/</span></code> you can
+specify <code class="docutils literal notranslate"><span class="pre">-H</span> <span class="pre">$HOME/Project12345/Version35:/home</span></code>, thus the container will only
+have access to the code inside <code class="docutils literal notranslate"><span class="pre">Version35</span></code>.</p>
+<p>If you want to run multiple commands inside the container you can use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ \</span>
+<span class="go">    -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ \</span>
+<span class="gp">    $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; bash -c <span class="s1">&#39;pwd &amp;&amp; ls &amp;&amp; python &lt;YOUR_CODE&gt;&#39;</span>
+</pre></div>
+</div>
+<section id="example-interactive-case-srun-salloc">
+<h4>Example: Interactive case (srun/salloc)<a class="headerlink" href="#example-interactive-case-srun-salloc" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Once you get an interactive session with SLURM, copy <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_DATASET&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">0</span>. Get an interactive session
+<span class="gp">$ </span>srun --gres<span class="o">=</span>gpu:1
+<span class="gp"># </span><span class="m">1</span>. Copy your container on the compute node
+<span class="gp">$ </span>rsync -avz <span class="nv">$SCRATCH</span>/&lt;YOUR_CONTAINER&gt; <span class="nv">$SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">2</span>. Copy your dataset on the compute node
+<span class="gp">$ </span>rsync -avz <span class="nv">$SCRATCH</span>/&lt;YOUR_DATASET&gt; <span class="nv">$SLURM_TMPDIR</span>
+</pre></div>
+</div>
+<p>Then use <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">shell</span></code> to get a shell inside the container</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">3</span>. Get a shell <span class="k">in</span> your environment
+<span class="gp">$ </span>singularity shell --nv <span class="se">\</span>
+        -H <span class="nv">$HOME</span>:/home <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/dataset/ <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/tmp_log/ <span class="se">\</span>
+        -B <span class="nv">$SCRATCH</span>:/final_log/ <span class="se">\</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">4</span>. Execute your code
+<span class="go">&lt;Singularity_container&gt;$ python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+<p><strong>or</strong> use <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">exec</span></code> to execute <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">3</span>. Execute your code
+<span class="gp">$ </span>singularity <span class="nb">exec</span> --nv <span class="se">\</span>
+        -H <span class="nv">$HOME</span>:/home <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/dataset/ <span class="se">\</span>
+        -B <span class="nv">$SLURM_TMPDIR</span>:/tmp_log/ <span class="se">\</span>
+        -B <span class="nv">$SCRATCH</span>:/final_log/ <span class="se">\</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; <span class="se">\</span>
+        python &lt;YOUR_CODE&gt;
+</pre></div>
+</div>
+<p>You can create also the following alias to make your life easier.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span>alias my_env=&#39;singularity exec --nv \
+        -H $HOME:/home \
+        -B $SLURM_TMPDIR:/dataset/ \
+        -B $SLURM_TMPDIR:/tmp_log/ \
+        -B $SCRATCH:/final_log/ \
+        $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;&#39;
+</pre></div>
+</div>
+<p>This will allow you to run any code with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">my_env python &lt;YOUR_CODE&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="example-sbatch-case">
+<h4>Example: sbatch case<a class="headerlink" href="#example-sbatch-case" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>You can also create a <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> script:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
+<span class="gp">#</span>SBATCH --cpus-per-task<span class="o">=</span><span class="m">6</span>         <span class="c1"># Ask for 6 CPUs</span>
+<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:1              <span class="c1"># Ask for 1 GPU</span>
+<span class="gp">#</span>SBATCH --mem<span class="o">=</span>10G                 <span class="c1"># Ask for 10 GB of RAM</span>
+<span class="gp">#</span>SBATCH --time<span class="o">=</span><span class="m">0</span>:10:00            <span class="c1"># The job will run for 10 minutes</span>
+
+<span class="gp"># </span><span class="m">1</span>. Copy your container on the compute node
+<span class="go">rsync -avz $SCRATCH/&lt;YOUR_CONTAINER&gt; $SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">2</span>. Copy your dataset on the compute node
+<span class="go">rsync -avz $SCRATCH/&lt;YOUR_DATASET&gt; $SLURM_TMPDIR</span>
+<span class="gp"># </span><span class="m">3</span>. Executing your code with singularity
+<span class="go">singularity exec --nv \</span>
+<span class="go">        -H $HOME:/home \</span>
+<span class="go">        -B $SLURM_TMPDIR:/dataset/ \</span>
+<span class="go">        -B $SLURM_TMPDIR:/tmp_log/ \</span>
+<span class="go">        -B $SCRATCH:/final_log/ \</span>
+<span class="gp">        $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; <span class="se">\</span>
+        python <span class="s2">&quot;&lt;YOUR_CODE&gt;&quot;</span>
+<span class="gp"># </span><span class="m">4</span>. Copy whatever you want to save on <span class="nv">$SCRATCH</span>
+<span class="go">rsync -avz $SLURM_TMPDIR/&lt;to_save&gt; $SCRATCH</span>
+</pre></div>
+</div>
+</section>
+<section id="issue-with-pybullet-and-opengl-libraries">
+<h4>Issue with PyBullet and OpenGL libraries<a class="headerlink" href="#issue-with-pybullet-and-opengl-libraries" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>If you are running certain gym environments that require <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you may
+encounter a problem when running your singularity instance with the Nvidia
+drivers using the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag. This happens because the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag also
+provides the OpenGL libraries:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">libGL.so.1 =&gt; /.singularity.d/libs/libGL.so.1</span>
+<span class="go">libGLX.so.0 =&gt; /.singularity.d/libs/libGLX.so.0</span>
+</pre></div>
+</div>
+<p>If you don’t experience those problems with <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you probably don’t need
+to address this. Otherwise, you can resolve those problems by <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span>
+<span class="pre">-y</span> <span class="pre">libosmesa6-dev</span> <span class="pre">mesa-utils</span> <span class="pre">mesa-utils-extra</span> <span class="pre">libgl1-mesa-glx</span></code>, and then making
+sure that your <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> points to those libraries before the ones in
+<code class="docutils literal notranslate"><span class="pre">/.singularity.d/libs</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">%</span>environment
+<span class="gp">        # </span>...
+<span class="go">        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/mesa:$LD_LIBRARY_PATH</span>
+</pre></div>
+</div>
+</section>
+<section id="apuana-cluster">
+<h4>Apuana cluster<a class="headerlink" href="#apuana-cluster" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>On the Apuana cluster <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> is not yet defined, you should add the
+experiment results you want to keep in <code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;/</span></code>. In
+order to use the sbatch script above and to match other cluster environment’s
+names, you can define <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> as an alias for
+<code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;</span></code> with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">echo &quot;export SCRATCH=/network/scratch/${USER:0:1}/$USER&quot; &gt;&gt; ~/.bashrc</span>
+</pre></div>
+</div>
+<p>Then, you can follow the general procedure explained above.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Singularity</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#what-is-singularity">What is Singularity?</a></li>
+<li><a class="reference internal" href="#links-to-official-documentation">Links to official documentation</a></li>
+<li><a class="reference internal" href="#overview-of-the-steps-used-in-practice">Overview of the steps used in practice</a></li>
+<li><a class="reference internal" href="#nope-not-on-macos">Nope, not on MacOS</a></li>
+<li><a class="reference internal" href="#where-to-build-images">Where to build images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-containers">Building the containers</a><ul>
+<li><a class="reference internal" href="#first-way-build-and-use-a-sandbox">First way: Build and use a sandbox</a><ul>
+<li><a class="reference internal" href="#download-containers-from-the-web">Download containers from the web</a></li>
+<li><a class="reference internal" href="#how-to-add-or-install-stuff-in-a-container">How to add or install stuff in a container</a></li>
+<li><a class="reference internal" href="#creating-useful-directories">Creating useful directories</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#creating-a-new-image-from-the-sandbox">Creating a new image from the sandbox</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#second-way-use-recipes">Second way: Use recipes</a><ul>
+<li><a class="reference internal" href="#build-recipe-on-singularity-hub">Build recipe on singularity hub</a></li>
+<li><a class="reference internal" href="#example-recipe-with-openai-gym-mujoco-and-miniworld">Example: Recipe with OpenAI gym, MuJoCo and Miniworld</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-containers-on-clusters">Using containers on clusters</a><ul>
+<li><a class="reference internal" href="#how-to-use-containers-on-clusters">How to use containers on clusters</a><ul>
+<li><a class="reference internal" href="#example-interactive-case-srun-salloc">Example: Interactive case (srun/salloc)</a></li>
+<li><a class="reference internal" href="#example-sbatch-case">Example: sbatch case</a></li>
+<li><a class="reference internal" href="#issue-with-pybullet-and-opengl-libraries">Issue with PyBullet and OpenGL libraries</a></li>
+<li><a class="reference internal" href="#apuana-cluster">Apuana cluster</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Tópico anterior</h4>
+    <p class="topless"><a href="Userguide_portability.html"
+                          title="capítulo anterior">Portability concerns and solutions</a></p>
+  </div>
+  <div>
+    <h4>Próximo tópico</h4>
+    <p class="topless"><a href="Userguide_sharing_data.html"
+                          title="próximo capítulo">Sharing Data with ACLs</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_singularity.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="right" >
+          <a href="Userguide_sharing_data.html" title="Sharing Data with ACLs"
+             >próximo</a> |</li>
+        <li class="right" >
+          <a href="Userguide_portability.html" title="Portability concerns and solutions"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Singularity</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

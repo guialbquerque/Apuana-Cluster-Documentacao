@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Virtual environments &#8212; documentação Cluster Cin latest</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             accesskey="I">índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Virtual environments</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="virtual-environments">
+<span id="python"></span><h1>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>A virtual environment in Python is a local, isolated environment in which you
+can install or uninstall Python packages without interfering with the global
+environment (or other virtual environments). It usually lives in a directory
+(location varies depending on whether you use venv, conda or poetry). In order
+to use a virtual environment, you have to <strong>activate</strong> it. Activating an
+environment essentially sets environment variables in your shell so that:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">python</span></code> points to the right Python version for that environment (different</dt><dd><p>virtual environments can use different versions of Python!)</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> looks for packages in the virtual environment</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> installs packages into the virtual environment</p></li>
+<li><p>Any shell commands installed via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> are made available</p></li>
+</ul>
+<p>To run experiments within a virtual environment, you can simply activate it
+in the script given to <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<section id="pip-virtualenv">
+<h2>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Pip is the preferred package manager for Python and each cluster provides
+several Python versions through the associated module which comes with pip. In
+order to install new packages, you will first have to create a personal space
+for them to be stored.  The preferred solution (as it is the preferred solution
+on Digital Research Alliance of Canada clusters) is to use <a class="reference external" href="https://virtualenv.pypa.io/en/stable/">virtual
+environments</a>.</p>
+<p>First, load the Python module you want to use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load python/3.8</span>
+</pre></div>
+</div>
+<p>Then, create a virtual environment in your <code class="docutils literal notranslate"><span class="pre">home</span></code> directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv $HOME/&lt;env&gt;</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;env&gt;</span></code> is the name of your environment. Finally, activate the environment:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source $HOME/&lt;env&gt;/bin/activate</span>
+</pre></div>
+</div>
+<p>You can now install any Python package you wish using the <code class="docutils literal notranslate"><span class="pre">pip</span></code> command, e.g.
+<a class="reference external" href="https://pytorch.org/get-started/locally">pytorch</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install torch torchvision</span>
+</pre></div>
+</div>
+<p>Or <a class="reference external" href="https://www.tensorflow.org/install/gpu">Tensorflow</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install tensorflow-gpu</span>
+</pre></div>
+</div>
+</section>
+<section id="conda">
+<h2>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Another solution for Python is to use <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> or <a class="reference external" href="https://docs.anaconda.com">anaconda</a> which are also available through the <code class="docutils literal notranslate"><span class="pre">module</span></code>
+command: (the use of Conda is not recommended for Digital Research Alliance of
+Canada clusters due to the availability of custom-built packages for pip)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load miniconda/3
+<span class="go">[=== Module miniconda/3 loaded ===]</span>
+<span class="go">To enable conda environment functions, first use:</span>
+</pre></div>
+</div>
+<p>To create an environment (see <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>
+for details) using a specific Python version, you may write:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n &lt;env&gt; python=3.9</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;env&gt;</span></code> is the name of your environment. You can now activate it by doing:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate &lt;env&gt;</span>
+</pre></div>
+</div>
+<p>You are now ready to install any Python package you want in this environment.
+For instance, to install PyTorch, you can find the Conda command of any version
+you want on <a class="reference external" href="https://pytorch.org/get-started/locally">pytorch’s website</a>, e.g:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install pytorch torchvision cudatoolkit=10.0 -c pytorch</span>
+</pre></div>
+</div>
+<p>If you make a lot of environments and install/uninstall a lot of packages, it
+can be good to periodically clean up Conda’s cache:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda clean --all</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Tabela de Conteúdo</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Virtual environments</a><ul>
+<li><a class="reference internal" href="#pip-virtualenv">Pip/Virtualenv</a></li>
+<li><a class="reference internal" href="#conda">Conda</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>Essa Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Userguide_python.rst.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegação</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Índice Geral"
+             >índice</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Virtual environments</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
