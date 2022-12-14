@@ -36,5 +36,5 @@ A página da web do cluster foi gerada utilizando a ferramenta Sphinx, que utili
 
 Considerando, obviamente que a hierarquia de diretórios se mantém conforme este repositório.
 
-### Toda a página foi baseada no projeto já consolidade do Milla Cluster-Canadá
+### Toda a página foi baseada no projeto já consolidado do Milla Cluster-Canadá
 <https://github.com/mila-iqia/mila-docs>
