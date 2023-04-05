@@ -9,6 +9,9 @@
 ## Criação de arquivos de documentação
 ### Você pode começar a criar sua documentação adicionando arquivos de documentação no formato reStructuredText (ou RST) na pasta source do seu projeto. O RST é uma linguagem de marcação usada pelo Sphinx para criar a documentação. Você pode criar arquivos RST para cada seção da sua documentação, como páginas de introdução, tutoriais, referências, etc.
 
+## Organizacao de documentos
+
+### É possível criar diretórios dentro da pasta source do seu projeto Sphinx para organizar os arquivos RST. Na verdade, essa é uma prática comum para manter a organização e estrutura da documentação. Você pode criar quantos diretórios quiser dentro da pasta source e colocar os arquivos RST neles, seguindo a estrutura que melhor se adeque às suas necessidades. Após criar os diretórios e colocar os arquivos RST neles, você pode referenciar os arquivos RST em outros arquivos RST ou no arquivo de índice (normalmente chamado de index.rst) para criar a estrutura da documentação e estabelecer os links entre os diferentes tópicos
 
 ## Primeiros passos
 ### Considera-se que um sistema linux esteja sendo utilizado, caso esteja num windows, utilizar o wsl2 para uso do linux. Também considera-se que tenha o visual studio code instalado. 
@@ -34,9 +37,8 @@
 
 ### Após procedimentos acima, aplicar o seguinte comando para gerar renderização na web:
 
-
 ### sphinx-build -b html docs/source/ docs/build/html
- 
+
 ## Publicação da documentação na web
 ### Após a compilação da documentação, você pode publicá-la na web copiando os arquivos gerados na pasta _build/html para um servidor web ou plataforma de hospedagem de sua escolha. O processo de hospedagem no site do CIn pode ser verificado no link abaixo dependendo do sistema operacional utilizando: <https://helpdesk.cin.ufpe.br/servicos/dados-e-hospedagem>
 ### Toda a página foi baseada no projeto já consolidado do Milla Cluster-Canadá
