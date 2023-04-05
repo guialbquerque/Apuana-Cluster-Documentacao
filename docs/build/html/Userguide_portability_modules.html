@@ -4,15 +4,14 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>The module command &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
@@ -36,9 +35,9 @@
           <div class="body" role="main">
             
   <section id="the-module-command">
-<h1>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho"></a></h1>
 <p>For a list of available modules, simply use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module avail
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>avail
 <span class="go">--------------------------------------------------------------------------------------------------------------- Global Aliases ---------------------------------------------------------------------------------------------------------------</span>
 <span class="go">    cuda/10.0 -&gt; cudatoolkit/10.0    cuda/9.2      -&gt; cudatoolkit/9.2                                 pytorch/1.4.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1    tensorflow/1.15 -&gt; python/3.7/tensorflow/1.15</span>
 <span class="go">    cuda/10.1 -&gt; cudatoolkit/10.1    mujoco-py     -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.0       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0    tensorflow/2.2  -&gt; python/3.7/tensorflow/2.2</span>
@@ -81,13 +80,9 @@ If you want to use <code class="docutils literal notranslate"><span class="pre">
 </div>
 </section>
 <section id="available-software">
-<h1>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho"></a></h1>
 <p>Modules are divided in 5 main sections:</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 75%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Section</p></th>
 <th class="head"><p>Description</p></th>
@@ -123,7 +118,7 @@ user pick his favorite flavor.</p>
 </div>
 </section>
 <section id="default-package-location">
-<h1>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho"></a></h1>
 <p>Python by default uses the user site package first and packages provided by
 <code class="docutils literal notranslate"><span class="pre">module</span></code> last to not interfere with your installation.  If you want to skip
 packages installed in your site-packages folder (in your /home directory), you
@@ -131,14 +126,14 @@ have to start Python with the <code class="docutils literal notranslate"><span c
 <p>To check which package is loaded at import, you can print <code class="docutils literal notranslate"><span class="pre">package.__file__</span></code>
 to get the full path of the package.</p>
 <p><em>Example:</em></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
-<span class="gp">$ </span>python -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
+<span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
 <span class="go">/home/mila/my_home/.local/lib/python3.7/site-packages/torch/__init__.py   &lt;== package from your own site-package</span>
 </pre></div>
 </div>
 <p>Now with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
-<span class="gp">$ </span>python -s -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
+<span class="gp">$ </span>python<span class="w"> </span>-s<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
 <span class="go">/cvmfs/ai.mila.quebec/apps/x86_64/debian/pytorch/python3.7-cuda10.1-cudnn7.6-v1.5.0/lib/python3.7/site-packages/torch/__init__.py&#39;</span>
 </pre></div>
 </div>
@@ -195,8 +190,8 @@ to get the full path of the package.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

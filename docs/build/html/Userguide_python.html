@@ -4,15 +4,14 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Virtual environments &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
@@ -36,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="virtual-environments">
-<span id="python"></span><h1>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho">¶</a></h1>
+<span id="python"></span><h1>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho"></a></h1>
 <p>A virtual environment in Python is a local, isolated environment in which you
 can install or uninstall Python packages without interfering with the global
 environment (or other virtual environments). It usually lives in a directory
@@ -56,7 +55,7 @@ environment essentially sets environment variables in your shell so that:</p>
 <p>To run experiments within a virtual environment, you can simply activate it
 in the script given to <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
 <section id="pip-virtualenv">
-<h2>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho"></a></h2>
 <p>Pip is the preferred package manager for Python and each cluster provides
 several Python versions through the associated module which comes with pip. In
 order to install new packages, you will first have to create a personal space
@@ -86,11 +85,11 @@ environments</a>.</p>
 </div>
 </section>
 <section id="conda">
-<h2>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho"></a></h2>
 <p>Another solution for Python is to use <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> or <a class="reference external" href="https://docs.anaconda.com">anaconda</a> which are also available through the <code class="docutils literal notranslate"><span class="pre">module</span></code>
 command: (the use of Conda is not recommended for Digital Research Alliance of
 Canada clusters due to the availability of custom-built packages for pip)</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load miniconda/3
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>miniconda/3
 <span class="go">[=== Module miniconda/3 loaded ===]</span>
 <span class="go">To enable conda environment functions, first use:</span>
 </pre></div>
@@ -171,8 +170,8 @@ can be good to periodically clean up Conda’s cache:</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

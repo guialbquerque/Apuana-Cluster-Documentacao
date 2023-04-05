@@ -4,15 +4,14 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Advanced SLURM usage and Multiple GPU jobs &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
@@ -36,9 +35,9 @@
           <div class="body" role="main">
             
   <section id="advanced-slurm-usage-and-multiple-gpu-jobs">
-<h1>Advanced SLURM usage and Multiple GPU jobs<a class="headerlink" href="#advanced-slurm-usage-and-multiple-gpu-jobs" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>Advanced SLURM usage and Multiple GPU jobs<a class="headerlink" href="#advanced-slurm-usage-and-multiple-gpu-jobs" title="Link permanente para este cabeçalho"></a></h1>
 <section id="handling-preemption">
-<h2>Handling preemption<a class="headerlink" href="#handling-preemption" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Handling preemption<a class="headerlink" href="#handling-preemption" title="Link permanente para este cabeçalho"></a></h2>
 <p id="advanced-preemption">On the Apuana cluster, jobs can preempt one-another depending on their priority
 (unkillable&gt;high&gt;low) (See the <a class="reference external" href="https://slurm.schedmd.com/preempt.html">Slurm documentation</a>)</p>
 <p>The default preemption mechanism is to kill and re-queue the job automatically
@@ -54,19 +53,19 @@ to properly terminate a job and save what’s necessary to restart the job.  On
 each cluster, you’ll be allowed a <em>grace period</em> before SLURM actually kills
 your job (<code class="docutils literal notranslate"><span class="pre">SIGKILL</span></code>).</p>
 <p>The easiest way to handle preemption is by trapping the <code class="docutils literal notranslate"><span class="pre">SIGTERM</span></code> signal</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>SBATCH --ntasks<span class="o">=</span><span class="m">1</span>
-<span class="gp">#</span>SBATCH ....
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>....
 
 <span class="go">exit_script() {</span>
 <span class="go">    echo &quot;Preemption signal, saving myself&quot;</span>
 <span class="go">    trap - SIGTERM # clear the trap</span>
-<span class="gp">    # </span>Optional: sends SIGTERM to child/sub processes
+<span class="gp">    # </span>Optional:<span class="w"> </span>sends<span class="w"> </span>SIGTERM<span class="w"> </span>to<span class="w"> </span>child/sub<span class="w"> </span>processes
 <span class="go">    kill -- -$$</span>
 <span class="go">}</span>
 
 <span class="go">trap exit_script SIGTERM</span>
 
-<span class="gp"># </span>The main script part
+<span class="gp"># </span>The<span class="w"> </span>main<span class="w"> </span>script<span class="w"> </span>part
 <span class="go">python3 my_script</span>
 </pre></div>
 </div>
@@ -83,17 +82,17 @@ your job (<code class="docutils literal notranslate"><span class="pre">SIGKILL</
 </div>
 </section>
 <section id="packing-jobs">
-<h2>Packing jobs<a class="headerlink" href="#packing-jobs" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Packing jobs<a class="headerlink" href="#packing-jobs" title="Link permanente para este cabeçalho"></a></h2>
 <section id="sharing-a-gpu-between-processes">
-<h3>Sharing a GPU between processes<a class="headerlink" href="#sharing-a-gpu-between-processes" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Sharing a GPU between processes<a class="headerlink" href="#sharing-a-gpu-between-processes" title="Link permanente para este cabeçalho"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">srun</span></code>, when used in a batch job is responsible for starting tasks on the
 allocated resources (see srun) SLURM batch script</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>SBATCH --ntasks-per-node<span class="o">=</span><span class="m">2</span>
-<span class="gp">#</span>SBATCH --output<span class="o">=</span>myjob_output_wrapper.out
-<span class="gp">#</span>SBATCH --ntasks<span class="o">=</span><span class="m">2</span>
-<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:1
-<span class="gp">#</span>SBATCH --cpus-per-task<span class="o">=</span><span class="m">4</span>
-<span class="gp">#</span>SBATCH --mem<span class="o">=</span>18G
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">2</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--output<span class="o">=</span>myjob_output_wrapper.out
+<span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">2</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--gres<span class="o">=</span>gpu:1
+<span class="gp">#</span>SBATCH<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">4</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--mem<span class="o">=</span>18G
 <span class="go">srun -l --output=myjob_output_%t.out python script args</span>
 </pre></div>
 </div>
@@ -115,7 +114,7 @@ you can use a multi-prog configuration file: <code class="docutils literal notra
 <code class="docutils literal notranslate"><span class="pre">srun</span></code> command: this will prepend each line with the taskid (0:, 1:)</p>
 </section>
 <section id="sharing-a-node-with-multiple-gpu-1process-gpu">
-<h3>Sharing a node with multiple GPU 1process/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-1process-gpu" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Sharing a node with multiple GPU 1process/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-1process-gpu" title="Link permanente para este cabeçalho"></a></h3>
 <p>On Digital Research Alliance of Canada, several nodes, especially nodes with
 <code class="docutils literal notranslate"><span class="pre">largeGPU</span></code> (P100) are reserved for jobs requesting the whole node, therefore
 packing multiple processes in a single job can leverage faster GPU.</p>
@@ -129,11 +128,11 @@ in a subset (except –cpu-per-task which is a per-task requirement)</p>
 <p>Example for a GPU node with 24 cores and 4 GPUs and 128G of RAM
 Requesting 1 task per GPU</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
-<span class="gp">#</span>SBATCH --nodes<span class="o">=</span><span class="m">1</span>-1
-<span class="gp">#</span>SBATCH --ntasks-per-node<span class="o">=</span><span class="m">4</span>
-<span class="gp">#</span>SBATCH --output<span class="o">=</span>myjob_output_wrapper.out
-<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:4
-<span class="gp">#</span>SBATCH --cpus-per-task<span class="o">=</span><span class="m">6</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span>-1
+<span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">4</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--output<span class="o">=</span>myjob_output_wrapper.out
+<span class="gp">#</span>SBATCH<span class="w"> </span>--gres<span class="o">=</span>gpu:4
+<span class="gp">#</span>SBATCH<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">6</span>
 <span class="go">srun --gres=gpu:1 -n1 --mem=30G -l --output=%j-step-%s.out --exclusive --multi-prog python script args1 &amp;</span>
 <span class="go">srun --gres=gpu:1 -n1 --mem=30G -l --output=%j-step-%s.out --exclusive --multi-prog python script args2 &amp;</span>
 <span class="go">srun --gres=gpu:1 -n1 --mem=30G -l --output=%j-step-%s.out --exclusive --multi-prog python script args3 &amp;</span>
@@ -150,18 +149,18 @@ Requesting 1 task per GPU</p>
 </ul>
 </section>
 <section id="sharing-a-node-with-multiple-gpu-multiple-processes-gpu">
-<h3>Sharing a node with multiple GPU &amp; multiple processes/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-multiple-processes-gpu" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Sharing a node with multiple GPU &amp; multiple processes/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-multiple-processes-gpu" title="Link permanente para este cabeçalho"></a></h3>
 <p>Combining both previous sections, we can create a script requesting a whole node
 with four GPUs, allocating 1 GPU per <code class="docutils literal notranslate"><span class="pre">srun</span></code> and sharing each GPU with multiple
 processes</p>
 <p>Example still with a 24 cores/4 GPUs/128G RAM
 Requesting 2 tasks per GPU</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
-<span class="gp">#</span>SBATCH --nodes<span class="o">=</span><span class="m">1</span>-1
-<span class="gp">#</span>SBATCH --ntasks-per-node<span class="o">=</span><span class="m">8</span>
-<span class="gp">#</span>SBATCH --output<span class="o">=</span>myjob_output_wrapper.out
-<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:4
-<span class="gp">#</span>SBATCH --cpus-per-task<span class="o">=</span><span class="m">3</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span>-1
+<span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--output<span class="o">=</span>myjob_output_wrapper.out
+<span class="gp">#</span>SBATCH<span class="w"> </span>--gres<span class="o">=</span>gpu:4
+<span class="gp">#</span>SBATCH<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">3</span>
 <span class="go">srun --gres=gpu:1 -n2 --mem=30G -l --output=%j-step-%s-task-%t.out --exclusive --multi-prog silly.conf &amp;</span>
 <span class="go">srun --gres=gpu:1 -n2 --mem=30G -l --output=%j-step-%s-task-%t.out --exclusive --multi-prog silly.conf &amp;</span>
 <span class="go">srun --gres=gpu:1 -n2 --mem=30G -l --output=%j-step-%s-task-%t.out --exclusive --multi-prog silly.conf &amp;</span>
@@ -183,7 +182,7 @@ Requesting 2 tasks per GPU</p>
 </ul>
 <p>Running <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> in silly.conf, while parsing the output, we can see 4
 GPUs allocated and 2 tasks per GPU</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat JOBID-step-* <span class="p">|</span> grep Tesla
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>JOBID-step-*<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Tesla
 <span class="go">0: |   0  Tesla P100-PCIE...  On   | 00000000:04:00.0 Off |                    0 |</span>
 <span class="go">1: |   0  Tesla P100-PCIE...  On   | 00000000:04:00.0 Off |                    0 |</span>
 <span class="go">0: |   0  Tesla P100-PCIE...  On   | 00000000:83:00.0 Off |                    0 |</span>
@@ -256,8 +255,8 @@ GPUs allocated and 2 tasks per GPU</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

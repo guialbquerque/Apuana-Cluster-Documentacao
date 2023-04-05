@@ -4,15 +4,14 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Multiple Nodes &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
@@ -36,38 +35,37 @@
           <div class="body" role="main">
             
   <section id="multiple-nodes">
-<h1>Multiple Nodes<a class="headerlink" href="#multiple-nodes" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>Multiple Nodes<a class="headerlink" href="#multiple-nodes" title="Link permanente para este cabeçalho"></a></h1>
 <section id="data-parallel">
-<h2>Data Parallel<a class="headerlink" href="#data-parallel" title="Link permanente para este cabeçalho">¶</a></h2>
-<img alt="_images/dataparallel.png" src="_images/dataparallel.png" />
+<h2>Data Parallel<a class="headerlink" href="#data-parallel" title="Link permanente para este cabeçalho"></a></h2>
 <p>Request 3 nodes with at least 4 GPUs each.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
 
-<span class="gp"># </span>Number of Nodes
-<span class="gp">#</span>SBATCH --nodes<span class="o">=</span><span class="m">3</span>
+<span class="gp"># </span>Number<span class="w"> </span>of<span class="w"> </span>Nodes
+<span class="gp">#</span>SBATCH<span class="w"> </span>--nodes<span class="o">=</span><span class="m">3</span>
 
-<span class="gp"># </span>Number of tasks. <span class="m">3</span> <span class="o">(</span><span class="m">1</span> per node<span class="o">)</span>
-<span class="gp">#</span>SBATCH --ntasks<span class="o">=</span><span class="m">3</span>
+<span class="gp"># </span>Number<span class="w"> </span>of<span class="w"> </span>tasks.<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">(</span><span class="m">1</span><span class="w"> </span>per<span class="w"> </span>node<span class="o">)</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">3</span>
 
-<span class="gp"># </span>Number of GPU per node
-<span class="gp">#</span>SBATCH --gres<span class="o">=</span>gpu:4
-<span class="gp">#</span>SBATCH --gpus-per-node<span class="o">=</span><span class="m">4</span>
+<span class="gp"># </span>Number<span class="w"> </span>of<span class="w"> </span>GPU<span class="w"> </span>per<span class="w"> </span>node
+<span class="gp">#</span>SBATCH<span class="w"> </span>--gres<span class="o">=</span>gpu:4
+<span class="gp">#</span>SBATCH<span class="w"> </span>--gpus-per-node<span class="o">=</span><span class="m">4</span>
 
-<span class="gp"># </span><span class="m">16</span> CPUs per node
-<span class="gp">#</span>SBATCH --cpus-per-gpu<span class="o">=</span><span class="m">4</span>
+<span class="gp"># </span><span class="m">16</span><span class="w"> </span>CPUs<span class="w"> </span>per<span class="w"> </span>node
+<span class="gp">#</span>SBATCH<span class="w"> </span>--cpus-per-gpu<span class="o">=</span><span class="m">4</span>
 
-<span class="gp"># </span>16Go per nodes <span class="o">(</span>4Go per GPU<span class="o">)</span>
-<span class="gp">#</span>SBATCH --mem<span class="o">=</span>16G
+<span class="gp"># </span>16Go<span class="w"> </span>per<span class="w"> </span>nodes<span class="w"> </span><span class="o">(</span>4Go<span class="w"> </span>per<span class="w"> </span>GPU<span class="o">)</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--mem<span class="o">=</span>16G
 
-<span class="gp"># </span>we need all nodes to be ready at the same <span class="nb">time</span>
-<span class="gp">#</span>SBATCH --wait-all-nodes<span class="o">=</span><span class="m">1</span>
+<span class="gp"># </span>we<span class="w"> </span>need<span class="w"> </span>all<span class="w"> </span>nodes<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>ready<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>same<span class="w"> </span><span class="nb">time</span>
+<span class="gp">#</span>SBATCH<span class="w"> </span>--wait-all-nodes<span class="o">=</span><span class="m">1</span>
 
-<span class="gp"># </span>Total resources:
-<span class="gp">#   </span>CPU: <span class="m">16</span> * <span class="nv">3</span> <span class="o">=</span> <span class="m">48</span>
-<span class="gp">#   </span>RAM: <span class="m">16</span> * <span class="nv">3</span> <span class="o">=</span> <span class="m">48</span> Go
-<span class="gp">#   </span>GPU:  <span class="m">4</span> * <span class="nv">3</span> <span class="o">=</span> <span class="m">12</span>
+<span class="gp"># </span>Total<span class="w"> </span>resources:
+<span class="gp">#   </span>CPU:<span class="w"> </span><span class="m">16</span><span class="w"> </span>*<span class="w"> </span><span class="nv">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">48</span>
+<span class="gp">#   </span>RAM:<span class="w"> </span><span class="m">16</span><span class="w"> </span>*<span class="w"> </span><span class="nv">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">48</span><span class="w"> </span>Go
+<span class="gp">#   </span>GPU:<span class="w">  </span><span class="m">4</span><span class="w"> </span>*<span class="w"> </span><span class="nv">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span>
 
-<span class="gp"># </span>Setup our rendez-vous point
+<span class="gp"># </span>Setup<span class="w"> </span>our<span class="w"> </span>rendez-vous<span class="w"> </span>point
 <span class="go">RDV_ADDR=$(hostname)</span>
 <span class="go">WORLD_SIZE=$SLURM_JOB_NUM_NODES</span>
 <span class="gp"># </span>-----
@@ -246,8 +244,8 @@ In the example above this means at least 12 processes are spawn, at least 4 on e
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

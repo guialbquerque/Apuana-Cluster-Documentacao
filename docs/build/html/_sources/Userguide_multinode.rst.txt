@@ -4,7 +4,7 @@ Multiple Nodes
 Data Parallel
 -------------
 
-.. image:: dataparallel.png
+.. image::/home/barad-dur/Apuana-Cluster-Documentacao/docs/source/Imagens/dataparallel.png
 
 Request 3 nodes with at least 4 GPUs each.
 

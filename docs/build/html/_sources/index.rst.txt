@@ -23,8 +23,7 @@ Para acessar o cluster é necessário ter um login cin.ufpe.br e ter o acesso ha
    :caption: General Theory
    :maxdepth: 2
 
-   Theory_cluster
-
+   TheoryCluster/Theory_cluster
   
 
 .. toctree::
@@ -38,7 +37,7 @@ Para acessar o cluster é necessário ter um login cin.ufpe.br e ter o acesso ha
    :caption: How to and Guides
    :maxdepth: 2
 
-   Userguide
+   UserGuide/Userguide
    
  
 .. toctree::

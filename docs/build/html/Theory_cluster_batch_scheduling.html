@@ -4,15 +4,14 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>The workload manager &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
@@ -36,14 +35,14 @@
           <div class="body" role="main">
             
   <section id="the-workload-manager">
-<h1>The workload manager<a class="headerlink" href="#the-workload-manager" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>The workload manager<a class="headerlink" href="#the-workload-manager" title="Link permanente para este cabeçalho"></a></h1>
 <p>On a cluster, users don’t have direct access to the compute nodes but
 instead connect to a login node and add jobs to the workload manager
 queue. Whenever there are resources available to execute these jobs
 they will be allocated to a compute node and run, which can be
 immediately or after a wait of up to several days.</p>
 <section id="anatomy-of-a-job">
-<h2>Anatomy of a job<a class="headerlink" href="#anatomy-of-a-job" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Anatomy of a job<a class="headerlink" href="#anatomy-of-a-job" title="Link permanente para este cabeçalho"></a></h2>
 <p>A job is comprised of a number of steps that will run one after the
 other. This is done so that you can schedule a sequence of processes
 that can use the results of the previous steps without having to
@@ -69,7 +68,7 @@ do not need to always be used. It is perfectly acceptable to sumbit
 jobs with a single step, a single task and a single process.</p>
 </section>
 <section id="understanding-the-queue">
-<h2>Understanding the queue<a class="headerlink" href="#understanding-the-queue" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Understanding the queue<a class="headerlink" href="#understanding-the-queue" title="Link permanente para este cabeçalho"></a></h2>
 <p>The available resources on the cluster are not infinite and it is the
 workload manager’s job to allocate them. Whenever a job request comes
 in and there are not enough resources available to start it
@@ -85,7 +84,7 @@ can see the status of your queued jobs and why they remain in the
 queue.</p>
 </section>
 <section id="about-partitions">
-<h2>About partitions<a class="headerlink" href="#about-partitions" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>About partitions<a class="headerlink" href="#about-partitions" title="Link permanente para este cabeçalho"></a></h2>
 <p>The workload manager will divide the cluster into partitions according
 to the configuration set by the admins. A partition is a set of
 machines typically reserved for a particular purpose. An example might
@@ -102,7 +101,7 @@ clusters where different hardware is mixed in and not all software is
 compatible with all of it (for example x86 and POWER cpus).</p>
 </section>
 <section id="exceding-limits-preemption-and-grace-periods">
-<h2>Exceding limits (preemption and grace periods)<a class="headerlink" href="#exceding-limits-preemption-and-grace-periods" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Exceding limits (preemption and grace periods)<a class="headerlink" href="#exceding-limits-preemption-and-grace-periods" title="Link permanente para este cabeçalho"></a></h2>
 <p>To ensure a fair share of the computing resources for all, the workload
 manager establishes limits on the amount of resources that a single
 user can use at once. These can be hard limits which prevent running
@@ -130,7 +129,7 @@ will be terminated if it goes too much over. This makes it important
 to ensure you estimate resource usage accurately.</p>
 </section>
 <section id="apuana-information">
-<h2>Apuana information<a class="headerlink" href="#apuana-information" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Apuana information<a class="headerlink" href="#apuana-information" title="Link permanente para este cabeçalho"></a></h2>
 <p><strong>Slurm</strong> client commands are available on the login nodes for you to submit
 jobs to the main controller and add your job to the queue. Jobs are of 2 types:
 <em>batch</em> jobs and <em>interactive</em> jobs.</p>
@@ -147,7 +146,7 @@ your code</span>.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/cin-logo.png" alt="Logo"/>
+              <img class="logo" src="_static/conf.py" alt="Logo"/>
             </a></p>
   <div>
     <h3><a href="index.html">Tabela de Conteúdo</a></h3>
@@ -195,8 +194,8 @@ your code</span>.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

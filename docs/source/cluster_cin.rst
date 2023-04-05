@@ -1,4 +1,4 @@
-Arquitetura Cluster Apuana
+Arquitetura do cluster Apuana
 ==========================
 
 Visão geral da arquitetura e acesso
@@ -39,10 +39,10 @@ Visão geral de funcionamento do cluster
 Política de Alocação de Recursos
 ================================
 
-- Quota destinada aos pesquisadores (geralmente professores do CIn)
+- Cota destinada aos pesquisadores (geralmente professores do CIn)
     Pesquisadores definem quem está em seu grupo de pesquisa
     Todos em um grupo de pesquisa usam a quota do pesquisador
-- Quota destinada a cada pesquisador depende da quantidade de recursos que ele investiu no cluster
+- Cota destinada a cada pesquisador depende da quantidade de recursos que ele investiu no cluster
 - Uma quota mínima será fornecida a todos os professores do CIn e aos pesquisadores participantes do Projeto Hiper.
 
 Política de Uso

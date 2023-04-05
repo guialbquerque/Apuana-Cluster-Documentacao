@@ -9,7 +9,7 @@ A página da web do cluster foi gerada utilizando a ferramenta Sphinx, que utili
 ### 1.  pip install -U --pre sphinx
 ## Instalação de alguns pacotes e temas utilizados na renderização
 
-### 2. pip install sphinx_rtd_theme
+### 2. pip install sphinx_rtd_theme,  wheel, groundwork-sphinx-theme
 
 ### Após instalação, adicionar no arquivo conf.py
 
@@ -22,7 +22,7 @@ A página da web do cluster foi gerada utilizando a ferramenta Sphinx, que utili
 
 ### Tema principal utilizado: Groundwork
 
-### 3. pip install groundwork-sphinx-theme
+### 3. 
 
 ### Adicionar em conf.py a seguinte linha:
 

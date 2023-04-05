@@ -4,21 +4,19 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Portability concerns and solutions &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/translations.js"></script>
     <link rel="index" title="Índice" href="genindex.html" />
-    <link rel="search" title="Buscar" href="search.html" />
-    <link rel="prev" title="Running your code" href="Userguide_running_code.html" /> 
+    <link rel="search" title="Buscar" href="search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navegação</h3>
@@ -26,9 +24,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="Índice Geral"
              accesskey="I">índice</a></li>
-        <li class="right" >
-          <a href="Userguide_running_code.html" title="Running your code"
-             accesskey="P">anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Portability concerns and solutions</a></li> 
       </ul>
@@ -40,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="portability-concerns-and-solutions">
-<h1>Portability concerns and solutions<a class="headerlink" href="#portability-concerns-and-solutions" title="Link permanente para este cabeçalho">¶</a></h1>
+<h1>Portability concerns and solutions<a class="headerlink" href="#portability-concerns-and-solutions" title="Link permanente para este cabeçalho"></a></h1>
 <p>When working on a software project, it is important to be aware of all the
 software and libraries the project relies on and to list them explicitly and
 <em>under a version control system</em> in such a way that they can easily be
@@ -73,10 +68,10 @@ environments</span> and <span class="xref std std-ref">containers</span>.</p>
 </li>
 </ul>
 <section id="managing-your-environments">
-<h2>Managing your environments<a class="headerlink" href="#managing-your-environments" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Managing your environments<a class="headerlink" href="#managing-your-environments" title="Link permanente para este cabeçalho"></a></h2>
 </section>
 <section id="virtual-environments">
-<span id="python"></span><h2>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho">¶</a></h2>
+<span id="python"></span><h2>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho"></a></h2>
 <p>A virtual environment in Python is a local, isolated environment in which you
 can install or uninstall Python packages without interfering with the global
 environment (or other virtual environments). It usually lives in a directory
@@ -96,7 +91,7 @@ environment essentially sets environment variables in your shell so that:</p>
 <p>To run experiments within a virtual environment, you can simply activate it
 in the script given to <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
 <section id="pip-virtualenv">
-<h3>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho"></a></h3>
 <p>Pip is the preferred package manager for Python and each cluster provides
 several Python versions through the associated module which comes with pip. In
 order to install new packages, you will first have to create a personal space
@@ -126,11 +121,11 @@ environments</a>.</p>
 </div>
 </section>
 <section id="conda">
-<h3>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho"></a></h3>
 <p>Another solution for Python is to use <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> or <a class="reference external" href="https://docs.anaconda.com">anaconda</a> which are also available through the <code class="docutils literal notranslate"><span class="pre">module</span></code>
 command: (the use of Conda is not recommended for Digital Research Alliance of
 Canada clusters due to the availability of custom-built packages for pip)</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load miniconda/3
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>miniconda/3
 <span class="go">[=== Module miniconda/3 loaded ===]</span>
 <span class="go">To enable conda environment functions, first use:</span>
 </pre></div>
@@ -158,7 +153,7 @@ can be good to periodically clean up Conda’s cache:</p>
 </section>
 </section>
 <section id="using-modules">
-<h2>Using Modules<a class="headerlink" href="#using-modules" title="Link permanente para este cabeçalho">¶</a></h2>
+<h2>Using Modules<a class="headerlink" href="#using-modules" title="Link permanente para este cabeçalho"></a></h2>
 <p>A lot of software, such as Python and Conda, is already compiled and available on
 the cluster through the <code class="docutils literal notranslate"><span class="pre">module</span></code> command and its sub-commands. In particular,
 if you wish to use <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7</span></code> you can simply do:</p>
@@ -166,9 +161,9 @@ if you wish to use <code class="docutils literal notranslate"><span class="pre">
 </pre></div>
 </div>
 <section id="the-module-command">
-<h3>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho"></a></h3>
 <p>For a list of available modules, simply use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module avail
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>avail
 <span class="go">--------------------------------------------------------------------------------------------------------------- Global Aliases ---------------------------------------------------------------------------------------------------------------</span>
 <span class="go">    cuda/10.0 -&gt; cudatoolkit/10.0    cuda/9.2      -&gt; cudatoolkit/9.2                                 pytorch/1.4.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1    tensorflow/1.15 -&gt; python/3.7/tensorflow/1.15</span>
 <span class="go">    cuda/10.1 -&gt; cudatoolkit/10.1    mujoco-py     -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.0       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0    tensorflow/2.2  -&gt; python/3.7/tensorflow/2.2</span>
@@ -211,13 +206,9 @@ If you want to use <code class="docutils literal notranslate"><span class="pre">
 </div>
 </section>
 <section id="available-software">
-<h3>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho"></a></h3>
 <p>Modules are divided in 5 main sections:</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 75%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Section</p></th>
 <th class="head"><p>Description</p></th>
@@ -253,7 +244,7 @@ user pick his favorite flavor.</p>
 </div>
 </section>
 <section id="default-package-location">
-<h3>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho">¶</a></h3>
+<h3>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho"></a></h3>
 <p>Python by default uses the user site package first and packages provided by
 <code class="docutils literal notranslate"><span class="pre">module</span></code> last to not interfere with your installation.  If you want to skip
 packages installed in your site-packages folder (in your /home directory), you
@@ -261,22 +252,22 @@ have to start Python with the <code class="docutils literal notranslate"><span c
 <p>To check which package is loaded at import, you can print <code class="docutils literal notranslate"><span class="pre">package.__file__</span></code>
 to get the full path of the package.</p>
 <p><em>Example:</em></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
-<span class="gp">$ </span>python -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
+<span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
 <span class="go">/home/mila/my_home/.local/lib/python3.7/site-packages/torch/__init__.py   &lt;== package from your own site-package</span>
 </pre></div>
 </div>
 <p>Now with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load pytorch/1.5.0
-<span class="gp">$ </span>python -s -c <span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
+<span class="gp">$ </span>python<span class="w"> </span>-s<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
 <span class="go">/cvmfs/ai.mila.quebec/apps/x86_64/debian/pytorch/python3.7-cuda10.1-cudnn7.6-v1.5.0/lib/python3.7/site-packages/torch/__init__.py&#39;</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="on-using-containers">
-<h2>On using containers<a class="headerlink" href="#on-using-containers" title="Link permanente para este cabeçalho">¶</a></h2>
-<p>Another option for creating portable code is <span class="xref std std-ref">Using containers</span>.</p>
+<h2>On using containers<a class="headerlink" href="#on-using-containers" title="Link permanente para este cabeçalho"></a></h2>
+<p>Another option for creating portable code is <a class="reference internal" href="Userguide_singularity_on_clusters.html#using-containers"><span class="std std-ref">Using containers on clusters</span></a>.</p>
 <p>Containers are a popular approach at deploying applications by packaging a lot
 of the required dependencies together. The most popular tool for this is
 <a class="reference external" href="https://www.docker.com/">Docker</a>, but Docker cannot be used on the Mila
@@ -320,11 +311,6 @@ Mila cluster. See section <span class="xref std std-ref">Singularity</span> for 
 </ul>
 
   </div>
-  <div>
-    <h4>Tópico anterior</h4>
-    <p class="topless"><a href="Userguide_running_code.html"
-                          title="capítulo anterior">Running your code</a></p>
-  </div>
   <div role="note" aria-label="source link">
     <h3>Essa Página</h3>
     <ul class="this-page-menu">
@@ -352,16 +338,13 @@ Mila cluster. See section <span class="xref std std-ref">Singularity</span> for 
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="Índice Geral"
              >índice</a></li>
-        <li class="right" >
-          <a href="Userguide_running_code.html" title="Running your code"
-             >anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Portability concerns and solutions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

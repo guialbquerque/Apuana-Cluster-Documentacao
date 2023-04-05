@@ -112,3 +112,4 @@ Exemplo com repositório privado do GitHub
 3. git clone https://username:token@github.com/username/repoName.git
 
 Em seguida, basta repetir os outros passos do exemplo com repositório público do GitHub.
+
