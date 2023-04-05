@@ -20,7 +20,7 @@
 ### 1. Abrir terminal e digitar: git clone https://github.com/guialbquerque/Apuana-Cluster-Documentacao.git
 
 ### 2. No terminal, mudar para o diretorio clonado com o comando: 'cd Apuana-Cluster-Documentacao'. Após isso, digitar 'code .' 
-### 3.  Dentro do vscode, abrir terminal e criar um ambiente virtual: pytho3 -m venv .cluster, e ativar: source .cluster/bin/activate
+### 3.  Dentro do vscode, abrir terminal e criar um ambiente virtual: python3 -m venv .cluster, e ativar: source .cluster/bin/activate
 ### 4. Instalar: pip install -U sphinx
 ## Instalação de alguns pacotes e temas utilizados na renderização
 
