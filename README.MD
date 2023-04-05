@@ -6,24 +6,25 @@
 ## Edição do arquivo de configuração
 ###  O arquivo de configuração principal é chamado de conf.py e está localizado na pasta raiz do projeto. Você pode editá-lo para configurar várias opções de documentação, como temas, extensões, entre outros.
 
-### Comandos necessários para gerar a renderização na web utilizando a ferramenta Sphinx do Python
-
 ## Criação de arquivos de documentação
 ### Você pode começar a criar sua documentação adicionando arquivos de documentação no formato reStructuredText (ou RST) na pasta source do seu projeto. O RST é uma linguagem de marcação usada pelo Sphinx para criar a documentação. Você pode criar arquivos RST para cada seção da sua documentação, como páginas de introdução, tutoriais, referências, etc.
 
-### Considera-se que um ambiente virtual foi criado para comportar todos os pacotes necessários.Exemplo: python3 -m venv .cluster
 
-### 1.  pip install -U sphinx
+## Primeiros passos
+### Considera-se que um sistema linux esteja sendo utilizado, caso esteja num windows, utilizar o wsl2 para uso do linux. Também considera-se que tenha o visual studio code instalado. 
+ 1. <https://learn.microsoft.com/en-us/windows/wsl/install> 
+ 2. <https://code.visualstudio.com/download>
+### 1. Abrir terminal e digitar: git clone https://github.com/guialbquerque/Apuana-Cluster-Documentacao.git
+
+### 2. No terminal, mudar para o diretorio clonado com o comando: 'cd Apuana-Cluster-Documentacao'. Após isso, digitar 'code .' 
+### 3.  Dentro do vscode, abrir terminal e criar um ambiente virtual: pytho3 -m venv .cluster, e ativar: source .cluster/bin/activate
+### 4. Instalar: pip install -U sphinx
 ## Instalação de alguns pacotes e temas utilizados na renderização
 
-### 2. pip install wheel, groundwork-sphinx-theme
+### 5. pip install wheel, groundwork-sphinx-theme
 
 
-### Tema principal utilizado: Groundwork
-
-### 3. Adicionar em conf.py a seguinte linha:
-
-### html_theme = 'groundwork'
+### Tema principal utilizado: Groundwork'
 
 ### As seguintes linhas em conf.py precisarao ser atualizadas:
 
@@ -31,7 +32,7 @@
 ### html_logo = '/home/barad-dur/Apuana-Cluster-Documentacao/docs/source/cin-logo.png'
 ### Considerando que toda a construcao foi feita num sistema linux e na home do sistema, basta alterar /home/USUARIO/Apuana-Cluster-Documentacao/docs/build/_static
 
-### Após procedimentos acima, caso alguma alteração tenha sido feita, aplicar o seguinte comando para gerar renderização na web:
+### Após procedimentos acima, aplicar o seguinte comando para gerar renderização na web:
 
 
 ### sphinx-build -b html docs/source/ docs/build/html
