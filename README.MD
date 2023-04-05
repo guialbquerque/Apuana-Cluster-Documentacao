@@ -24,7 +24,7 @@
 ### 4. Instalar: pip install -U sphinx
 ## Instalação de alguns pacotes e temas utilizados na renderização
 
-### 5. pip install wheel, groundwork-sphinx-theme
+### 5. pip install groundwork-sphinx-theme
 
 
 ### Tema principal utilizado: Groundwork'
