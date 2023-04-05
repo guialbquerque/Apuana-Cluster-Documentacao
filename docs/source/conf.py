@@ -12,8 +12,7 @@ from datetime import datetime
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_rtd_theme'
-    ]
+extensions = []
 
 project = 'Cluster Cin'
 copyright = str(datetime.now().year)
