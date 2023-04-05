@@ -1,5 +1,5 @@
 ## **Documentação do Cluster Apuana**
-## **Link para o site**: <https://www.cin.ufpe.br/~jgbal/docs/build/html/>
+## **Link para o site**: <https://www.cin.ufpe.br/~jgbal/build/html/>
 
 ### A página da web do cluster foi gerada utilizando Sphinx, ferramenta de documentação de código aberto amplamente usada para criar documentação técnica, incluindo documentação de código-fonte, manuais de usuário e documentação de API.. Recomenda-se uma leitura nos primeiros passos para melhor entendimento de como a ferramenta funciona. Esta documentação seguiu rigorosamente os passos descritos no site oficial. Segue link : <https://www.sphinx-doc.org/en/master/usage/quickstart.html>
 
