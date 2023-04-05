@@ -1,5 +1,5 @@
 
-Apuana Cluster Documentação
+Documentação do Cluster Apuana  
 ###########################
 
 **Acessando o Cluster**

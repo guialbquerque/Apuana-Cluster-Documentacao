@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Arquitetura Cluster Apuana &#8212; documentação Cluster Cin latest</title>
+    <title>Arquitetura do cluster Apuana &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
     <script src="_static/jquery.js"></script>
@@ -33,7 +33,7 @@
           <a href="index.html" title="Apuana Cluster Documentação"
              accesskey="P">anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Arquitetura Cluster Apuana</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Arquitetura do cluster Apuana</a></li> 
       </ul>
     </div>  
 
@@ -42,8 +42,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="arquitetura-cluster-apuana">
-<h1>Arquitetura Cluster Apuana<a class="headerlink" href="#arquitetura-cluster-apuana" title="Link permanente para este cabeçalho"></a></h1>
+  <section id="arquitetura-do-cluster-apuana">
+<h1>Arquitetura do cluster Apuana<a class="headerlink" href="#arquitetura-do-cluster-apuana" title="Link permanente para este cabeçalho"></a></h1>
 <section id="visao-geral-da-arquitetura-e-acesso">
 <h2>Visão geral da arquitetura e acesso<a class="headerlink" href="#visao-geral-da-arquitetura-e-acesso" title="Link permanente para este cabeçalho"></a></h2>
 <img alt="_images/arquitetura-cluster.png" src="_images/arquitetura-cluster.png" />
@@ -95,37 +95,45 @@ slurmd</p>
 <h1>Política de Alocação de Recursos<a class="headerlink" href="#politica-de-alocacao-de-recursos" title="Link permanente para este cabeçalho"></a></h1>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Quota destinada aos pesquisadores (geralmente professores do CIn)</dt><dd><p>Pesquisadores definem quem está em seu grupo de pesquisa
-Todos em um grupo de pesquisa usam a quota do pesquisador</p>
+<dt>Cota destinada aos pesquisadores (geralmente professores do CIn)</dt><dd><ul>
+<li><p>Pesquisadores definem os membros do grupo de pesquisa</p></li>
+<li><p>Todos em um grupo de pesquisa usam a cota do pesquisador</p></li>
+</ul>
 </dd>
 </dl>
 </li>
-<li><p>Quota destinada a cada pesquisador depende da quantidade de recursos que ele investiu no cluster</p></li>
-<li><p>Uma quota mínima será fornecida a todos os professores do CIn e aos pesquisadores participantes do Projeto Hiper.</p></li>
+<li><p>A cota destinada para cada pesquisador depende da quantidade de recursos que ele investiu no cluster</p></li>
+<li><p>Uma cota mínima será fornecida a todos os professores do CIn e aos pesquisadores participantes do Projeto Hiper.</p></li>
 </ul>
 </section>
 <section id="politica-de-uso">
 <h1>Política de Uso<a class="headerlink" href="#politica-de-uso" title="Link permanente para este cabeçalho"></a></h1>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Fila de jobs:</dt><dd><p>Cada usuário submete um job ao SLURM
-Na submissão do job, o usuário especifica os recursos que precisa (GPUs, CPUs, RAM)
-Quanto mais recursos ele solicita menor prioridade
-Usuários com mais quota possuem maior prioridade</p>
+<dt>Fila de jobs:</dt><dd><ul>
+<li><p>Cada usuário submete um job ao SLURM</p></li>
+<li><p>Na submissão do job, o usuário especifica os recursos que precisa (GPUs, CPUs, RAM)</p></li>
+<li><p>Quanto mais recursos ele solicitar, menor a prioridade</p></li>
+<li><p>Usuários com mais cota possuem maior prioridade</p></li>
+</ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Categorias de tempo execução:</dt><dd><p>Jobs de longa duração (ex.: 7 dias sem ser finalizado usando poucos recursos)
-Jobs de curta média (ex.: 1 dia) sem ser finalizado usando quantidade média de recursos
-Jobs de curta duração (ex.: 2 horas) sem sofrer preempção usando maior quantidade de recursos</p>
+<dt>Categorias de tempo execução:</dt><dd><ul>
+<li><p>Jobs de longa duração (ex.: 7 dias sem ser finalizadoe e usando poucos recursos)</p></li>
+<li><p>Jobs de média duração (ex.: 1 dia sem ser finalizado e usando uma quantidade média de recursos)</p></li>
+<li><p>Jobs de curta duração (ex.: 2 horas sem sofrer interrupção usando maior quantidade de recursos)</p></li>
+</ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Preempção:</dt><dd><p>Após um certo tempo mínimo de execução um job pode sofrer preempção para dar espaço para outros jobs (em situações de sobrecarga)
-Ao sofrer preempção o job volta para a fila de espera e será retomado quando houver recursos para ele
-O usuário é responsável por implementar o salvamento e carregamento do estado do seu job (checkpointing)</p>
+<dt>Preempção:</dt><dd><ul>
+<li><p>Após um certo tempo mínimo de execução, um job pode sofrer interrupção para dar espaço a outros jobs (em situações de sobrecarga)</p></li>
+<li><p>Ao sofrer interrupção, o job volta para a fila de espera e será retomado quando houver recursos para ele</p></li>
+<li><p>O usuário é responsável por implementar o salvamento e carregamento do estado do seu job (checkpointing)</p></li>
+</ul>
 </dd>
 </dl>
 </li>
@@ -136,14 +144,18 @@ O usuário é responsável por implementar o salvamento e carregamento do estado
 <ul class="simple">
 <li><p>Acesso externo indevido</p></li>
 <li><dl class="simple">
-<dt>Privacidade de dados</dt><dd><p>Datasets públicos (preferencialmente compartilhados)
-Datasets privados (compartilhados entre os membros de um grupo de pesquisa)</p>
+<dt>Privacidade de dados</dt><dd><ul>
+<li><p>Datasets públicos (preferencialmente compartilhados)</p></li>
+<li><p>Datasets privados (compartilhados entre os membros de um grupo de pesquisa)</p></li>
+</ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Uso indevido de recursos</dt><dd><p>Computação/armazenamento fora da cota de uso
-Mineração de criptomoedas (dentro ou fora da cota)</p>
+<dt>Uso indevido de recursos</dt><dd><ul>
+<li><p>Computação/armazenamento fora da cota de uso</p></li>
+<li><p>Mineração de criptomoedas (dentro ou fora da cota)</p></li>
+</ul>
 </dd>
 </dl>
 </li>
@@ -163,7 +175,7 @@ Mineração de criptomoedas (dentro ou fora da cota)</p>
   <div>
     <h3><a href="index.html">Tabela de Conteúdo</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Arquitetura Cluster Apuana</a><ul>
+<li><a class="reference internal" href="#">Arquitetura do cluster Apuana</a><ul>
 <li><a class="reference internal" href="#visao-geral-da-arquitetura-e-acesso">Visão geral da arquitetura e acesso</a></li>
 <li><a class="reference internal" href="#visao-geral-de-funcionamento-do-cluster">Visão geral de funcionamento do cluster</a></li>
 </ul>
@@ -218,7 +230,7 @@ Mineração de criptomoedas (dentro ou fora da cota)</p>
           <a href="index.html" title="Apuana Cluster Documentação"
              >anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Arquitetura Cluster Apuana</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Arquitetura do cluster Apuana</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -18,7 +18,7 @@
     <link rel="index" title="Índice" href="genindex.html" />
     <link rel="search" title="Buscar" href="search.html" />
     <link rel="next" title="What is a computer cluster?" href="TheoryCluster/Theory_cluster.html" />
-    <link rel="prev" title="Arquitetura Cluster Apuana" href="cluster_cin.html" /> 
+    <link rel="prev" title="Arquitetura do cluster Apuana" href="cluster_cin.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navegação</h3>
@@ -30,7 +30,7 @@
           <a href="TheoryCluster/Theory_cluster.html" title="What is a computer cluster?"
              accesskey="N">próximo</a> |</li>
         <li class="right" >
-          <a href="cluster_cin.html" title="Arquitetura Cluster Apuana"
+          <a href="cluster_cin.html" title="Arquitetura do cluster Apuana"
              accesskey="P">anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Primeiros Passos</a></li> 
@@ -45,15 +45,17 @@
   <section id="primeiros-passos">
 <h1>Primeiros Passos<a class="headerlink" href="#primeiros-passos" title="Link permanente para este cabeçalho"></a></h1>
 <section id="conectando-a-maquina-de-acesso">
-<h2>Conectando a Maquina de Acesso<a class="headerlink" href="#conectando-a-maquina-de-acesso" title="Link permanente para este cabeçalho"></a></h2>
-<p>O envio de tarefas para o cluster precisa ser feito a partir de uma maquina de acesso, a entrada na maquina de acesso é realizado através do SSH</p>
+<h2>Conectando a Máquina de Acesso<a class="headerlink" href="#conectando-a-maquina-de-acesso" title="Link permanente para este cabeçalho"></a></h2>
+<p>O envio de tarefas para o cluster precisa ser feito a partir de uma maquina de acesso. A entrada na maquina de acesso é realizado através do SSH.</p>
 <p><strong>ssh &lt;login&gt;&#64;slurm-client1.cin.ufpe.br</strong></p>
-<p>Uma vez conectado na máquina de acesso é possível alocar e editar seus jobs a partir de comandos <strong>slurm</strong>. Primeiramente, você precisará preparar seu ambiente de
-trabalho no servidor que você utilizará. Jobs que utilizam máquinas virtuais (<strong>Docker e afins</strong>) não serão aprovados, pois abrem brechas de segurança. Qualquer
-biblioteca que necessite de instalação, por favor, nos contate e faremos a instalação o mais rápido possível. Para acessar o servidor que realizará o processamento,
-utilize o comando “<strong>salloc</strong>”, como no exemplo abaixo:</p>
-<p><strong>salloc</strong></p>
-<p>Nossos servidores já tem o gerenciador de pacotes <strong>conda</strong> para qualquer projeto que for realizado em Python. Os comandos de git também estão disponíveis e prontos
+<p>Uma vez conectado na máquina de acesso, é possível alocar e editar seus jobs a partir de comandos <strong>slurm</strong>. Primeiramente, você precisará preparar seu ambiente de
+trabalho no servidor que utilizará. Jobs que utilizam máquinas virtuais (<strong>Docker e afins</strong>) não serão aprovados, pois abrem brechas de segurança. Qualquer
+biblioteca que necessite de instalação, por favor nos contate e faremos a instalação o mais rápido possível. Para acessar o servidor que realizará o processamento,
+utilize o comando “<strong>salloc</strong>” como no exemplo abaixo:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">salloc</span>
+</pre></div>
+</div>
+<p>Nossos servidores já possuem o gerenciador de pacotes <strong>conda</strong> para qualquer projeto que for realizado em Python. Os comandos de git também estão disponíveis e prontos
 para uso. Após a preparação do seu ambiente, volte para o nodo de login com o comando “<strong>exit</strong>” e rode o seu job com o comando <strong>srun</strong>. Exemplo:</p>
 <p><strong>srun –gpus=N_GPUS –cpus-per-task=N_CPUS nvidia-smi</strong></p>
 </section>
@@ -70,11 +72,11 @@ para uso. Após a preparação do seu ambiente, volte para o nodo de login com o
 <ol class="arabic simple">
 <li><p>git clone <a class="reference external" href="https://github.com/username/repoName.git">https://github.com/username/repoName.git</a></p></li>
 </ol>
-<p>Depois de clonar o repositório, é criado um script .sh. Uma das alternativas é utilizando nano:</p>
+<p>Depois de clonar o repositório, um script .sh será criado. Uma das alternativas é utilizando o comando nano:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nano test_slurm.sh</span>
 </pre></div>
 </div>
-<p>Em seguida, o usuário preenche o script com as diretivas do SBATCH que ele acha necessário e depois com os comandos que devem ser executados no node.</p>
+<p>Em seguida, o usuário preenche o script com as diretivas do SBATCH que ele achar necessário, e depois com os comandos que devem ser executados no node.</p>
 <p>test_slurm.sh</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/sh
 <span class="gp">#</span>SBATCH<span class="w"> </span>-o<span class="w"> </span>slurm-%j.out<span class="w">  </span><span class="c1"># Write the log here</span>
@@ -94,7 +96,7 @@ para uso. Após a preparação do seu ambiente, volte para o nodo de login com o
 <span class="go">python repoName/thisScript.py</span>
 </pre></div>
 </div>
-<p>Perceba a criação de um novo ambiente e em seguida sua ativação. Aqui foi realizado o dowgrade da versão do Python de 3.10 para 3.9. Isto foi feito porque
+<p>Aqui foi realizado o dowgrade da versão do Python de 3.10 para 3.9. Isto foi feito porque
 ainda existem bugs da classe DataLoader do PyTorch ao utilizar o python 3.10. O conda é bastante versátil neste aspecto, pois pode-se escolher a versão do
 python e das dependencias mais adequadas para o funcionamento do seu código.</p>
 <p>Um exemplo de script que faz uso de tensorflow é apresentado abaixo:</p>
@@ -128,7 +130,19 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
 <h2>Exemplo com repositório privado do GitHub<a class="headerlink" href="#exemplo-com-repositorio-privado-do-github" title="Link permanente para este cabeçalho"></a></h2>
 <p><strong>Clonando um repositório privado</strong></p>
 <ol class="arabic simple">
-<li><p>Foto do perfil -&gt; Settings -&gt; Developer settings -&gt; Personal access tokens -&gt; Tokens (classic) -&gt; Generate new token (classic) -&gt; configurar da forma que desejar -&gt; gerar token (salvar em um local seguro para reutilizar)</p></li>
+<li><dl class="simple">
+<dt>Foto do perfil</dt><dd><ul class="simple">
+<li><p>Settings</p></li>
+<li><p>Developer settings</p></li>
+<li><p>Personal access tokens</p></li>
+<li><p>Tokens (classic)</p></li>
+<li><p>Generate new token (classic)</p></li>
+<li><p>configurar da forma que desejar</p></li>
+<li><p>Gerar token (salvar em um local seguro para reutilizar)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 <li><p>Copie o token e clone o repositório substituindo o nome do usuário e o token no comando</p></li>
 <li><p>git clone <a class="reference external" href="https://username:token&#64;github.com/username/repoName.git">https://username:token&#64;github.com/username/repoName.git</a></p></li>
 </ol>
@@ -150,7 +164,7 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
     <h3><a href="index.html">Tabela de Conteúdo</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Primeiros Passos</a><ul>
-<li><a class="reference internal" href="#conectando-a-maquina-de-acesso">Conectando a Maquina de Acesso</a></li>
+<li><a class="reference internal" href="#conectando-a-maquina-de-acesso">Conectando a Máquina de Acesso</a></li>
 <li><a class="reference internal" href="#bibliotecas-disponiveis">Bibliotecas disponíveis</a></li>
 <li><a class="reference internal" href="#exemplo-com-repositorio-do-publico-do-github">Exemplo com repositório do público do GitHub</a></li>
 <li><a class="reference internal" href="#exemplo-com-repositorio-privado-do-github">Exemplo com repositório privado do GitHub</a></li>
@@ -162,7 +176,7 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
   <div>
     <h4>Tópico anterior</h4>
     <p class="topless"><a href="cluster_cin.html"
-                          title="capítulo anterior">Arquitetura Cluster Apuana</a></p>
+                          title="capítulo anterior">Arquitetura do cluster Apuana</a></p>
   </div>
   <div>
     <h4>Próximo tópico</h4>
@@ -200,7 +214,7 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
           <a href="TheoryCluster/Theory_cluster.html" title="What is a computer cluster?"
              >próximo</a> |</li>
         <li class="right" >
-          <a href="cluster_cin.html" title="Arquitetura Cluster Apuana"
+          <a href="cluster_cin.html" title="Arquitetura do cluster Apuana"
              >anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">documentação Cluster Cin latest</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Primeiros Passos</a></li> 
