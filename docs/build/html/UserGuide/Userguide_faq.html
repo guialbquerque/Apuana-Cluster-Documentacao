@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Frequently asked questions (FAQs) &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -35,55 +33,55 @@
           <div class="body" role="main">
             
   <section id="frequently-asked-questions-faqs">
-<h1>Frequently asked questions (FAQs)<a class="headerlink" href="#frequently-asked-questions-faqs" title="Link permanente para este cabeçalho"></a></h1>
+<h1>Frequently asked questions (FAQs)<a class="headerlink" href="#frequently-asked-questions-faqs" title="Link permanente para este cabeçalho">¶</a></h1>
 <section id="connection-ssh-issues">
-<h2>Connection/SSH issues<a class="headerlink" href="#connection-ssh-issues" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Connection/SSH issues<a class="headerlink" href="#connection-ssh-issues" title="Link permanente para este cabeçalho">¶</a></h2>
 <section id="i-m-getting-connection-refused-while-trying-to-connect-to-a-login-node">
-<h3>I’m getting <code class="docutils literal notranslate"><span class="pre">connection</span> <span class="pre">refused</span></code> while trying to connect to a login node<a class="headerlink" href="#i-m-getting-connection-refused-while-trying-to-connect-to-a-login-node" title="Link permanente para este cabeçalho"></a></h3>
+<h3>I’m getting <code class="docutils literal notranslate"><span class="pre">connection</span> <span class="pre">refused</span></code> while trying to connect to a login node<a class="headerlink" href="#i-m-getting-connection-refused-while-trying-to-connect-to-a-login-node" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Login nodes are protected against brute force attacks and might ban your IP if
 it detects too many connections/failures. You will be automatically unbanned
 after 1 hour. For any further problem, please <a href="#id1"><span class="problematic" id="id2">`</span></a>submit a support ticket.</p>
 </section>
 </section>
 <section id="shell-issues">
-<h2>Shell issues<a class="headerlink" href="#shell-issues" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Shell issues<a class="headerlink" href="#shell-issues" title="Link permanente para este cabeçalho">¶</a></h2>
 <section id="how-do-i-change-my-shell">
-<h3>How do I change my shell ?<a class="headerlink" href="#how-do-i-change-my-shell" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How do I change my shell ?<a class="headerlink" href="#how-do-i-change-my-shell" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>By default you will be assigned <code class="docutils literal notranslate"><span class="pre">/bin/bash</span></code> as a shell. If you would like to
 change for another one, please <a href="#id3"><span class="problematic" id="id4">`</span></a>submit a support ticket.</p>
 </section>
 </section>
 <section id="slurm-issues">
-<h2>SLURM issues<a class="headerlink" href="#slurm-issues" title="Link permanente para este cabeçalho"></a></h2>
+<h2>SLURM issues<a class="headerlink" href="#slurm-issues" title="Link permanente para este cabeçalho">¶</a></h2>
 <section id="how-can-i-get-an-interactive-shell-on-the-cluster">
-<h3>How can I get an interactive shell on the cluster ?<a class="headerlink" href="#how-can-i-get-an-interactive-shell-on-the-cluster" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How can I get an interactive shell on the cluster ?<a class="headerlink" href="#how-can-i-get-an-interactive-shell-on-the-cluster" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">salloc</span> <span class="pre">[--slurm_options]</span></code> without any executable at the end of the
 command, this will launch your default shell on an interactive session. Remember
 that an interactive session is bound to the login node where you start it so you
 could risk losing your job if the login node becomes unreachable.</p>
 </section>
 <section id="how-can-i-reset-my-cluster-password">
-<h3>How can I reset my cluster password ?<a class="headerlink" href="#how-can-i-reset-my-cluster-password" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How can I reset my cluster password ?<a class="headerlink" href="#how-can-i-reset-my-cluster-password" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>To reset your password, please <a href="#id5"><span class="problematic" id="id6">`</span></a>submit a support ticket.</p>
 <p><strong>Warning</strong>: your cluster password is the same as your Google Workspace account. So,
 after reset, you must use the new password for all your Google services.</p>
 </section>
 <section id="srun-error-mem-and-mem-per-cpu-are-mutually-exclusive">
-<h3>srun: error: –mem and –mem-per-cpu are mutually exclusive<a class="headerlink" href="#srun-error-mem-and-mem-per-cpu-are-mutually-exclusive" title="Link permanente para este cabeçalho"></a></h3>
+<h3>srun: error: –mem and –mem-per-cpu are mutually exclusive<a class="headerlink" href="#srun-error-mem-and-mem-per-cpu-are-mutually-exclusive" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>You can safely ignore this, <code class="docutils literal notranslate"><span class="pre">salloc</span></code> has a default memory flag in case you
 don’t provide one.</p>
 </section>
 <section id="how-can-i-see-where-and-if-my-jobs-are-running">
-<h3>How can I see where and if my jobs are running ?<a class="headerlink" href="#how-can-i-see-where-and-if-my-jobs-are-running" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How can I see where and if my jobs are running ?<a class="headerlink" href="#how-can-i-see-where-and-if-my-jobs-are-running" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span> <span class="pre">YOUR_USERNAME</span></code> to see all your job status and locations.
 To get more info on a running job, try <code class="docutils literal notranslate"><span class="pre">scontrol</span> <span class="pre">show</span> <span class="pre">job</span> <span class="pre">#JOBID</span></code></p>
 </section>
 <section id="unable-to-allocate-resources-invalid-account-or-account-partition-combination-specified">
-<h3>Unable to allocate resources: Invalid account or account/partition combination specified<a class="headerlink" href="#unable-to-allocate-resources-invalid-account-or-account-partition-combination-specified" title="Link permanente para este cabeçalho"></a></h3>
+<h3>Unable to allocate resources: Invalid account or account/partition combination specified<a class="headerlink" href="#unable-to-allocate-resources-invalid-account-or-account-partition-combination-specified" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Chances are your account is not setup properly. You should <a href="#id7"><span class="problematic" id="id8">`</span></a>submit a support ticket.</p>
 </section>
 <section id="how-do-i-cancel-a-job">
-<h3>How do I cancel a job?<a class="headerlink" href="#how-do-i-cancel-a-job" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How do I cancel a job?<a class="headerlink" href="#how-do-i-cancel-a-job" title="Link permanente para este cabeçalho">¶</a></h3>
 <ul class="simple">
 <li><p>To cancel a specific job, use <code class="docutils literal notranslate"><span class="pre">scancel</span> <span class="pre">#JOBID</span></code></p></li>
 <li><p>To cancel all your jobs (running and pending), use <code class="docutils literal notranslate"><span class="pre">scancel</span> <span class="pre">-u</span> <span class="pre">YOUR_USERNAME</span></code></p></li>
@@ -91,7 +89,7 @@ To get more info on a running job, try <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="how-can-i-access-a-node-on-which-one-of-my-jobs-is-running">
-<h3>How can I access a node on which one of my jobs is running ?<a class="headerlink" href="#how-can-i-access-a-node-on-which-one-of-my-jobs-is-running" title="Link permanente para este cabeçalho"></a></h3>
+<h3>How can I access a node on which one of my jobs is running ?<a class="headerlink" href="#how-can-i-access-a-node-on-which-one-of-my-jobs-is-running" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>You can ssh into a node on which you have a job running, your ssh connection
 will be adopted by your job, i.e.  if your job finishes your ssh connection will
 be automatically terminated. In order to connect to a node, you need to have
@@ -105,11 +103,11 @@ password-less ssh either with a key present in your home or with an
 </div>
 </section>
 <section id="i-m-getting-permission-denied-publickey-while-trying-to-connect-to-a-node">
-<h3>I’m getting <code class="docutils literal notranslate"><span class="pre">Permission</span> <span class="pre">denied</span> <span class="pre">(publickey)</span></code> while trying to connect to a node<a class="headerlink" href="#i-m-getting-permission-denied-publickey-while-trying-to-connect-to-a-node" title="Link permanente para este cabeçalho"></a></h3>
+<h3>I’m getting <code class="docutils literal notranslate"><span class="pre">Permission</span> <span class="pre">denied</span> <span class="pre">(publickey)</span></code> while trying to connect to a node<a class="headerlink" href="#i-m-getting-permission-denied-publickey-while-trying-to-connect-to-a-node" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>See previous question</p>
 </section>
 <section id="where-do-i-put-my-data-during-a-job">
-<h3>Where do I put my data during a job ?<a class="headerlink" href="#where-do-i-put-my-data-during-a-job" title="Link permanente para este cabeçalho"></a></h3>
+<h3>Where do I put my data during a job ?<a class="headerlink" href="#where-do-i-put-my-data-during-a-job" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Your <code class="docutils literal notranslate"><span class="pre">/home</span></code> as well as the datasets are on shared file-systems, it is
 recommended to copy them to the <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> to better process them and
 leverage higher-speed local drives. If you run a low priority job subject to
@@ -117,22 +115,22 @@ preemption, it’s better to save any output you want to keep on the shared file
 systems, because the <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> is deleted at the end of each job.</p>
 </section>
 <section id="slurmstepd-error-detected-1-oom-kill-event-s-in-step-batch-cgroup">
-<h3>slurmstepd: error: Detected 1 oom-kill event(s) in step #####.batch cgroup<a class="headerlink" href="#slurmstepd-error-detected-1-oom-kill-event-s-in-step-batch-cgroup" title="Link permanente para este cabeçalho"></a></h3>
+<h3>slurmstepd: error: Detected 1 oom-kill event(s) in step #####.batch cgroup<a class="headerlink" href="#slurmstepd-error-detected-1-oom-kill-event-s-in-step-batch-cgroup" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>You exceeded the amount of memory allocated to your job, either you did not
 request enough memory or you have a memory leak in your process. Try increasing
 the amount of memory requested with <code class="docutils literal notranslate"><span class="pre">--mem=</span></code> or <code class="docutils literal notranslate"><span class="pre">--mem-per-cpu=</span></code>.</p>
 </section>
 <section id="fork-retry-resource-temporarily-unavailable">
-<h3>fork: retry: Resource temporarily unavailable<a class="headerlink" href="#fork-retry-resource-temporarily-unavailable" title="Link permanente para este cabeçalho"></a></h3>
+<h3>fork: retry: Resource temporarily unavailable<a class="headerlink" href="#fork-retry-resource-temporarily-unavailable" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>You exceeded the limit of 2000 tasks/PIDs in your job, it probably means there
 is an issue with a sub-process spawning too many processes in your script. For
 any help with your software, please <a href="#id9"><span class="problematic" id="id10">`</span></a>submit a support ticket.</p>
 </section>
 </section>
 <section id="pytorch-issues">
-<h2>PyTorch issues<a class="headerlink" href="#pytorch-issues" title="Link permanente para este cabeçalho"></a></h2>
+<h2>PyTorch issues<a class="headerlink" href="#pytorch-issues" title="Link permanente para este cabeçalho">¶</a></h2>
 <section id="i-randomly-get-internal-assert-failed-at-aten-src-aten-mapallocator-cpp-263">
-<h3>I randomly get <code class="docutils literal notranslate"><span class="pre">INTERNAL</span> <span class="pre">ASSERT</span> <span class="pre">FAILED</span> <span class="pre">at</span> <span class="pre">&quot;../aten/src/ATen/MapAllocator.cpp&quot;:263</span></code><a class="headerlink" href="#i-randomly-get-internal-assert-failed-at-aten-src-aten-mapallocator-cpp-263" title="Link permanente para este cabeçalho"></a></h3>
+<h3>I randomly get <code class="docutils literal notranslate"><span class="pre">INTERNAL</span> <span class="pre">ASSERT</span> <span class="pre">FAILED</span> <span class="pre">at</span> <span class="pre">&quot;../aten/src/ATen/MapAllocator.cpp&quot;:263</span></code><a class="headerlink" href="#i-randomly-get-internal-assert-failed-at-aten-src-aten-mapallocator-cpp-263" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>You are using PyTorch 1.10.x and hitting <a class="reference external" href="https://github.com/pytorch/pytorch/issues/67864">#67864</a>,
 for which the solution is <a class="reference external" href="https://github.com/pytorch/pytorch/pull/72232">PR #72232</a>
 merged in PyTorch 1.11.x. For an immediate fix, consider the following compilable Gist:
@@ -232,7 +230,7 @@ be injected using the <code class="docutils literal notranslate"><span class="pr
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

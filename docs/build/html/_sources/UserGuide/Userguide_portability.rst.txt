@@ -1,67 +1,58 @@
-Portability concerns and solutions
-==================================
+Preocupações e soluções de portabilidade
+========================================
 
-When working on a software project, it is important to be aware of all the
-software and libraries the project relies on and to list them explicitly and
-*under a version control system* in such a way that they can easily be
-installed and made available on different systems. The upsides are significant:
+Ao trabalhar em um projeto de software, é importante estar ciente
+de todo o software e bibliotecas nos quais o projeto depende e 
+listá-los explicitamente e sob um sistema de controle de versão
+de tal forma que possam ser facilmente instalados e disponibilizados
+em diferentes sistemas. As vantagens são significativas:
 
-* Easily install and run on the cluster
-* Ease of collaboration
-* Better reproducibility
+* Facilidade de instalação e execução no cluster
+* Facilidade de colaboração
+* Melhor reprodutibilidade
 
-To achieve this, try to always keep in mind the following aspects:
 
-* **Versions:** For each dependency, make sure you have some record of the
-    specific version you are using during development. That way, in the future, you
-    will be able to reproduce the original environment which you know to be
-    compatible. Indeed, the more time passes, the more likely it is that newer
-    versions of some dependency have breaking changes. The ``pip freeze`` command can create
-    such a record for Python dependencies.
-* **Isolation:** Ideally, each of your software projects should be isolated from
-    the others. What this means is that updating the environment for project A
-  should *not* update the environment for project B. That way, you can freely
-    install and upgrade software and libraries for the former without worrying about
-    breaking the latter (which you might not notice until weeks later, the next time
-    you work on project B!) Isolation can be achieved using :ref:`Python Virtual
-    environments` and :ref:`containers`.
+Para alcançar isso, tente sempre manter em mente os seguintes aspectos:
+
+* Versões: Para cada dependência, certifique-se de ter algum registro da versão 
+    específica que está usando durante o desenvolvimento. Dessa forma, no futuro, você
+    poderá reproduzir o ambiente original que sabe ser compatível. De fato, quanto mais
+    tempo passa, mais provável é que novas versões de alguma dependência tenham alterações
+    quebradas. O comando pip freeze pode criar tal registro para dependências do Python.
+* Isolamento: Idealmente, cada um de seus projetos de software deve estar isolado dos outros.
+    O que isso significa é que atualizar o ambiente do projeto A não deve atualizar o ambiente do
+    projeto B. Dessa forma, você pode instalar e atualizar software e bibliotecas livremente para
+    o primeiro, sem se preocupar em quebrar o segundo (o que você pode não perceber até semanas 
+    depois, na próxima vez em que trabalhar no projeto B!) O isolamento pode ser alcançado usando
+    :ref:`Python Virtual environments` and :ref:`containers`.
 
 .. Creating a list of your software's dependencies
 .. -----------------------------------------------
 .. TODO
 
 
-Managing your environments
+Gerenciando seus ambientes
 --------------------------
 
 .. include:: Userguide_python.rst
 
 
-Using Modules
--------------
+Usando módulos
+--------------
 
-A lot of software, such as Python and Conda, is already compiled and available on
-the cluster through the ``module`` command and its sub-commands. In particular,
-if you wish to use ``Python 3.7`` you can simply do:
+Muito software, como Python e Conda, já está compilado e disponível no cluster por
+meio do comando ``module`` e seus subcomandos. Em particular, se você deseja usar 
+o ``Python 3.7``, basta fazer:
 
 .. code-block:: console
 
     module load python/3.7
 
-.. include:: Userguide_portability_modules.rst
 
+No uso de contêineres
+---------------------
 
-On using containers
--------------------
+Outra opção para criar código portátil é: :ref:`Using containers`.
 
-Another option for creating portable code is :ref:`Using containers`.
-
-Containers are a popular approach at deploying applications by packaging a lot
-of the required dependencies together. The most popular tool for this is
-`Docker <https://www.docker.com/>`_, but Docker cannot be used on the Mila
-cluster (nor the other clusters from Digital Research Alliance of Canada).
-
-One popular mechanism for containerisation on a computational cluster is called
-`Singularity <https://singularity-docs.readthedocs.io/en/latest/>`_.
-This is the recommended approach for running containers on the
-Mila cluster. See section :ref:`Singularity` for more details.
+Containers são uma abordagem popular para implantar aplicativos, empacotando juntos muitas das dependências necessárias.
+ A ferramenta mais popular para isso é o `Docker <https://www.docker.com/>`_.

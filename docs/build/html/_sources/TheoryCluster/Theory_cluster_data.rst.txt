@@ -1,117 +1,101 @@
-Processing data
-***************
+Processamento de dados
+**********************
 
-For processing large amounts of data common for deep learning, either
-for dataset preprocessing or training, several techniques exist. Each
-has typical uses and limitations.
+Para processar grandes quantidades de dados comuns para o aprendizado profundo,
+seja para pré-processamento de conjuntos de dados ou treinamento, existem várias técnicas.
+Cada uma tem usos e limitações típicas
 
-Data parallelism
-================
+Paralelismo de dados
+====================
 
-The first technique is called **data parallelism** (aka task
-parallelism in formal computer science). You simply run lots of
-processes each handling a portion of the data you want to
-process. This is by far the easiest technique to use and should be
-favored whenever possible. A common example of this is
-hyperparameter optimisation.
+A primeira técnica é chamada de **paralelismo de dados** (também conhecida
+como paralelismo de tarefas na ciência da computação formal). Você simplesmente
+executa muitos processos, cada um lidando com uma parte dos dados que você deseja processar.
+Isso é de longe a técnica mais fácil de usar e deve ser favorecida sempre que possível. Um exemplo
+comum disso é a otimização de hiperparâmetros.
 
-For really small computations the time to setup multiple processes
-might be longer than the processing time and lead to waste. This can
-be addressed by bunching up some of the processes together by doing
-sequential processing of sub-partitions of the data.
+Para cálculos realmente pequenos, o tempo para configurar vários processos pode
+ser maior do que o tempo de processamento e levar a desperdício. Isso pode ser 
+resolvido agrupando alguns dos processos juntos, fazendo o processamento sequencial
+de subpartições dos dados.
 
-For the cluster systems it is also inadvisable to launch thousands of
-jobs and even if each job would run for a reasonable amount of time
-(several minutes at minimum), it would be best to make larger groups
-until the amount of jobs is in the low hundreds at most.
+Para os sistemas de cluster, também não é recomendável lançar milhares de trabalhos
+e mesmo que cada trabalho fosse executado por um período razoável de tempo
+(vários minutos no mínimo), seria melhor formar grupos maiores até que a 
+quantidade de trabalhos seja no máximo algumas centenas.
 
-Finally another thing to keep in mind is that the transfer bandwidth
-is limited between the filesystems (see :ref:`Filesystem concerns`)
-and the compute nodes and if you run too many jobs using too much data
-at once they may end up not being any faster because they will spend
-their time waiting for data to arrive.
-
-
-Model parallelism
-=================
-
-The second technique is called **model parallelism** (which doesn't
-have a single equivalent in formal computer science). It is used
-mostly when a single instance of a model will not fit in a computing
-resource (such as the GPU memory being too small for all the
-parameters).
-
-In this case, the model is split into its constituent parts, each
-processed independently and their intermediate results communicated
-with each other to arrive at a final result.
-
-This is generally harder but necessary to work with larger, more
-powerful models like GPT.
-
-Communication concerns
-======================
-
-The main difference of these two approaches is the need for
-communication between the multiple processes. Some common training
-methods, like stochastic gradient descent sit somewhere between the
-two, because they require some communication, but not a lot. Most
-people classify it as data parallelism since it sits closer to that
-end.
-
-In general for data parallelism tasks or tasks that communicate
-infrequently it doesn't make a lot of difference where the processes
-sit because the communication bandwidth and latency will not have a
-lot of impact on the time it takes to complete the job.  The
-individual tasks can generally be scheduled independently.
-
-On the contrary for model parallelism you need to pay more attention
-to where your tasks are.  In this case it is usually required to use
-the facilities of the workload manager to group the tasks so that they
-are on the same machine or machines that are closely linked to ensure
-optimal communication.  What is the best allocation depends on the
-specific cluster architecture available and the technologies it
-support (such as `InfiniBand <https://en.wikipedia.org/wiki/InfiniBand>`_,
-`RDMA <https://en.wikipedia.org/wiki/Remote_direct_memory_access>`_,
-`NVLink <https://en.wikipedia.org/wiki/NVLink>`_ or others)
+Finalmente, outra coisa a ter em mente é que a largura de banda de transferência
+é limitada entre os sistemas de arquivos (consulte :ref:`Preocupações com o sistema
+de arquivos``) e os nós de computação e se você executar muitos trabalhos usando muitos
+dados de uma só vez, eles podem não ser mais rápidos porque passarão seu tempo esperando 
+pelos dados chegarem.
 
 
-Filesystem concerns
-===================
+Paralelismo de modelo
+=====================
 
-When working on a cluster, you will generally encounter several
-different filesystems.  Usually there will be names such as 'home',
-'scratch', 'datasets', 'projects', 'tmp'.
+A segunda técnica é chamada de **paralelismo de modelo** (que não tem um 
+único equivalente na ciência da computação formal). É usada principalmente
+quando uma única instância de um modelo não cabe em um recurso de computaçã
+o (como a memória da GPU sendo muito pequena para todos os parâmetros).
 
-The reason for having different filesystems available instead of a
-single giant one is to provide for different use cases. For example,
-the 'datasets' filesystem would be optimized for fast reads but have
-slow write performance. This is because datasets are usually written
-once and then read very often for training.
+Nesse caso, o modelo é dividido em suas partes constituintes, cada uma processada
+independentemente e seus resultados intermediários comunicados entre si para chegar
+a um resultado final.
 
-Different filesystems have different performance levels. For instance, backed
-up filesystems (such as ``$PROJECT`` in Digital Research Alliance of Canada
-clusters) provide more space and can handle large files but cannot sustain
-highly parallel accesses typically required for high speed model training.
+Isso é geralmente mais difícil, mas necessário para trabalhar com modelos maiores e mais poderosos como o GPT.
 
-The set of filesystems provided by the cluster you are using should be
-detailed in the documentation for that cluster and the names can
-differ from those above. You should pay attention to their recommended
-use case in the documentation and use the appropriate filesystem for
-the appropriate job. There are cases where a job ran hundreds of times
-slower because it tried to use a filesystem that wasn't a good fit for
-the job.
+Preocupações com a comunicação
+==============================
 
-One last thing to pay attention to is the data retention policy for
-the filesystems. This has two subpoints: how long is the data kept
-for, and are there backups.
+A principal diferença dessas duas abordagens é a necessidade de comunicação
+entre os múltiplos processos. Alguns métodos comuns de treinamento, como o
+descida de gradiente estocástica, ficam em algum lugar entre os dois, pois
+requerem alguma comunicação, mas não muita. A maioria das pessoas classifica-o
+como paralelismo de dados, já que fica mais próximo desse fim.
 
-Some filesystems will have a limit on how long they keep their
-files. Typically the limit is some number of days (like 90 days) but
-can also be 'as long as the job runs' for some.
+Em geral, para tarefas de paralelismo de dados ou tarefas que se comunicam com
+pouca frequência, não faz muita diferença onde os processos estão, porque a largura
+de banda e a latência de comunicação não terão muito impacto no tempo necessário
+para concluir o trabalho. As tarefas individuais podem geralmente ser agendadas independentemente.
 
-As for backups, some filesystems will not have a limit for data, but
-will also not have backups. For those it is important to maintain a
-copy of any crucial data somewhere else. The data will not be
-purposefully deleted, but the filesystem may fail and lose all or part
-of its data. If you have any data that is crucial for a paper or your
-thesis keep an additional copy of it somewhere else.
+Por outro lado, para o paralelismo de modelo, você precisa prestar mais atenção
+a onde estão suas tarefas. Nesse caso, geralmente é necessário usar as instalações
+do gerenciador de carga de trabalho para agrupar as tarefas de modo que estejam
+na mesma máquina ou em máquinas que estejam intimamente ligadas para garantir 
+uma comunicação ideal. A melhor alocação depende da arquitetura específica do 
+cluster disponível e das tecnologias que ele suporta (como InfiniBand, RDMA, NVLink ou outras).
+
+
+Preocupações com o sistema de arquivos
+======================================
+
+Ao trabalhar em um cluster, você geralmente encontrará vários sistemas
+de arquivos diferentes. Normalmente, haverá nomes como "home", "scratch", "datasets", "projects", "tmp".
+
+A razão de ter diferentes sistemas de arquivos disponíveis em vez de um
+único gigante é fornecer para diferentes casos de uso. Por exemplo, o
+sistema de arquivos "datasets" seria otimizado para leituras rápidas,
+mas teria desempenho lento de escrita. Isso ocorre porque os conjuntos
+de dados geralmente são escritos uma vez e, em seguida, lidos com muita frequência para treinamento.
+
+O conjunto de sistemas de arquivos fornecido pelo cluster que você está
+usando deve ser detalhado na documentação desse cluster e os nomes 
+podem diferir dos acima. Você deve prestar atenção ao caso de uso 
+recomendado na documentação e usar o sistema de arquivos apropriado
+para o trabalho apropriado. Existem casos em que um trabalho rodou 
+centenas de vezes mais devagar porque tentou usar um sistema de arquivos que não era adequado para o trabalho.
+
+Uma última coisa a prestar atenção é a política de retenção de dados
+para os sistemas de arquivos. Isso tem dois subpontos: por quanto tempo
+os dados são mantidos e se há backups.
+
+Alguns sistemas de arquivos terão um limite de tempo para manter seus arquivos.
+Tipicamente, o limite é algum número de dias (como 90 dias), mas pode ser "enquanto
+o trabalho estiver sendo executado" para alguns.
+
+Quanto aos backups, alguns sistemas de arquivos não terão um limite para os dados,
+mas também não terão backups. Para estes, é importante manter uma cópia de quaisquer
+dados cruciais em outro lugar. Os dados não serão excluídos intencionalmente, mas o
+sistema de arquivos pode falhar e perder todos ou parte de seus dados. Se você tiver
+algum dado que é crucial para um artigo ou para a sua tese, mantenha uma cópia adicional em outro lugar.

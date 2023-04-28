@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Primeiros Passos &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
-    <script src="_static/jquery.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
@@ -43,10 +41,10 @@
           <div class="body" role="main">
             
   <section id="primeiros-passos">
-<h1>Primeiros Passos<a class="headerlink" href="#primeiros-passos" title="Link permanente para este cabeçalho"></a></h1>
+<h1>Primeiros Passos<a class="headerlink" href="#primeiros-passos" title="Link permanente para este cabeçalho">¶</a></h1>
 <section id="conectando-a-maquina-de-acesso">
-<h2>Conectando a Máquina de Acesso<a class="headerlink" href="#conectando-a-maquina-de-acesso" title="Link permanente para este cabeçalho"></a></h2>
-<p>O envio de tarefas para o cluster precisa ser feito a partir de uma maquina de acesso. A entrada na maquina de acesso é realizado através do SSH.</p>
+<h2>Conectando a Máquina de Acesso<a class="headerlink" href="#conectando-a-maquina-de-acesso" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>O envio de tarefas para o cluster precisa ser feito a partir de uma máquina de acesso. A entrada na maquina de acesso é realizado através do SSH.</p>
 <p><strong>ssh &lt;login&gt;&#64;slurm-client1.cin.ufpe.br</strong></p>
 <p>Uma vez conectado na máquina de acesso, é possível alocar e editar seus jobs a partir de comandos <strong>slurm</strong>. Primeiramente, você precisará preparar seu ambiente de
 trabalho no servidor que utilizará. Jobs que utilizam máquinas virtuais (<strong>Docker e afins</strong>) não serão aprovados, pois abrem brechas de segurança. Qualquer
@@ -60,14 +58,14 @@ para uso. Após a preparação do seu ambiente, volte para o nodo de login com o
 <p><strong>srun –gpus=N_GPUS –cpus-per-task=N_CPUS nvidia-smi</strong></p>
 </section>
 <section id="bibliotecas-disponiveis">
-<h2>Bibliotecas disponíveis<a class="headerlink" href="#bibliotecas-disponiveis" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Bibliotecas disponíveis<a class="headerlink" href="#bibliotecas-disponiveis" title="Link permanente para este cabeçalho">¶</a></h2>
 <ul class="simple">
 <li><p>Pytorch = 1.10.2 com Python = 3.9.15</p></li>
 <li><p>Tensorflow = 2.10.0 com Python  = 3.10.8</p></li>
 </ul>
 </section>
 <section id="exemplo-com-repositorio-do-publico-do-github">
-<h2>Exemplo com repositório do público do GitHub<a class="headerlink" href="#exemplo-com-repositorio-do-publico-do-github" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Exemplo com repositório do público do GitHub<a class="headerlink" href="#exemplo-com-repositorio-do-publico-do-github" title="Link permanente para este cabeçalho">¶</a></h2>
 <p><strong>Primeiro é necessário clonar o repositório. Obs.: o diretório home do usuário é sincronizado entre todas as máquinas.</strong></p>
 <ol class="arabic simple">
 <li><p>git clone <a class="reference external" href="https://github.com/username/repoName.git">https://github.com/username/repoName.git</a></p></li>
@@ -127,7 +125,7 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
 </div>
 </section>
 <section id="exemplo-com-repositorio-privado-do-github">
-<h2>Exemplo com repositório privado do GitHub<a class="headerlink" href="#exemplo-com-repositorio-privado-do-github" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Exemplo com repositório privado do GitHub<a class="headerlink" href="#exemplo-com-repositorio-privado-do-github" title="Link permanente para este cabeçalho">¶</a></h2>
 <p><strong>Clonando um repositório privado</strong></p>
 <ol class="arabic simple">
 <li><dl class="simple">
@@ -222,7 +220,7 @@ python e das dependencias mais adequadas para o funcionamento do seu código.</p
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

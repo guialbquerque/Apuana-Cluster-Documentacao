@@ -1,129 +1,112 @@
-The workload manager
-********************
+O gerenciador de carga de trabalho
+**********************************
 
-On a cluster, users don't have direct access to the compute nodes but
-instead connect to a login node and add jobs to the workload manager
-queue. Whenever there are resources available to execute these jobs
-they will be allocated to a compute node and run, which can be
-immediately or after a wait of up to several days.
-
-
-Anatomy of a job
-----------------
-
-A job is comprised of a number of steps that will run one after the
-other. This is done so that you can schedule a sequence of processes
-that can use the results of the previous steps without having to
-manually interact with the scheduler.
-
-Each step can have any number of tasks which are groups of processes
-that can be scheduled independently on the cluster but can run in
-parallel if there are resources available. The distinction between
-steps and tasks is that multiple tasks, if they are part of the same
-step, cannot depend on results of other tasks because there are no
-guarantees on the order in which they will be executed.
-
-Finally each process group is the basic unit that is scheduled in the
-cluster. It comprises of a set of processes (or threads) that can run
-on a number of resources (CPU, GPU, RAM, ...) and are scheduled
-together as a unit on one or more machines.
-
-Each of these concepts lends itself to a particular use. For multi-gpu
-training in AI workloads you would use one task per GPU for data
-paralellism or one process group if you are doing model
-parallelism. Hyperparameter optimisation can be done using a
-combination of tasks and steps but is probably better left to a
-framework outside of the scope of the workload manager.
-
-If this all seems complicated, you should know that all these things
-do not need to always be used. It is perfectly acceptable to sumbit
-jobs with a single step, a single task and a single process.
+Em um cluster, os usuários não têm acesso direto aos nós de computação,
+mas se conectam a um nó de login e adicionam trabalhos à fila do gerenciador
+de carga de trabalho. Sempre que houver recursos disponíveis para executar
+esses trabalhos, eles serão alocados para um nó de computação e executados,
+o que pode acontecer imediatamente ou após uma espera de vários dias.
 
 
-Understanding the queue
+Anatomia de um trabalho
 -----------------------
 
-The available resources on the cluster are not infinite and it is the
-workload manager's job to allocate them. Whenever a job request comes
-in and there are not enough resources available to start it
-immediately, it will go in the queue.
+Um trabalho consiste em uma série de etapas que serão executadas uma após a outra.
+Isso é feito para que você possa agendar uma sequência de processos que podem usar
+os resultados das etapas anteriores sem ter que interagir manualmente com o escalonador.
 
-Once a job is in the queue, it will stay there until another job
-finishes and then the workload manager will try to use the newly freed
-resources with jobs from the queue. The exact order in which the jobs
-will start is not fixed, because it depends on the local policies
-which can take into account the user priority, the time since the job
-was requested, the amount of resources requested and possibly other
-things. There should be a tool that comes with the manager where you
-can see the status of your queued jobs and why they remain in the
-queue.
+Cada etapa pode ter qualquer número de tarefas, que são grupos de processos que podem 
+ser agendados independentemente no cluster, mas podem ser executados em paralelo se houver
+recursos disponíveis. A distinção entre etapas e tarefas é que várias tarefas, se fizerem
+parte da mesma etapa, não podem depender dos resultados de outras tarefas porque não há
+garantias sobre a ordem em que serão executadas.
 
+Finalmente, cada grupo de processos é a unidade básica agendada no cluster.
+Ele consiste em um conjunto de processos (ou threads) que podem ser executados
+em vários recursos (CPU, GPU, RAM, ...) e são agendados juntos como uma unidade
+em uma ou mais máquinas.
 
-About partitions
+Cada um desses conceitos é adequado para um uso específico. Para treinamento com
+várias GPUs em cargas de trabalho de inteligência artificial, você usaria uma tarefa
+por GPU para paralelismo de dados ou um grupo de processos se estiver fazendo paralelismo de modelo.
+A otimização de hiperparâmetros pode ser feita usando uma combinação de tarefas e etapas, mas
+provavelmente é melhor deixá-la para um framework fora do escopo do gerenciador de carga de trabalho.
+
+Se tudo isso parece complicado, você deve saber que todas essas coisas não precisam ser usadas sempre.
+É perfeitamente aceitável enviar trabalhos com uma única etapa, uma única tarefa e um único processo.
+
+Compreendendo a fila
+--------------------
+
+Os recursos disponíveis no cluster não são infinitos e é o trabalho do
+gerenciador de carga alocá-los. Sempre que uma solicitação de trabalho é feita
+e não há recursos suficientes disponíveis para iniciar imediatamente, ele
+será colocado na fila.
+
+Uma vez que um trabalho está na fila, ele permanecerá lá até que outro trabalho
+termine e, em seguida, o gerenciador de carga tentará usar os recursos liberados
+com trabalhos da fila. A ordem exata em que os trabalhos serão iniciados não é
+fixa, pois depende das políticas locais que podem levar em conta a prioridade do
+usuário, o tempo desde que o trabalho foi solicitado, a quantidade de recursos
+solicitados e possivelmente outras coisas. Deve haver uma ferramenta que acompanha
+o gerenciador em que você pode ver o status dos trabalhos em fila e por que eles
+permanecem na fila.
+
+Sobre partições
 ----------------
 
-The workload manager will divide the cluster into partitions according
-to the configuration set by the admins. A partition is a set of
-machines typically reserved for a particular purpose. An example might
-be CPU-only machines for preprocessing setup as a separate partition.
-It is possible for multiple partitions to share resources.
+O gerenciador de carga irá dividir o cluster em partições de acordo com
+a configuração definida pelos administradores. Uma partição é um conjunto de
+máquinas geralmente reservadas para um propósito específico. Um exemplo pode
+ser máquinas somente com CPU para pré-processamento configuradas como uma partição
+separada. É possível que várias partições compartilhem recursos.
 
-There will always be at least one partition that is the default
-partition in which jobs without a specific request will go. Other
-partitions can be requested, but might be restricted to a group of
-users, depending on policy.
+Sempre haverá pelo menos uma partição que é a partição padrão na qual os trabalhos
+sem solicitação específica serão executados. Outras partições podem ser solicitadas,
+mas podem ser restritas a um grupo de usuários, dependendo da política.
 
-Partitions are useful for a policy standpoint to ensure efficient use
-of the cluster resources and avoid using up too much of one resource
-type blocking use of another. They are also useful for heterogenous
-clusters where different hardware is mixed in and not all software is
-compatible with all of it (for example x86 and POWER cpus).
-
-
-Exceding limits (preemption and grace periods)
-----------------------------------------------
-
-To ensure a fair share of the computing resources for all, the workload
-manager establishes limits on the amount of resources that a single
-user can use at once. These can be hard limits which prevent running
-jobs when you go over or soft limits which will let you run jobs, but
-only until some other job needs the resources.
-
-Admin policy will determine what those exact limits are for a
-particular cluster or user and whether they are hard or soft limits.
-
-The way soft limits are enforced is using preemption, which means that
-when another job with higher priority needs the resources that your
-job is using, your job will receive a signal that it needs to save its
-state and exit. It will be given a certain amount of time to do this
-(the grace period, which may be 0s) and then forcefully terminated if
-it is still running.
-
-Depending on the workload manager in use and the cluster configuration
-a job that is preempted like this may be automatically rescheduled to
-have a chance to finish or it may be up to the job to reschedule
-itself.
-
-The other limit you can encounter with a job that goes over its
-declared limits. When you schedule a job, you declare how much
-resources it will need (RAM, CPUs, GPUs, ...). Some of those may have
-default values and not be explicitely defined. For certain types of
-devices, like GPUs, access to units over your job limit is made
-unavailable. For others, like RAM, usage is monitored and your job
-will be terminated if it goes too much over. This makes it important
-to ensure you estimate resource usage accurately.
+As partições são úteis do ponto de vista de política para garantir o uso eficiente
+dos recursos do cluster e evitar o uso excessivo de um tipo de recurso que possa
+bloquear o uso de outro. Elas também são úteis para clusters heterogêneos, onde
+diferentes hardwares são misturados e nem todos os softwares são compatíveis com
+todos eles (por exemplo, CPUs x86 e POWER).
 
 
-.. This should be somewhere else, but I don't know where.
+Ultrapassando limites (preempção e períodos de graça)
+-----------------------------------------------------
 
-Apuana information
-------------------
+Para garantir uma distribuição justa dos recursos de computação para todos,
+o gerenciador de carga estabelece limites na quantidade de recursos que um
+único usuário pode usar de uma só vez. Esses limites podem ser limites rígidos
+que impedem a execução de trabalhos quando você ultrapassa ou limites flexíveis
+que permitirão que você execute trabalhos, mas apenas até que outro trabalho precise dos recursos.
+
+A política do administrador determinará quais são os limites exatos para um cluster
+ou usuário específico e se eles são limites rígidos ou flexíveis.
+
+A forma como os limites flexíveis são aplicados é por meio de preempção, o que
+significa que quando outro trabalho com prioridade mais alta precisa dos recursos
+que seu trabalho está usando, seu trabalho receberá um sinal de que precisa salvar
+seu estado e sair. Será dado um certo tempo para isso (o período de graça, que pode ser de 0s)
+e depois ele será encerrado à força se ainda estiver em execução.
+
+Dependendo do gerenciador de carga em uso e da configuração do cluster, um trabalho
+que seja preemptionado dessa forma pode ser automaticamente reagendado para ter a
+chance de terminar ou pode caber ao trabalho reagendar-se.
+
+O outro limite que pode ser encontrado é com um trabalho que ultrapassa seus limites declarados.
+Ao agendar um trabalho, você declara quanto de recursos ele precisará (RAM, CPUs, GPUs, ...).
+Alguns desses recursos podem ter valores padrão e não serem definidos explicitamente. Para
+determinados tipos de dispositivos, como GPUs, o acesso a unidades acima do limite do seu
+trabalho fica indisponível. Para outros, como RAM, o uso é monitorado e seu trabalho será
+encerrado se exceder o limite. Isso torna importante garantir que você estime com precisão o uso de recursos.
 
 
 
-**Slurm** client commands are available on the login nodes for you to submit
-jobs to the main controller and add your job to the queue. Jobs are of 2 types:
-*batch* jobs and *interactive* jobs.
+Informações sobre Apuana
+------------------------
 
-For practical examples of Slurm commands on the Mila cluster, see :ref:`Running
-your code`.
+Comandos de cliente **Slurm** estão disponíveis nos nós de login para que você possa enviar
+trabalhos para o controlador principal e adicioná-los à fila. Existem dois tipos de trabalhos:
+trabalhos em *lote* (batch) e trabalhos *interativos* (interactive).
+

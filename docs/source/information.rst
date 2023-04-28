@@ -1,6 +1,6 @@
 .. _infra_info:
 
-Computing infrastructure and policies
-*************************************
+Infraestrutura de computação e políticas
+****************************************
 
 .. include:: Information_storage.rst

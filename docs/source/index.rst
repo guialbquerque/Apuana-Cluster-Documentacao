@@ -20,31 +20,26 @@ Para acessar o cluster é necessário ter um login cin.ufpe.br e ter o acesso ha
   
 
 .. toctree::
-   :caption: General Theory
+   :caption: Teoria Geral
    :maxdepth: 2
 
    TheoryCluster/Theory_cluster
   
 
 .. toctree::
-   :caption: Systems and services
+   :caption: Sistemas e serviços
    :maxdepth: 2
    
    information
   
 
 .. toctree::
-   :caption: How to and Guides
+   :caption: Como fazer e guias
    :maxdepth: 2
 
    UserGuide/Userguide
    
- 
-.. toctree::
-   :caption: Extras
-   :maxdepth: 2
 
-   VSCode
 
 
 

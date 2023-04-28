@@ -1,53 +1,47 @@
-Software on the cluster
-***********************
+Software no cluster
+*******************
 
-This section aims to raise awareness to problems one can encounter when trying
-to run a software on different computers and how this is dealt with on typical
-computation clusters.
+Esta seção tem como objetivo conscientizar sobre os problemas que se pode encontrar
+ao tentar executar um software em diferentes computadores e como isso é tratado em
+clusters de computação típicos.
 
-The Mila cluster and the Digital Research Alliance of Canada clusters both
-provide various useful software and computing environments, which can be
-activated through the module system. Alternatively, you may build containers
-with your desired software and run them on compute nodes.
-
-Regarding Python development, we recommend using virtual environments to install
-Python packages in isolation.
+Em relação ao desenvolvimento em Python, recomendamos o uso de ambientes virtuais para
+instalar pacotes Python em isolamento.
 
 
-Cluster software modules
-========================
 
-Modules are small files which modify your environment variables to point to
-specific versions of various software and libraries. For instance, a module
-might provide the ``python`` command to point to Python 3.7, another might
-activate CUDA version 11.0, another might provide the ``torch`` package, and so
-on.
+Módulos de software do cluster
+==============================
 
-For more information, see :ref:`The module command`.
+Os módulos são pequenos arquivos que modificam suas variáveis de ambiente para 
+apontar para versões específicas de vários softwares e bibliotecas. Por exemplo, 
+um módulo pode fornecer o comando "python" para apontar para o Python 3.7, outro 
+pode ativar a versão 11.0 do CUDA, outro pode fornecer o pacote "torch" e assim por diante.
 
-
-Containers
-==========
-
-Containers are a special form of isolation of software and its dependencies. A
-container is essentially a lightweight virtual machine: it encapsulates a
-virtual file system for a full OS installation, as well as a separate network
-and execution environment.
-
-For example, you can create an Ubuntu container in which you install various
-packages using ``apt``, modify settings as you would as a root user, and so on,
-but without interfering with your main installation. Once built, a container can
-be run on any compatible system.
-
-For more information, see :ref:`Using containers`.
+Para obter mais informações, consulte :ref:`O comando module`.
 
 
-Python Virtual environments
-===========================
+Contêineres
+===========
 
-A virtual environment in Python is a local, isolated environment in which you
-can install or uninstall Python packages without interfering with the global
-environment (or other virtual environments). In order to use a virtual
-environment, you first have to activate it.
+Os contêineres são uma forma especial de isolamento de software e suas dependências.
+Um contêiner é essencialmente uma máquina virtual leve: ele encapsula um sistema de arquivos
+virtual para uma instalação completa do sistema operacional, bem como uma rede e ambiente de
+execução separados.
 
-For more information, see :ref:`Virtual environments`.
+Por exemplo, você pode criar um contêiner Ubuntu no qual instala vários pacotes usando "apt", 
+modifica configurações como faria como usuário root, e assim por diante, mas sem interferir na
+sua instalação principal. Uma vez construído, um contêiner pode ser executado em qualquer sistema
+compatível.
+
+Para obter mais informações, consulte :ref:`Usando contêineres`.
+
+
+Ambientes virtuais Python
+=========================
+
+Um ambiente virtual em Python é um ambiente local e isolado no qual você pode instalar
+ou desinstalar pacotes Python sem interferir no ambiente global (ou em outros ambientes virtuais).
+Para usar um ambiente virtual, primeiro você deve ativá-lo.
+
+Para obter mais informações, consulte :ref:`Ambientes virtuais`.

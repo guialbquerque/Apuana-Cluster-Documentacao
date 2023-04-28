@@ -1,26 +1,27 @@
-Sharing Data with ACLs
-======================
+Compartilhando dados com ACLs
+=============================
 
-Regular permissions bits are extremely blunt tools: They control access through
-only three sets of bits owning user, owning group and all others. Therefore,
-access is either too narrow (``0700`` allows access only by oneself) or too wide
-(``770`` gives all permissions to everyone in the same group, and ``777`` to
-literally everyone).
+Os bits de permissão regulares são ferramentas extremamente limitadas: eles controlam
+o acesso por meio de apenas três conjuntos de bits - usuário proprietário, grupo
+proprietário e todos os outros. Portanto, o acesso é ou muito restrito 
+(0700 permite acesso apenas ao usuário proprietário) ou muito amplo 
+(770 dá todas as permissões para todos no mesmo grupo, e 777 para literalmente todos).
 
-ACLs (Access Control Lists) are an expansion of the permissions bits that allow
-more fine-grained, granular control of accesses to a file. They can be used to
-permit specific users access to files and folders even if conservative default
-permissions would have denied them such access.
+As ACLs (Listas de Controle de Acesso) são uma expansão dos bits de permissão que permitem
+um controle mais granular de acessos a um arquivo. Elas podem ser usadas para permitir 
+que usuários específicos acessem arquivos e pastas, mesmo que as permissões padrão 
+conservadoras os tenham negado esse acesso.
 
-
-As an illustrative example, to use ACLs to allow ``$USER`` (**oneself**) to
-share with ``$USER2`` (**another person**) a "playground" folder hierarchy in
-Mila's scratch filesystem at a location
+Como exemplo ilustrativo, para usar as ACLs para permitir que $USER (a si mesmo) compartilhe 
+com $USER2 (outra pessoa) uma hierarquia de pastas "playground" no sistema de arquivos de 
+rascunho do Apuana em um local
 
     ``/network/scratch/${USER:0:1}/$USER/X/Y/Z/...``
 
-in a safe and secure fashion that allows both users to read, write, execute,
-search and delete each others' files:
+de maneira segura e que permita que ambos os usuários leiam, escrevam, executem, pesquisem e excluam
+os arquivos um do outro:
+
+
 
 ----
 
@@ -36,14 +37,13 @@ search and delete each others' files:
 ----
 
 .. note::
-    The importance of doing this seemingly-redundant step first is that files
-   and folders are **always** owned by only one person, almost always their
-    creator (the UID will be the creator's, the GID typically as well). If that
-    user is not yourself, you will not have access to those files unless the
-    other person specifically gives them to you -- or these files inherited a
-    default ACL allowing you full access.
+    A importância de fazer este passo aparentemente redundante primeiro é que arquivos e
+    pastas são sempre de propriedade de apenas uma pessoa, quase sempre o seu criador 
+    (o UID será do criador, o GID geralmente também). Se esse usuário não for você,
+    você não terá acesso a esses arquivos a menos que a outra pessoa especificamente os dê
+    a você - ou esses arquivos herdem uma ACL padrão que permita acesso total.
 
-   **This** is the inherited, default ACL serving that purpose.
+   **This** Esta é a ACL padrão herdada que serve esse propósito.
 
 | **2.** Grant **the other** permission to access any **future** files/folders created
   by the other *(or oneself)*
@@ -57,18 +57,17 @@ search and delete each others' files:
 
 | **3.** Grant **the other** permission to access any **existing** files/folders created
   by *oneself*.
-| Such files and folders were created before the new default ACLs were added
-    above and thus did not inherit them from their parent folder at the moment of
-    their creation.
-
+| Esses arquivos e pastas foram criados antes das novas ACLs padrão serem adicionadas acima e,
+    portanto, não as herdaram de sua pasta pai no momento de sua criação.
 .. code-block:: console
 
     setfacl -Rm  user:${USER2}:rwx /network/scratch/${USER:0:1}/$USER/X/Y/Z/
 
 .. note::
-   The purpose of granting permissions first for *future* files and then for
-   *existing* files is to prevent a **race condition** whereby after the first ``setfacl`` command the other person could create files to which the
-   second ``setfacl`` command does not apply.
+   O objetivo de conceder permissões primeiro para arquivos *futuros* e depois para arquivos
+    existentes é evitar uma condição de corrida em que, após o primeiro comando ``setfacl``, a
+    outra pessoa possa criar arquivos aos quais o segundo comando ``setfacl`` não se aplica.
+
 
 ----
 
@@ -86,15 +85,17 @@ search and delete each others' files:
     setfacl -m   user:${USER2}:x   /network/scratch/${USER:0:1}/$USER/
 
 .. note::
-    In order to access a file, all folders from the root (``/``) down to the
-    parent folder in question must be searchable (``+x``) by the concerned user.
-    This is already the case for all users for folders such as ``/``,
-    ``/network`` and ``/network/scratch``, but users must explicitly grant access
-    to some or all users either through base permissions or by adding ACLs, for
-    at least ``/network/scratch/${USER:0:1}/$USER``, ``$HOME`` and subfolders.
+    Para acessar um arquivo, todas as pastas desde o diretório raiz (``/``) até a pasta pai
+    em questão devem ser pesquisáveis (+x) pelo usuário em questão. Isso já é o caso 
+    para todos os usuários em pastas como ``/``, ``/network`` e ``/network/scratch``, mas os usuários
+    devem conceder acesso explicitamente a alguns ou a todos os usuários, seja por meio de
+    permissões básicas ou adicionando ACLs, para pelo menos ``/network/scratch/${USER:0:1}/$USER``, ``$HOME`` e subpastas.
 
-   To bluntly allow **all** users to search through a folder (**think twice!**),
-    the following command can be used:
+    Para permitir bruscamente que todos os usuários pesquisem uma pasta (**pense duas vezes!**), o seguinte comando pode ser usado:
+
+
+
+
 
     .. code-block:: console
 
@@ -102,14 +103,14 @@ search and delete each others' files:
 
 
 .. note::
-    For more information on ``setfacl`` and path resolution/access checking,
-    consider the following documentation viewing commands:
+    Para obter mais informações sobre ``setfacl`` e resolução de caminho/verificação
+    de acesso, considere os seguintes comandos de visualização de documentação:
 
   * ``man setfacl``
   * ``man path_resolution``
 
-Viewing and Verifying ACLs
---------------------------
+Visualizando e Verificando ACLs
+-------------------------------
 
 .. code-block:: console
 

@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Portability concerns and solutions &#8212; documentação Cluster Cin latest</title>
+    <title>Preocupações e soluções de portabilidade &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -25,7 +23,7 @@
           <a href="../genindex.html" title="Índice Geral"
              accesskey="I">índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Portability concerns and solutions</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Preocupações e soluções de portabilidade</a></li> 
       </ul>
     </div>  
 
@@ -34,83 +32,84 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="portability-concerns-and-solutions">
-<h1>Portability concerns and solutions<a class="headerlink" href="#portability-concerns-and-solutions" title="Link permanente para este cabeçalho"></a></h1>
-<p>When working on a software project, it is important to be aware of all the
-software and libraries the project relies on and to list them explicitly and
-<em>under a version control system</em> in such a way that they can easily be
-installed and made available on different systems. The upsides are significant:</p>
+  <section id="preocupacoes-e-solucoes-de-portabilidade">
+<h1>Preocupações e soluções de portabilidade<a class="headerlink" href="#preocupacoes-e-solucoes-de-portabilidade" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Ao trabalhar em um projeto de software, é importante estar ciente
+de todo o software e bibliotecas nos quais o projeto depende e
+listá-los explicitamente e sob um sistema de controle de versão
+de tal forma que possam ser facilmente instalados e disponibilizados
+em diferentes sistemas. As vantagens são significativas:</p>
 <ul class="simple">
-<li><p>Easily install and run on the cluster</p></li>
-<li><p>Ease of collaboration</p></li>
-<li><p>Better reproducibility</p></li>
+<li><p>Facilidade de instalação e execução no cluster</p></li>
+<li><p>Facilidade de colaboração</p></li>
+<li><p>Melhor reprodutibilidade</p></li>
 </ul>
-<p>To achieve this, try to always keep in mind the following aspects:</p>
+<p>Para alcançar isso, tente sempre manter em mente os seguintes aspectos:</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt><strong>Versions:</strong> For each dependency, make sure you have some record of the</dt><dd><p>specific version you are using during development. That way, in the future, you
-will be able to reproduce the original environment which you know to be
-compatible. Indeed, the more time passes, the more likely it is that newer
-versions of some dependency have breaking changes. The <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">freeze</span></code> command can create
-such a record for Python dependencies.</p>
+<dt>Versões: Para cada dependência, certifique-se de ter algum registro da versão</dt><dd><p>específica que está usando durante o desenvolvimento. Dessa forma, no futuro, você
+poderá reproduzir o ambiente original que sabe ser compatível. De fato, quanto mais
+tempo passa, mais provável é que novas versões de alguma dependência tenham alterações
+quebradas. O comando pip freeze pode criar tal registro para dependências do Python.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt><strong>Isolation:</strong> Ideally, each of your software projects should be isolated from</dt><dd><p>the others. What this means is that updating the environment for project A</p>
-</dd>
-<dt>should <em>not</em> update the environment for project B. That way, you can freely</dt><dd><p>install and upgrade software and libraries for the former without worrying about
-breaking the latter (which you might not notice until weeks later, the next time
-you work on project B!) Isolation can be achieved using <span class="xref std std-ref">Python Virtual
-environments</span> and <span class="xref std std-ref">containers</span>.</p>
+<dt>Isolamento: Idealmente, cada um de seus projetos de software deve estar isolado dos outros.</dt><dd><p>O que isso significa é que atualizar o ambiente do projeto A não deve atualizar o ambiente do
+projeto B. Dessa forma, você pode instalar e atualizar software e bibliotecas livremente para
+o primeiro, sem se preocupar em quebrar o segundo (o que você pode não perceber até semanas
+depois, na próxima vez em que trabalhar no projeto B!) O isolamento pode ser alcançado usando
+<span class="xref std std-ref">Python Virtual environments</span> and <span class="xref std std-ref">containers</span>.</p>
 </dd>
 </dl>
 </li>
 </ul>
-<section id="managing-your-environments">
-<h2>Managing your environments<a class="headerlink" href="#managing-your-environments" title="Link permanente para este cabeçalho"></a></h2>
+<section id="gerenciando-seus-ambientes">
+<h2>Gerenciando seus ambientes<a class="headerlink" href="#gerenciando-seus-ambientes" title="Link permanente para este cabeçalho">¶</a></h2>
 </section>
-<section id="virtual-environments">
-<span id="python"></span><h2>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link permanente para este cabeçalho"></a></h2>
-<p>A virtual environment in Python is a local, isolated environment in which you
-can install or uninstall Python packages without interfering with the global
-environment (or other virtual environments). It usually lives in a directory
-(location varies depending on whether you use venv, conda or poetry). In order
-to use a virtual environment, you have to <strong>activate</strong> it. Activating an
-environment essentially sets environment variables in your shell so that:</p>
+<section id="ambientes-virtuais">
+<span id="python"></span><h2>Ambientes virtuais<a class="headerlink" href="#ambientes-virtuais" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Um ambiente virtual em Python é um ambiente local e isolado no qual você pode instalar
+ou desinstalar pacotes do Python sem interferir no ambiente global (ou em outros ambientes virtuais).
+Ele geralmente fica em um diretório (a localização varia dependendo se você usa venv, conda ou poetry).
+Para usar um ambiente virtual, você precisa ativá-lo. Ativar um ambiente define essencialmente variáveis
+de ambiente em seu shell para que:</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">python</span></code> points to the right Python version for that environment (different</dt><dd><p>virtual environments can use different versions of Python!)</p>
-</dd>
-</dl>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> looks for packages in the virtual environment</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> installs packages into the virtual environment</p></li>
-<li><p>Any shell commands installed via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> are made available</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> aponta para a versão correta do Python para aquele ambiente (diferentes ambientes virtuais podem usar</p></li>
 </ul>
-<p>To run experiments within a virtual environment, you can simply activate it
-in the script given to <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<blockquote>
+<div><p>diferentes versões do Python!)</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> procura pacotes no ambiente virtual</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> instala pacotes no ambiente virtual</p></li>
+<li><p>Quaisquer comandos de shell instalados via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> estão disponíveis</p></li>
+</ul>
+<p>Para executar experimentos dentro de um ambiente virtual, você pode simplesmente ativá-lo no script fornecido para <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
 <section id="pip-virtualenv">
-<h3>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho"></a></h3>
-<p>Pip is the preferred package manager for Python and each cluster provides
-several Python versions through the associated module which comes with pip. In
-order to install new packages, you will first have to create a personal space
-for them to be stored.  The preferred solution (as it is the preferred solution
-on Digital Research Alliance of Canada clusters) is to use <a class="reference external" href="https://virtualenv.pypa.io/en/stable/">virtual
-environments</a>.</p>
-<p>First, load the Python module you want to use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load python/3.8</span>
-</pre></div>
-</div>
-<p>Then, create a virtual environment in your <code class="docutils literal notranslate"><span class="pre">home</span></code> directory:</p>
+<h3>Pip/Virtualenv<a class="headerlink" href="#pip-virtualenv" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>O Pip é o gerenciador de pacotes preferido para Python e cada cluster fornece
+diversas versões do Python por meio do módulo associado, que vem com o pip.
+Para instalar novos pacotes, você primeiro precisará criar um espaço pessoal
+para que eles possam ser armazenados. A solução preferida (assim como é nos
+clusters da Digital Research Alliance do Canadá) é usar ambientes virtuais.</p>
+<blockquote>
+<div><p><a class="reference external" href="https://virtualenv.pypa.io/en/stable/">https://virtualenv.pypa.io/en/stable/</a>.</p>
+</div></blockquote>
+<p>Primeiro, carregue o módulo Python que você deseja usar:
+.. code-block:: console</p>
+<blockquote>
+<div><p>module load python/3.8</p>
+</div></blockquote>
+<p>Então, crie um ambiente virtual no seu diretório <code class="docutils literal notranslate"><span class="pre">home</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv $HOME/&lt;env&gt;</span>
 </pre></div>
 </div>
-<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;env&gt;</span></code> is the name of your environment. Finally, activate the environment:</p>
+<p>onde <code class="docutils literal notranslate"><span class="pre">&lt;env&gt;</span></code> é o nome do seu ambiente. Finalmente, ative o ambiente:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source $HOME/&lt;env&gt;/bin/activate</span>
 </pre></div>
 </div>
-<p>You can now install any Python package you wish using the <code class="docutils literal notranslate"><span class="pre">pip</span></code> command, e.g.
+<p>Agora você pode instalar qualquer pacote Python que desejar usando o comando <code class="docutils literal notranslate"><span class="pre">pip</span></code>, por exemplo:
 <a class="reference external" href="https://pytorch.org/get-started/locally">pytorch</a>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install torch torchvision</span>
 </pre></div>
@@ -121,161 +120,28 @@ environments</a>.</p>
 </div>
 </section>
 <section id="conda">
-<h3>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho"></a></h3>
-<p>Another solution for Python is to use <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> or <a class="reference external" href="https://docs.anaconda.com">anaconda</a> which are also available through the <code class="docutils literal notranslate"><span class="pre">module</span></code>
-command: (the use of Conda is not recommended for Digital Research Alliance of
-Canada clusters due to the availability of custom-built packages for pip)</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>miniconda/3
-<span class="go">[=== Module miniconda/3 loaded ===]</span>
-<span class="go">To enable conda environment functions, first use:</span>
-</pre></div>
-</div>
-<p>To create an environment (see <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>
-for details) using a specific Python version, you may write:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n &lt;env&gt; python=3.9</span>
-</pre></div>
-</div>
-<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;env&gt;</span></code> is the name of your environment. You can now activate it by doing:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate &lt;env&gt;</span>
-</pre></div>
-</div>
-<p>You are now ready to install any Python package you want in this environment.
-For instance, to install PyTorch, you can find the Conda command of any version
-you want on <a class="reference external" href="https://pytorch.org/get-started/locally">pytorch’s website</a>, e.g:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install pytorch torchvision cudatoolkit=10.0 -c pytorch</span>
-</pre></div>
-</div>
-<p>If you make a lot of environments and install/uninstall a lot of packages, it
-can be good to periodically clean up Conda’s cache:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda clean --all</span>
-</pre></div>
-</div>
+<h3>Conda<a class="headerlink" href="#conda" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Outra solução para Python é usar o miniconda.
+<a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">https://docs.conda.io/en/latest/miniconda.html</a> ou anaconda
+<a class="reference external" href="https://docs.anaconda.com">https://docs.anaconda.com</a></p>
 </section>
 </section>
-<section id="using-modules">
-<h2>Using Modules<a class="headerlink" href="#using-modules" title="Link permanente para este cabeçalho"></a></h2>
-<p>A lot of software, such as Python and Conda, is already compiled and available on
-the cluster through the <code class="docutils literal notranslate"><span class="pre">module</span></code> command and its sub-commands. In particular,
-if you wish to use <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7</span></code> you can simply do:</p>
+<section id="usando-modulos">
+<h2>Usando módulos<a class="headerlink" href="#usando-modulos" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Muito software, como Python e Conda, já está compilado e disponível no cluster por
+meio do comando <code class="docutils literal notranslate"><span class="pre">module</span></code> e seus subcomandos. Em particular, se você deseja usar
+o <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7</span></code>, basta fazer:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load python/3.7</span>
 </pre></div>
 </div>
-<section id="the-module-command">
-<h3>The module command<a class="headerlink" href="#the-module-command" title="Link permanente para este cabeçalho"></a></h3>
-<p>For a list of available modules, simply use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>avail
-<span class="go">--------------------------------------------------------------------------------------------------------------- Global Aliases ---------------------------------------------------------------------------------------------------------------</span>
-<span class="go">    cuda/10.0 -&gt; cudatoolkit/10.0    cuda/9.2      -&gt; cudatoolkit/9.2                                 pytorch/1.4.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1    tensorflow/1.15 -&gt; python/3.7/tensorflow/1.15</span>
-<span class="go">    cuda/10.1 -&gt; cudatoolkit/10.1    mujoco-py     -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.0       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0    tensorflow/2.2  -&gt; python/3.7/tensorflow/2.2</span>
-<span class="go">    cuda/10.2 -&gt; cudatoolkit/10.2    mujoco-py/2.0 -&gt; python/3.7/mujoco-py/2.0                        pytorch/1.5.1       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1</span>
-<span class="go">    cuda/11.0 -&gt; cudatoolkit/11.0    pytorch       -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1    tensorflow          -&gt; python/3.7/tensorflow/2.2</span>
-<span class="go">    cuda/9.0  -&gt; cudatoolkit/9.0     pytorch/1.4.0 -&gt; python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.0    tensorflow-cpu/1.15 -&gt; python/3.7/tensorflow/1.15</span>
-
-<span class="go">--------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Core ---------------------------------------------------------------------------------------------------</span>
-<span class="go">    Mila       (S,L)    anaconda/3 (D)    go/1.13.5        miniconda/2        mujoco/1.50        python/2.7    python/3.6        python/3.8           singularity/3.0.3    singularity/3.2.1    singularity/3.5.3 (D)</span>
-<span class="go">    anaconda/2          go/1.12.4         go/1.14   (D)    miniconda/3 (D)    mujoco/2.0  (D)    python/3.5    python/3.7 (D)    singularity/2.6.1    singularity/3.1.1    singularity/3.4.2</span>
-
-<span class="go">------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Compiler -------------------------------------------------------------------------------------------------</span>
-<span class="go">    python/3.7/mujoco-py/2.0</span>
-
-<span class="go">--------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Cuda ---------------------------------------------------------------------------------------------------</span>
-<span class="go">    cuda/10.0/cudnn/7.3        cuda/10.0/nccl/2.4         cuda/10.1/nccl/2.4     cuda/11.0/nccl/2.7        cuda/9.0/nccl/2.4     cudatoolkit/9.0     cudatoolkit/10.1        cudnn/7.6/cuda/10.0/tensorrt/7.0</span>
-<span class="go">    cuda/10.0/cudnn/7.5        cuda/10.1/cudnn/7.5        cuda/10.2/cudnn/7.6    cuda/9.0/cudnn/7.3        cuda/9.2/cudnn/7.6    cudatoolkit/9.2     cudatoolkit/10.2        cudnn/7.6/cuda/10.1/tensorrt/7.0</span>
-<span class="go">    cuda/10.0/cudnn/7.6 (D)    cuda/10.1/cudnn/7.6 (D)    cuda/10.2/nccl/2.7     cuda/9.0/cudnn/7.5 (D)    cuda/9.2/nccl/2.4     cudatoolkit/10.0    cudatoolkit/11.0 (D)    cudnn/7.6/cuda/9.0/tensorrt/7.0</span>
-
-<span class="go">------------------------------------------------------------------------------------------------- /cvmfs/config.mila.quebec/modules/Pytorch --------------------------------------------------------------------------------------------------</span>
-<span class="go">    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.4.1    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.5.1 (D)    python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.0</span>
-<span class="go">    python/3.7/cuda/10.1/cudnn/7.6/pytorch/1.5.0    python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.4.1        python/3.7/cuda/10.2/cudnn/7.6/pytorch/1.5.1 (D)</span>
-
-<span class="go">------------------------------------------------------------------------------------------------ /cvmfs/config.mila.quebec/modules/Tensorflow ------------------------------------------------------------------------------------------------</span>
-<span class="go">    python/3.7/tensorflow/1.15    python/3.7/tensorflow/2.0    python/3.7/tensorflow/2.2 (D)</span>
-</pre></div>
-</div>
-<p>Modules can be loaded using the <code class="docutils literal notranslate"><span class="pre">load</span></code> command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load &lt;module&gt;</span>
-</pre></div>
-</div>
-<p>To search for a module or a software, use the command <code class="docutils literal notranslate"><span class="pre">spider</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module spider search_term</span>
-</pre></div>
-</div>
-<p>E.g.: by default, <code class="docutils literal notranslate"><span class="pre">python2</span></code> will refer to the os-shipped installation of <code class="docutils literal notranslate"><span class="pre">python2.7</span></code> and <code class="docutils literal notranslate"><span class="pre">python3</span></code> to <code class="docutils literal notranslate"><span class="pre">python3.6</span></code>.
-If you want to use <code class="docutils literal notranslate"><span class="pre">python3.7</span></code> you can type:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">module load python3.7</span>
-</pre></div>
-</div>
 </section>
-<section id="available-software">
-<h3>Available Software<a class="headerlink" href="#available-software" title="Link permanente para este cabeçalho"></a></h3>
-<p>Modules are divided in 5 main sections:</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Section</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Core</p></td>
-<td><p>Base interpreter and software (Python, go, etc…)</p></td>
-</tr>
-<tr class="row-odd"><td><p>Compiler</p></td>
-<td><p>Interpreter-dependent software (<em>see the note below</em>)</p></td>
-</tr>
-<tr class="row-even"><td><p>Cuda</p></td>
-<td><p>Toolkits, cudnn and related libraries</p></td>
-</tr>
-<tr class="row-odd"><td><p>Pytorch/Tensorflow</p></td>
-<td><p>Pytorch/TF built with a specific Cuda/Cudnn
-version for Mila’s GPUs (<em>see the related paragraph</em>)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Modules which are nested (../../..) usually depend on other software/module
-loaded alongside the main module.  No need to load the dependent software,
-the complex naming scheme allows an automatic detection of the dependent
-module(s):</p>
-<p>i.e.: Loading <code class="docutils literal notranslate"><span class="pre">cudnn/7.6/cuda/9.0/tensorrt/7.0</span></code> will load <code class="docutils literal notranslate"><span class="pre">cudnn/7.6</span></code> and
-<code class="docutils literal notranslate"><span class="pre">cuda/9.0</span></code> alongside</p>
-<p><code class="docutils literal notranslate"><span class="pre">python/3.X</span></code> is a particular dependency which can be served through
-<code class="docutils literal notranslate"><span class="pre">python/3.X</span></code> or <code class="docutils literal notranslate"><span class="pre">anaconda/3</span></code> and is not automatically loaded to let the
-user pick his favorite flavor.</p>
-</div>
-</section>
-<section id="default-package-location">
-<h3>Default package location<a class="headerlink" href="#default-package-location" title="Link permanente para este cabeçalho"></a></h3>
-<p>Python by default uses the user site package first and packages provided by
-<code class="docutils literal notranslate"><span class="pre">module</span></code> last to not interfere with your installation.  If you want to skip
-packages installed in your site-packages folder (in your /home directory), you
-have to start Python with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag.</p>
-<p>To check which package is loaded at import, you can print <code class="docutils literal notranslate"><span class="pre">package.__file__</span></code>
-to get the full path of the package.</p>
-<p><em>Example:</em></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
-<span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
-<span class="go">/home/mila/my_home/.local/lib/python3.7/site-packages/torch/__init__.py   &lt;== package from your own site-package</span>
-</pre></div>
-</div>
-<p>Now with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>pytorch/1.5.0
-<span class="gp">$ </span>python<span class="w"> </span>-s<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torch;print(torch.__file__)&#39;</span>
-<span class="go">/cvmfs/ai.mila.quebec/apps/x86_64/debian/pytorch/python3.7-cuda10.1-cudnn7.6-v1.5.0/lib/python3.7/site-packages/torch/__init__.py&#39;</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="on-using-containers">
-<h2>On using containers<a class="headerlink" href="#on-using-containers" title="Link permanente para este cabeçalho"></a></h2>
-<p>Another option for creating portable code is <a class="reference internal" href="Userguide.html#using-containers"><span class="std std-ref">Using containers on clusters</span></a>.</p>
-<p>Containers are a popular approach at deploying applications by packaging a lot
-of the required dependencies together. The most popular tool for this is
-<a class="reference external" href="https://www.docker.com/">Docker</a>, but Docker cannot be used on the Mila
-cluster (nor the other clusters from Digital Research Alliance of Canada).</p>
-<p>One popular mechanism for containerisation on a computational cluster is called
-<a class="reference external" href="https://singularity-docs.readthedocs.io/en/latest/">Singularity</a>.
-This is the recommended approach for running containers on the
-Mila cluster. See section <span class="xref std std-ref">Singularity</span> for more details.</p>
+<section id="no-uso-de-conteineres">
+<h2>No uso de contêineres<a class="headerlink" href="#no-uso-de-conteineres" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Outra opção para criar código portátil é: <a class="reference internal" href="Userguide_singularity.html#using-containers"><span class="std std-ref">Usando Conteiners no cluster</span></a>.</p>
+<dl class="simple">
+<dt>Containers são uma abordagem popular para implantar aplicativos, empacotando juntos muitas das dependências necessárias.</dt><dd><p>A ferramenta mais popular para isso é o <a class="reference external" href="https://www.docker.com/">Docker</a>.</p>
+</dd>
+</dl>
 </section>
 </section>
 
@@ -292,20 +158,15 @@ Mila cluster. See section <span class="xref std std-ref">Singularity</span> for 
   <div>
     <h3><a href="../index.html">Tabela de Conteúdo</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Portability concerns and solutions</a><ul>
-<li><a class="reference internal" href="#managing-your-environments">Managing your environments</a></li>
-<li><a class="reference internal" href="#virtual-environments">Virtual environments</a><ul>
+<li><a class="reference internal" href="#">Preocupações e soluções de portabilidade</a><ul>
+<li><a class="reference internal" href="#gerenciando-seus-ambientes">Gerenciando seus ambientes</a></li>
+<li><a class="reference internal" href="#ambientes-virtuais">Ambientes virtuais</a><ul>
 <li><a class="reference internal" href="#pip-virtualenv">Pip/Virtualenv</a></li>
 <li><a class="reference internal" href="#conda">Conda</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-modules">Using Modules</a><ul>
-<li><a class="reference internal" href="#the-module-command">The module command</a></li>
-<li><a class="reference internal" href="#available-software">Available Software</a></li>
-<li><a class="reference internal" href="#default-package-location">Default package location</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#on-using-containers">On using containers</a></li>
+<li><a class="reference internal" href="#usando-modulos">Usando módulos</a></li>
+<li><a class="reference internal" href="#no-uso-de-conteineres">No uso de contêineres</a></li>
 </ul>
 </li>
 </ul>
@@ -339,12 +200,12 @@ Mila cluster. See section <span class="xref std std-ref">Singularity</span> for 
           <a href="../genindex.html" title="Índice Geral"
              >índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Portability concerns and solutions</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Preocupações e soluções de portabilidade</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Advanced SLURM usage and Multiple GPU jobs &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -35,9 +33,9 @@
           <div class="body" role="main">
             
   <section id="advanced-slurm-usage-and-multiple-gpu-jobs">
-<h1>Advanced SLURM usage and Multiple GPU jobs<a class="headerlink" href="#advanced-slurm-usage-and-multiple-gpu-jobs" title="Link permanente para este cabeçalho"></a></h1>
+<h1>Advanced SLURM usage and Multiple GPU jobs<a class="headerlink" href="#advanced-slurm-usage-and-multiple-gpu-jobs" title="Link permanente para este cabeçalho">¶</a></h1>
 <section id="handling-preemption">
-<h2>Handling preemption<a class="headerlink" href="#handling-preemption" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Handling preemption<a class="headerlink" href="#handling-preemption" title="Link permanente para este cabeçalho">¶</a></h2>
 <p id="advanced-preemption">On the Apuana cluster, jobs can preempt one-another depending on their priority
 (unkillable&gt;high&gt;low) (See the <a class="reference external" href="https://slurm.schedmd.com/preempt.html">Slurm documentation</a>)</p>
 <p>The default preemption mechanism is to kill and re-queue the job automatically
@@ -82,9 +80,9 @@ your job (<code class="docutils literal notranslate"><span class="pre">SIGKILL</
 </div>
 </section>
 <section id="packing-jobs">
-<h2>Packing jobs<a class="headerlink" href="#packing-jobs" title="Link permanente para este cabeçalho"></a></h2>
+<h2>Packing jobs<a class="headerlink" href="#packing-jobs" title="Link permanente para este cabeçalho">¶</a></h2>
 <section id="sharing-a-gpu-between-processes">
-<h3>Sharing a GPU between processes<a class="headerlink" href="#sharing-a-gpu-between-processes" title="Link permanente para este cabeçalho"></a></h3>
+<h3>Sharing a GPU between processes<a class="headerlink" href="#sharing-a-gpu-between-processes" title="Link permanente para este cabeçalho">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">srun</span></code>, when used in a batch job is responsible for starting tasks on the
 allocated resources (see srun) SLURM batch script</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>SBATCH<span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">2</span>
@@ -114,7 +112,7 @@ you can use a multi-prog configuration file: <code class="docutils literal notra
 <code class="docutils literal notranslate"><span class="pre">srun</span></code> command: this will prepend each line with the taskid (0:, 1:)</p>
 </section>
 <section id="sharing-a-node-with-multiple-gpu-1process-gpu">
-<h3>Sharing a node with multiple GPU 1process/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-1process-gpu" title="Link permanente para este cabeçalho"></a></h3>
+<h3>Sharing a node with multiple GPU 1process/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-1process-gpu" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>On Digital Research Alliance of Canada, several nodes, especially nodes with
 <code class="docutils literal notranslate"><span class="pre">largeGPU</span></code> (P100) are reserved for jobs requesting the whole node, therefore
 packing multiple processes in a single job can leverage faster GPU.</p>
@@ -149,7 +147,7 @@ Requesting 1 task per GPU</p>
 </ul>
 </section>
 <section id="sharing-a-node-with-multiple-gpu-multiple-processes-gpu">
-<h3>Sharing a node with multiple GPU &amp; multiple processes/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-multiple-processes-gpu" title="Link permanente para este cabeçalho"></a></h3>
+<h3>Sharing a node with multiple GPU &amp; multiple processes/GPU<a class="headerlink" href="#sharing-a-node-with-multiple-gpu-multiple-processes-gpu" title="Link permanente para este cabeçalho">¶</a></h3>
 <p>Combining both previous sections, we can create a script requesting a whole node
 with four GPUs, allocating 1 GPU per <code class="docutils literal notranslate"><span class="pre">srun</span></code> and sharing each GPU with multiple
 processes</p>
@@ -256,7 +254,7 @@ GPUs allocated and 2 tasks per GPU</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

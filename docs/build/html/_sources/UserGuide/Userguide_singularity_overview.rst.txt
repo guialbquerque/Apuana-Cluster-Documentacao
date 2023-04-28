@@ -1,77 +1,73 @@
-Overview
---------
+Visão Geral
+-----------
 
-What is Singularity?
-^^^^^^^^^^^^^^^^^^^^
+O que é singularidade
+^^^^^^^^^^^^^^^^^^^^^
 
-Running Docker on SLURM is a security problem (e.g. running as root, being able
-to mount any directory).  The alternative is to use Singularity, which is a
-popular solution in the world of HPC.
+Executar o Docker no SLURM é um problema de segurança (por exemplo, executando como root,
+tendo a capacidade de montar qualquer diretório). A alternativa é usar o Singularity,
+que é uma solução popular no mundo de HPC.
 
-There is a good level of compatibility between Docker and Singularity,
-and we can find many exaggerated claims about able to convert containers
-from Docker to Singularity without any friction.
-Oftentimes, Docker images from DockerHub are 100% compatible with Singularity,
-and they can indeed be used without friction, but things get messy when
-we try to convert our own Docker build files to Singularity recipes.
+Existe um bom nível de compatibilidade entre Docker e Singularity, e podemos encontrar
+muitas alegações exageradas sobre a capacidade de converter contêineres do Docker para
+Singularity sem qualquer atrito. Muitas vezes, imagens do DockerHub são 100% compatíveis
+com o Singularity e podem ser usadas sem atrito, mas as coisas ficam complicadas quando
+tentamos converter nossos próprios arquivos de construção do Docker em receitas do Singularity.
 
-Links to official documentation
+Links para documentação oficial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* official `Singularity user guide <https://singularity-docs.readthedocs.io/en/latest/>`_ (this is the one you will use most often)
+* official `Singularity user guide <https://singularity-docs.readthedocs.io/en/latest/>`_ 
 
 * official `Singularity admin guide <https://sylabs.io/guides/latest/admin-guide/>`_
 
-Overview of the steps used in practice
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Visão gerald dos passos usados na prática
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most often, the process to create and use a Singularity container is:
+Na maioria das vezes, o processo para criar e usar um contêiner Singularity é:
 
-* on your Linux computer (at home or work)
+* No seu computador Linux (em casa ou no trabalho)
 
-  * select a Docker image from DockerHub (e.g. *pytorch/pytorch*)
-  * make a recipe file for Singularity that starts with that DockerHub image
-  * build the recipe file, thus creating the image file (e.g. ``my-pytorch-image.sif``)
-  * test your singularity container before send it over to the cluster
+  * selecione uma imagem Docker do DockerHub (por exemplo, *pytorch/pytorch*)
+  * crie um arquivo de receita para o Singularity que comece com essa imagem do DockerHub
+  * construa o arquivo de receita, criando assim o arquivo de imagem (por exemplo, ``my-pytorch-image.sif``)
+  * teste seu contêiner Singularity antes de enviá-lo para o cluster
   * ``rsync -av my-pytorch-image.sif <login-node>:Documents/my-singularity-images``
 
-* on the login node for that cluster
+* No nó de login desse cluster
 
-  * queue your jobs with ``sbatch ...``
-  * (note that your jobs will copy over the ``my-pytorch-image.sif`` to $SLURM_TMPDIR
-    and will then launch Singularity with that image)
-  * do something else while you wait for them to finish
-  * queue more jobs with the same ``my-pytorch-image.sif``,
-    reusing it many times over
+  * enfileire seus trabalhos com ``sbatch ...``
+  * (observe que seus trabalhos copiarão o arquivo ``my-pytorch-image.sif`` para $SLURM_TMPDIR e então iniciarão o Singularity com essa imagem)
+    faça outra coisa enquanto espera que eles terminem
+  * enfileire mais trabalhos com o mesmo ``my-pytorch-image.sif``, reutilizando-o várias vezes
 
-In the following sections you will find specific examples or tips to accomplish
-in practice the steps highlighted above.
+Nas próximas seções, você encontrará exemplos específicos ou dicas para realizar na prática as etapas destacadas acima.
 
-Nope, not on MacOS
-^^^^^^^^^^^^^^^^^^
+Não, não no MacOS
+^^^^^^^^^^^^^^^^^
 
-Singularity does not work on MacOS, as of the time of this writing in 2021.
-Docker does not *actually* run on MacOS, but there Docker silently installs a
-virtual machine running Linux, which makes it a pleasant experience,
-and the user does not need to care about the details of how Docker does it.
+Singularity não funciona no MacOS, até a data desta escrita em 2021.
+Docker realmente não roda no MacOS, mas o Docker instala silenciosamente uma
+máquina virtual executando Linux, o que torna a experiência agradável,
+e o usuário não precisa se preocupar com os detalhes de como o Docker faz isso.
 
-Given its origins in HPC, Singularity does not provide that kind of seamless
-experience on MacOS, even though it's technically possible to run it
-inside a Linux virtual machine on MacOS.
+Dado sua origem em HPC, o Singularity não fornece esse tipo de experiência sem problemas no MacOS,
+embora tecnicamente seja possível executá-lo dentro de uma máquina virtual Linux no MacOS.
 
-Where to build images
-^^^^^^^^^^^^^^^^^^^^^
+Onde construir imagens
+^^^^^^^^^^^^^^^^^^^^^^
 
-Building Singularity images is a rather heavy task, which can take 20 minutes
-if you have a lot of steps in your recipe. This makes it a bad task to run on
-the login nodes of our clusters, especially if it needs to be run regularly.
+Construir imagens do Singularity é uma tarefa bastante pesada, que pode levar 20 minutos
+se você tiver muitas etapas na sua receita. Isso torna uma tarefa ruim para rodar em
+os nós de login de nossos clusters, especialmente se precisar ser executado regularmente.
 
-On the Mila cluster, we are lucky to have unrestricted internet access on the compute
-nodes, which means that anyone can request an interactive CPU node (no need for GPU)
-and build their images there without problem.
+No cluster Mila, temos a sorte de ter acesso irrestrito à internet nos nós de computação,
+o que significa que qualquer pessoa pode solicitar um nó de CPU interativo (sem necessidade de GPU)
+e construir suas imagens lá sem problemas.
 
-.. warning:: Do not build Singularity images from scratch every time your run a
-    job in a large batch.  This will be a colossal waste of GPU time as well as
-    internet bandwidth.  If you setup your workflow properly (e.g. using bind
-    paths for your code and data), you can spend months reusing the same
-    Singularity image ``my-pytorch-image.sif``.
+.. warning:: Não construa imagens do Singularity do zero toda vez que executar um
+    trabalho em um grande lote. Isso será um desperdício colossal de tempo de GPU e também de
+    largura de banda da internet. Se você configurar seu fluxo de trabalho corretamente
+    (por exemplo, usando caminhos de ligação para o seu código e dados), você pode passar meses reutilizando a mesma
+    imagem do Singularity ``my-pytorch-image.sif``.
+

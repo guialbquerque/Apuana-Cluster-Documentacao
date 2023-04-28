@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Software on the cluster &#8212; documentação Cluster Cin latest</title>
+    <title>Software no cluster &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -25,7 +23,7 @@
           <a href="../genindex.html" title="Índice Geral"
              accesskey="I">índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Software on the cluster</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Software no cluster</a></li> 
       </ul>
     </div>  
 
@@ -34,45 +32,39 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="software-on-the-cluster">
-<h1>Software on the cluster<a class="headerlink" href="#software-on-the-cluster" title="Link permanente para este cabeçalho"></a></h1>
-<p>This section aims to raise awareness to problems one can encounter when trying
-to run a software on different computers and how this is dealt with on typical
-computation clusters.</p>
-<p>The Mila cluster and the Digital Research Alliance of Canada clusters both
-provide various useful software and computing environments, which can be
-activated through the module system. Alternatively, you may build containers
-with your desired software and run them on compute nodes.</p>
-<p>Regarding Python development, we recommend using virtual environments to install
-Python packages in isolation.</p>
-<section id="cluster-software-modules">
-<h2>Cluster software modules<a class="headerlink" href="#cluster-software-modules" title="Link permanente para este cabeçalho"></a></h2>
-<p>Modules are small files which modify your environment variables to point to
-specific versions of various software and libraries. For instance, a module
-might provide the <code class="docutils literal notranslate"><span class="pre">python</span></code> command to point to Python 3.7, another might
-activate CUDA version 11.0, another might provide the <code class="docutils literal notranslate"><span class="pre">torch</span></code> package, and so
-on.</p>
-<p>For more information, see <span class="xref std std-ref">The module command</span>.</p>
+  <section id="software-no-cluster">
+<h1>Software no cluster<a class="headerlink" href="#software-no-cluster" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Esta seção tem como objetivo conscientizar sobre os problemas que se pode encontrar
+ao tentar executar um software em diferentes computadores e como isso é tratado em
+clusters de computação típicos.</p>
+<p>Em relação ao desenvolvimento em Python, recomendamos o uso de ambientes virtuais para
+instalar pacotes Python em isolamento.</p>
+<section id="modulos-de-software-do-cluster">
+<h2>Módulos de software do cluster<a class="headerlink" href="#modulos-de-software-do-cluster" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Os módulos são pequenos arquivos que modificam suas variáveis de ambiente para
+apontar para versões específicas de vários softwares e bibliotecas. Por exemplo,
+um módulo pode fornecer o comando “python” para apontar para o Python 3.7, outro
+pode ativar a versão 11.0 do CUDA, outro pode fornecer o pacote “torch” e assim por diante.</p>
+<p>Para obter mais informações, consulte <span class="xref std std-ref">O comando module</span>.</p>
 </section>
-<section id="containers">
-<h2>Containers<a class="headerlink" href="#containers" title="Link permanente para este cabeçalho"></a></h2>
-<p>Containers are a special form of isolation of software and its dependencies. A
-container is essentially a lightweight virtual machine: it encapsulates a
-virtual file system for a full OS installation, as well as a separate network
-and execution environment.</p>
-<p>For example, you can create an Ubuntu container in which you install various
-packages using <code class="docutils literal notranslate"><span class="pre">apt</span></code>, modify settings as you would as a root user, and so on,
-but without interfering with your main installation. Once built, a container can
-be run on any compatible system.</p>
-<p>For more information, see <a class="reference internal" href="../UserGuide/Userguide.html#using-containers"><span class="std std-ref">Using containers on clusters</span></a>.</p>
+<section id="conteineres">
+<h2>Contêineres<a class="headerlink" href="#conteineres" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Os contêineres são uma forma especial de isolamento de software e suas dependências.
+Um contêiner é essencialmente uma máquina virtual leve: ele encapsula um sistema de arquivos
+virtual para uma instalação completa do sistema operacional, bem como uma rede e ambiente de
+execução separados.</p>
+<p>Por exemplo, você pode criar um contêiner Ubuntu no qual instala vários pacotes usando “apt”,
+modifica configurações como faria como usuário root, e assim por diante, mas sem interferir na
+sua instalação principal. Uma vez construído, um contêiner pode ser executado em qualquer sistema
+compatível.</p>
+<p>Para obter mais informações, consulte <span class="xref std std-ref">Usando contêineres</span>.</p>
 </section>
-<section id="python-virtual-environments">
-<h2>Python Virtual environments<a class="headerlink" href="#python-virtual-environments" title="Link permanente para este cabeçalho"></a></h2>
-<p>A virtual environment in Python is a local, isolated environment in which you
-can install or uninstall Python packages without interfering with the global
-environment (or other virtual environments). In order to use a virtual
-environment, you first have to activate it.</p>
-<p>For more information, see <span class="xref std std-ref">Virtual environments</span>.</p>
+<section id="ambientes-virtuais-python">
+<h2>Ambientes virtuais Python<a class="headerlink" href="#ambientes-virtuais-python" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Um ambiente virtual em Python é um ambiente local e isolado no qual você pode instalar
+ou desinstalar pacotes Python sem interferir no ambiente global (ou em outros ambientes virtuais).
+Para usar um ambiente virtual, primeiro você deve ativá-lo.</p>
+<p>Para obter mais informações, consulte <span class="xref std std-ref">Ambientes virtuais</span>.</p>
 </section>
 </section>
 
@@ -89,10 +81,10 @@ environment, you first have to activate it.</p>
   <div>
     <h3><a href="../index.html">Tabela de Conteúdo</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Software on the cluster</a><ul>
-<li><a class="reference internal" href="#cluster-software-modules">Cluster software modules</a></li>
-<li><a class="reference internal" href="#containers">Containers</a></li>
-<li><a class="reference internal" href="#python-virtual-environments">Python Virtual environments</a></li>
+<li><a class="reference internal" href="#">Software no cluster</a><ul>
+<li><a class="reference internal" href="#modulos-de-software-do-cluster">Módulos de software do cluster</a></li>
+<li><a class="reference internal" href="#conteineres">Contêineres</a></li>
+<li><a class="reference internal" href="#ambientes-virtuais-python">Ambientes virtuais Python</a></li>
 </ul>
 </li>
 </ul>
@@ -126,12 +118,12 @@ environment, you first have to activate it.</p>
           <a href="../genindex.html" title="Índice Geral"
              >índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Software on the cluster</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Software no cluster</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Sharing Data with ACLs &#8212; documentação Cluster Cin latest</title>
+    <title>Compartilhando dados com ACLs &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -25,7 +23,7 @@
           <a href="../genindex.html" title="Índice Geral"
              accesskey="I">índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Sharing Data with ACLs</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Compartilhando dados com ACLs</a></li> 
       </ul>
     </div>  
 
@@ -34,25 +32,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="sharing-data-with-acls">
-<h1>Sharing Data with ACLs<a class="headerlink" href="#sharing-data-with-acls" title="Link permanente para este cabeçalho"></a></h1>
-<p>Regular permissions bits are extremely blunt tools: They control access through
-only three sets of bits owning user, owning group and all others. Therefore,
-access is either too narrow (<code class="docutils literal notranslate"><span class="pre">0700</span></code> allows access only by oneself) or too wide
-(<code class="docutils literal notranslate"><span class="pre">770</span></code> gives all permissions to everyone in the same group, and <code class="docutils literal notranslate"><span class="pre">777</span></code> to
-literally everyone).</p>
-<p>ACLs (Access Control Lists) are an expansion of the permissions bits that allow
-more fine-grained, granular control of accesses to a file. They can be used to
-permit specific users access to files and folders even if conservative default
-permissions would have denied them such access.</p>
-<p>As an illustrative example, to use ACLs to allow <code class="docutils literal notranslate"><span class="pre">$USER</span></code> (<strong>oneself</strong>) to
-share with <code class="docutils literal notranslate"><span class="pre">$USER2</span></code> (<strong>another person</strong>) a “playground” folder hierarchy in
-Mila’s scratch filesystem at a location</p>
+  <section id="compartilhando-dados-com-acls">
+<h1>Compartilhando dados com ACLs<a class="headerlink" href="#compartilhando-dados-com-acls" title="Link permanente para este cabeçalho">¶</a></h1>
+<p>Os bits de permissão regulares são ferramentas extremamente limitadas: eles controlam
+o acesso por meio de apenas três conjuntos de bits - usuário proprietário, grupo
+proprietário e todos os outros. Portanto, o acesso é ou muito restrito
+(0700 permite acesso apenas ao usuário proprietário) ou muito amplo
+(770 dá todas as permissões para todos no mesmo grupo, e 777 para literalmente todos).</p>
+<p>As ACLs (Listas de Controle de Acesso) são uma expansão dos bits de permissão que permitem
+um controle mais granular de acessos a um arquivo. Elas podem ser usadas para permitir
+que usuários específicos acessem arquivos e pastas, mesmo que as permissões padrão
+conservadoras os tenham negado esse acesso.</p>
+<p>Como exemplo ilustrativo, para usar as ACLs para permitir que $USER (a si mesmo) compartilhe
+com $USER2 (outra pessoa) uma hierarquia de pastas “playground” no sistema de arquivos de
+rascunho do Apuana em um local</p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">/network/scratch/${USER:0:1}/$USER/X/Y/Z/...</span></code></p>
 </div></blockquote>
-<p>in a safe and secure fashion that allows both users to read, write, execute,
-search and delete each others’ files:</p>
+<p>de maneira segura e que permita que ambos os usuários leiam, escrevam, executem, pesquisem e excluam
+os arquivos um do outro:</p>
 <hr class="docutils" />
 <div class="line-block">
 <div class="line"><strong>1.</strong> Grant <strong>oneself</strong> permissions to access any <strong>future</strong> files/folders created
@@ -66,16 +64,13 @@ by the other <em>(or oneself)</em></div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <blockquote>
-<div><p>The importance of doing this seemingly-redundant step first is that files</p>
+<div><p>A importância de fazer este passo aparentemente redundante primeiro é que arquivos e
+pastas são sempre de propriedade de apenas uma pessoa, quase sempre o seu criador
+(o UID será do criador, o GID geralmente também). Se esse usuário não for você,
+você não terá acesso a esses arquivos a menos que a outra pessoa especificamente os dê
+a você - ou esses arquivos herdem uma ACL padrão que permita acesso total.</p>
 </div></blockquote>
-<dl class="simple">
-<dt>and folders are <strong>always</strong> owned by only one person, almost always their</dt><dd><p>creator (the UID will be the creator’s, the GID typically as well). If that
-user is not yourself, you will not have access to those files unless the
-other person specifically gives them to you – or these files inherited a
-default ACL allowing you full access.</p>
-</dd>
-</dl>
-<p><strong>This</strong> is the inherited, default ACL serving that purpose.</p>
+<p><strong>This</strong> Esta é a ACL padrão herdada que serve esse propósito.</p>
 </div>
 <div class="line-block">
 <div class="line"><strong>2.</strong> Grant <strong>the other</strong> permission to access any <strong>future</strong> files/folders created
@@ -89,18 +84,19 @@ by the other <em>(or oneself)</em></div>
 <div class="line-block">
 <div class="line"><strong>3.</strong> Grant <strong>the other</strong> permission to access any <strong>existing</strong> files/folders created
 by <em>oneself</em>.</div>
-<div class="line">Such files and folders were created before the new default ACLs were added
-above and thus did not inherit them from their parent folder at the moment of
-their creation.</div>
+<div class="line">Esses arquivos e pastas foram criados antes das novas ACLs padrão serem adicionadas acima e,
+portanto, não as herdaram de sua pasta pai no momento de sua criação.</div>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">setfacl -Rm  user:${USER2}:rwx /network/scratch/${USER:0:1}/$USER/X/Y/Z/</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>The purpose of granting permissions first for <em>future</em> files and then for
-<em>existing</em> files is to prevent a <strong>race condition</strong> whereby after the first <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> command the other person could create files to which the
-second <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> command does not apply.</p>
+<dl class="simple">
+<dt>O objetivo de conceder permissões primeiro para arquivos <em>futuros</em> e depois para arquivos</dt><dd><p>existentes é evitar uma condição de corrida em que, após o primeiro comando <code class="docutils literal notranslate"><span class="pre">setfacl</span></code>, a
+outra pessoa possa criar arquivos aos quais o segundo comando <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> não se aplica.</p>
+</dd>
+</dl>
 </div>
 <hr class="docutils" />
 <div class="line-block">
@@ -122,35 +118,29 @@ shared location in question.</div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<blockquote>
-<div><p>In order to access a file, all folders from the root (<code class="docutils literal notranslate"><span class="pre">/</span></code>) down to the
-parent folder in question must be searchable (<code class="docutils literal notranslate"><span class="pre">+x</span></code>) by the concerned user.
-This is already the case for all users for folders such as <code class="docutils literal notranslate"><span class="pre">/</span></code>,
-<code class="docutils literal notranslate"><span class="pre">/network</span></code> and <code class="docutils literal notranslate"><span class="pre">/network/scratch</span></code>, but users must explicitly grant access
-to some or all users either through base permissions or by adding ACLs, for
-at least <code class="docutils literal notranslate"><span class="pre">/network/scratch/${USER:0:1}/$USER</span></code>, <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> and subfolders.</p>
-</div></blockquote>
-<dl>
-<dt>To bluntly allow <strong>all</strong> users to search through a folder (<strong>think twice!</strong>),</dt><dd><p>the following command can be used:</p>
+<p>Para acessar um arquivo, todas as pastas desde o diretório raiz (<code class="docutils literal notranslate"><span class="pre">/</span></code>) até a pasta pai
+em questão devem ser pesquisáveis (+x) pelo usuário em questão. Isso já é o caso
+para todos os usuários em pastas como <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">/network</span></code> e <code class="docutils literal notranslate"><span class="pre">/network/scratch</span></code>, mas os usuários
+devem conceder acesso explicitamente a alguns ou a todos os usuários, seja por meio de
+permissões básicas ou adicionando ACLs, para pelo menos <code class="docutils literal notranslate"><span class="pre">/network/scratch/${USER:0:1}/$USER</span></code>, <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> e subpastas.</p>
+<p>Para permitir bruscamente que todos os usuários pesquisem uma pasta (<strong>pense duas vezes!</strong>), o seguinte comando pode ser usado:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">chmod a+x /network/scratch/${USER:0:1}/$USER/</span>
 </pre></div>
 </div>
-</dd>
-</dl>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <blockquote>
-<div><p>For more information on <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> and path resolution/access checking,
-consider the following documentation viewing commands:</p>
+<div><p>Para obter mais informações sobre <code class="docutils literal notranslate"><span class="pre">setfacl</span></code> e resolução de caminho/verificação
+de acesso, considere os seguintes comandos de visualização de documentação:</p>
 </div></blockquote>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">setfacl</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">path_resolution</span></code></p></li>
 </ul>
 </div>
-<section id="viewing-and-verifying-acls">
-<h2>Viewing and Verifying ACLs<a class="headerlink" href="#viewing-and-verifying-acls" title="Link permanente para este cabeçalho"></a></h2>
+<section id="visualizando-e-verificando-acls">
+<h2>Visualizando e Verificando ACLs<a class="headerlink" href="#visualizando-e-verificando-acls" title="Link permanente para este cabeçalho">¶</a></h2>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">getfacl /path/to/folder/or/file</span>
 <span class="go">            1:  # file: somedir/</span>
 <span class="go">            2:  # owner: lisa</span>
@@ -191,8 +181,8 @@ consider the following documentation viewing commands:</p>
   <div>
     <h3><a href="../index.html">Tabela de Conteúdo</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Sharing Data with ACLs</a><ul>
-<li><a class="reference internal" href="#viewing-and-verifying-acls">Viewing and Verifying ACLs</a></li>
+<li><a class="reference internal" href="#">Compartilhando dados com ACLs</a><ul>
+<li><a class="reference internal" href="#visualizando-e-verificando-acls">Visualizando e Verificando ACLs</a></li>
 </ul>
 </li>
 </ul>
@@ -226,12 +216,12 @@ consider the following documentation viewing commands:</p>
           <a href="../genindex.html" title="Índice Geral"
              >índice</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">documentação Cluster Cin latest</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Sharing Data with ACLs</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Compartilhando dados com ACLs</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

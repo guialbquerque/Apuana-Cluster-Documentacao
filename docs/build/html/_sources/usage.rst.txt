@@ -4,7 +4,7 @@ Primeiros Passos
 Conectando a Máquina de Acesso
 ------------------------------
 
-O envio de tarefas para o cluster precisa ser feito a partir de uma maquina de acesso. A entrada na maquina de acesso é realizado através do SSH.
+O envio de tarefas para o cluster precisa ser feito a partir de uma máquina de acesso. A entrada na maquina de acesso é realizado através do SSH.
 
 **ssh <login>@slurm-client1.cin.ufpe.br**
 

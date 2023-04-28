@@ -1,6 +1,6 @@
-What is a computer cluster?
-***************************
+O que é um cluster de computadores?
+***********************************
 
-A `computer cluster <https://en.wikipedia.org/wiki/Computer_cluster>`_ is a set
-of loosely or tightly connected computers that work together so that, in many
-respects, they can be viewed as a single system.
+Um cluster de computadores `<https://pt.wikipedia.org/wiki/Cluster>`_ é um conjunto
+de computadores conectados de forma solta ou estreita que trabalham juntos para que,
+em muitos aspectos, possam ser vistos como um único sistema.

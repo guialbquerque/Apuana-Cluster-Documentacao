@@ -4,13 +4,11 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Singularity &#8212; documentação Cluster Cin latest</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
@@ -35,113 +33,107 @@
           <div class="body" role="main">
             
   <section id="singularity">
-<h1>Singularity<a class="headerlink" href="#singularity" title="Link permanente para este cabeçalho"></a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link permanente para este cabeçalho"></a></h2>
-<section id="what-is-singularity">
-<h3>What is Singularity?<a class="headerlink" href="#what-is-singularity" title="Link permanente para este cabeçalho"></a></h3>
-<p>Running Docker on SLURM is a security problem (e.g. running as root, being able
-to mount any directory).  The alternative is to use Singularity, which is a
-popular solution in the world of HPC.</p>
-<p>There is a good level of compatibility between Docker and Singularity,
-and we can find many exaggerated claims about able to convert containers
-from Docker to Singularity without any friction.
-Oftentimes, Docker images from DockerHub are 100% compatible with Singularity,
-and they can indeed be used without friction, but things get messy when
-we try to convert our own Docker build files to Singularity recipes.</p>
+<h1>Singularity<a class="headerlink" href="#singularity" title="Link permanente para este cabeçalho">¶</a></h1>
+<section id="visao-geral">
+<h2>Visão Geral<a class="headerlink" href="#visao-geral" title="Link permanente para este cabeçalho">¶</a></h2>
+<section id="o-que-e-singularidade">
+<h3>O que é singularidade<a class="headerlink" href="#o-que-e-singularidade" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Executar o Docker no SLURM é um problema de segurança (por exemplo, executando como root,
+tendo a capacidade de montar qualquer diretório). A alternativa é usar o Singularity,
+que é uma solução popular no mundo de HPC.</p>
+<p>Existe um bom nível de compatibilidade entre Docker e Singularity, e podemos encontrar
+muitas alegações exageradas sobre a capacidade de converter contêineres do Docker para
+Singularity sem qualquer atrito. Muitas vezes, imagens do DockerHub são 100% compatíveis
+com o Singularity e podem ser usadas sem atrito, mas as coisas ficam complicadas quando
+tentamos converter nossos próprios arquivos de construção do Docker em receitas do Singularity.</p>
 </section>
-<section id="links-to-official-documentation">
-<h3>Links to official documentation<a class="headerlink" href="#links-to-official-documentation" title="Link permanente para este cabeçalho"></a></h3>
+<section id="links-para-documentacao-oficial">
+<h3>Links para documentação oficial<a class="headerlink" href="#links-para-documentacao-oficial" title="Link permanente para este cabeçalho">¶</a></h3>
 <ul class="simple">
-<li><p>official <a class="reference external" href="https://singularity-docs.readthedocs.io/en/latest/">Singularity user guide</a> (this is the one you will use most often)</p></li>
+<li><p>official <a class="reference external" href="https://singularity-docs.readthedocs.io/en/latest/">Singularity user guide</a></p></li>
 <li><p>official <a class="reference external" href="https://sylabs.io/guides/latest/admin-guide/">Singularity admin guide</a></p></li>
 </ul>
 </section>
-<section id="overview-of-the-steps-used-in-practice">
-<h3>Overview of the steps used in practice<a class="headerlink" href="#overview-of-the-steps-used-in-practice" title="Link permanente para este cabeçalho"></a></h3>
-<p>Most often, the process to create and use a Singularity container is:</p>
+<section id="visao-gerald-dos-passos-usados-na-pratica">
+<h3>Visão gerald dos passos usados na prática<a class="headerlink" href="#visao-gerald-dos-passos-usados-na-pratica" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Na maioria das vezes, o processo para criar e usar um contêiner Singularity é:</p>
 <ul class="simple">
-<li><p>on your Linux computer (at home or work)</p>
+<li><p>No seu computador Linux (em casa ou no trabalho)</p>
 <ul>
-<li><p>select a Docker image from DockerHub (e.g. <em>pytorch/pytorch</em>)</p></li>
-<li><p>make a recipe file for Singularity that starts with that DockerHub image</p></li>
-<li><p>build the recipe file, thus creating the image file (e.g. <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>)</p></li>
-<li><p>test your singularity container before send it over to the cluster</p></li>
+<li><p>selecione uma imagem Docker do DockerHub (por exemplo, <em>pytorch/pytorch</em>)</p></li>
+<li><p>crie um arquivo de receita para o Singularity que comece com essa imagem do DockerHub</p></li>
+<li><p>construa o arquivo de receita, criando assim o arquivo de imagem (por exemplo, <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>)</p></li>
+<li><p>teste seu contêiner Singularity antes de enviá-lo para o cluster</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rsync</span> <span class="pre">-av</span> <span class="pre">my-pytorch-image.sif</span> <span class="pre">&lt;login-node&gt;:Documents/my-singularity-images</span></code></p></li>
 </ul>
 </li>
-<li><p>on the login node for that cluster</p>
+<li><p>No nó de login desse cluster</p>
 <ul>
-<li><p>queue your jobs with <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">...</span></code></p></li>
-<li><p>(note that your jobs will copy over the <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code> to $SLURM_TMPDIR
-and will then launch Singularity with that image)</p></li>
-<li><p>do something else while you wait for them to finish</p></li>
-<li><p>queue more jobs with the same <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>,
-reusing it many times over</p></li>
+<li><p>enfileire seus trabalhos com <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">...</span></code></p></li>
+<li><p>(observe que seus trabalhos copiarão o arquivo <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code> para $SLURM_TMPDIR e então iniciarão o Singularity com essa imagem)
+faça outra coisa enquanto espera que eles terminem</p></li>
+<li><p>enfileire mais trabalhos com o mesmo <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>, reutilizando-o várias vezes</p></li>
 </ul>
 </li>
 </ul>
-<p>In the following sections you will find specific examples or tips to accomplish
-in practice the steps highlighted above.</p>
+<p>Nas próximas seções, você encontrará exemplos específicos ou dicas para realizar na prática as etapas destacadas acima.</p>
 </section>
-<section id="nope-not-on-macos">
-<h3>Nope, not on MacOS<a class="headerlink" href="#nope-not-on-macos" title="Link permanente para este cabeçalho"></a></h3>
-<p>Singularity does not work on MacOS, as of the time of this writing in 2021.
-Docker does not <em>actually</em> run on MacOS, but there Docker silently installs a
-virtual machine running Linux, which makes it a pleasant experience,
-and the user does not need to care about the details of how Docker does it.</p>
-<p>Given its origins in HPC, Singularity does not provide that kind of seamless
-experience on MacOS, even though it’s technically possible to run it
-inside a Linux virtual machine on MacOS.</p>
+<section id="nao-nao-no-macos">
+<h3>Não, não no MacOS<a class="headerlink" href="#nao-nao-no-macos" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Singularity não funciona no MacOS, até a data desta escrita em 2021.
+Docker realmente não roda no MacOS, mas o Docker instala silenciosamente uma
+máquina virtual executando Linux, o que torna a experiência agradável,
+e o usuário não precisa se preocupar com os detalhes de como o Docker faz isso.</p>
+<p>Dado sua origem em HPC, o Singularity não fornece esse tipo de experiência sem problemas no MacOS,
+embora tecnicamente seja possível executá-lo dentro de uma máquina virtual Linux no MacOS.</p>
 </section>
-<section id="where-to-build-images">
-<h3>Where to build images<a class="headerlink" href="#where-to-build-images" title="Link permanente para este cabeçalho"></a></h3>
-<p>Building Singularity images is a rather heavy task, which can take 20 minutes
-if you have a lot of steps in your recipe. This makes it a bad task to run on
-the login nodes of our clusters, especially if it needs to be run regularly.</p>
-<p>On the Mila cluster, we are lucky to have unrestricted internet access on the compute
-nodes, which means that anyone can request an interactive CPU node (no need for GPU)
-and build their images there without problem.</p>
+<section id="onde-construir-imagens">
+<h3>Onde construir imagens<a class="headerlink" href="#onde-construir-imagens" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Construir imagens do Singularity é uma tarefa bastante pesada, que pode levar 20 minutos
+se você tiver muitas etapas na sua receita. Isso torna uma tarefa ruim para rodar em
+os nós de login de nossos clusters, especialmente se precisar ser executado regularmente.</p>
+<p>No cluster Mila, temos a sorte de ter acesso irrestrito à internet nos nós de computação,
+o que significa que qualquer pessoa pode solicitar um nó de CPU interativo (sem necessidade de GPU)
+e construir suas imagens lá sem problemas.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Do not build Singularity images from scratch every time your run a
-job in a large batch.  This will be a colossal waste of GPU time as well as
-internet bandwidth.  If you setup your workflow properly (e.g. using bind
-paths for your code and data), you can spend months reusing the same
-Singularity image <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>.</p>
+<p>Não construa imagens do Singularity do zero toda vez que executar um
+trabalho em um grande lote. Isso será um desperdício colossal de tempo de GPU e também de
+largura de banda da internet. Se você configurar seu fluxo de trabalho corretamente
+(por exemplo, usando caminhos de ligação para o seu código e dados), você pode passar meses reutilizando a mesma
+imagem do Singularity <code class="docutils literal notranslate"><span class="pre">my-pytorch-image.sif</span></code>.</p>
 </div>
 </section>
 </section>
-<section id="building-the-containers">
-<h2>Building the containers<a class="headerlink" href="#building-the-containers" title="Link permanente para este cabeçalho"></a></h2>
-<p>Building a container is like creating a new environment except that containers
-are much more powerful since they are self-contained systems.  With
-singularity, there are two ways to build containers.</p>
-<p>The first one is by yourself, it’s like when you got a new Linux laptop and you
-don’t really know what you need, if you see that something is missing, you
-install it. Here you can get a vanilla container with Ubuntu called a sandbox,
-you log in and you install each packages by yourself.  This procedure can take
-time but will allow you to understand how things work and what you need. This is
-recommended if you need to figure out how things will be compiled or if you want
-to install packages on the fly. We’ll refer to this procedure as singularity
-sandboxes.</p>
-<p>The second way is more like you know what you want, so you write a list of
-everything you need, you send it to singularity and it will install everything
-for you. Those lists are called singularity recipes.</p>
-<section id="first-way-build-and-use-a-sandbox">
-<h3>First way: Build and use a sandbox<a class="headerlink" href="#first-way-build-and-use-a-sandbox" title="Link permanente para este cabeçalho"></a></h3>
-<p>You might ask yourself: <em>On which machine should I build a container?</em></p>
-<p>First of all, you need to choose where you’ll build your container. This
-operation requires <strong>memory and high cpu usage</strong>.</p>
+<section id="construindo-os-containers">
+<h2>Construindo os containers<a class="headerlink" href="#construindo-os-containers" title="Link permanente para este cabeçalho">¶</a></h2>
+<p>Construir um container é como criar um novo ambiente, exceto que os containers são
+muito mais poderosos, pois são sistemas autocontidos. Com o Singularity, existem
+duas maneiras de construir containers.</p>
+<p>A primeira é fazê-lo você mesmo, é como quando você compra um novo laptop Linux e
+não sabe muito bem o que precisa, se perceber que algo está faltando, você o instala.
+Aqui, você pode obter um container vanilla com o Ubuntu chamado sandbox, você faz o
+login e instala cada pacote por si mesmo. Esse procedimento pode levar tempo, mas permitirá
+que você entenda como as coisas funcionam e o que precisa ser feito. Isso é recomendado se
+você precisa descobrir como as coisas serão compiladas ou se deseja instalar pacotes na hora
+Nos referiremos a este procedimento como singularity sandboxes.</p>
+<p>A segunda maneira é mais como se você soubesse o que quer, então você escreve uma lista de tudo o
+que precisa, envia para o Singularity e ele instalará tudo para você. Essas listas são chamadas de
+singularity recipes.</p>
+<section id="primeira-maneira-construir-e-usar-um-sandbox">
+<h3>Primeira maneira: construir e usar um sandbox<a class="headerlink" href="#primeira-maneira-construir-e-usar-um-sandbox" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Você pode se perguntar: <em>Em qual máquina devo construir um container?</em></p>
+<p>Antes de tudo, você precisa escolher onde construirá o seu container. Essa
+operação requer muita <strong>memória e alto uso da CPU</strong>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Do NOT build containers on any login nodes !</p>
+<p>NÃO construa containers em nenhum nó de login!</p>
 </div>
 <ul>
 <li><dl>
-<dt>(Recommended for beginner) If you need to <strong>use apt-get</strong>, you should <a href="#id1"><span class="problematic" id="id2">**</span></a>build</dt><dd><p>the container on your laptop** with sudo privileges. You’ll only need to
-install singularity on your laptop. Windows/Mac users can look <a class="reference external" href="https://www.sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac">there</a> and
-Ubuntu/Debian users can use directly:</p>
+<dt>(Recomendado para iniciantes) Se você precisar usar o apt-get, você deve construir</dt><dd><p>o container em seu laptop com privilégios de superusuário. Você só precisará
+instalar o Singularity em seu laptop. Usuários de Windows/Mac podem ver <a class="reference external" href="https://www.sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac">there</a>
+e usuários de Ubuntu/Debian podem usar diretamente:</p>
 <blockquote>
 <div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install singularity-container</span>
 </pre></div>
@@ -150,10 +142,9 @@ Ubuntu/Debian users can use directly:</p>
 </dd>
 </dl>
 </li>
-<li><p>If you <strong>can’t install singularity</strong> on your laptop and you <strong>don’t need apt-get</strong>, you can reserve a <strong>cpu node on the Mila cluster</strong> to build your container.</p></li>
 </ul>
-<p>In this case, in order to avoid too much I/O over the network, you should define
-the singularity cache locally:</p>
+<p>Nesse caso, para evitar muita entrada/saída (I/O) na rede, você deve definir o cache do
+Singularity localmente:</p>
 <blockquote>
 <div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export SINGULARITY_CACHEDIR=$SLURM_TMPDIR</span>
 </pre></div>
@@ -161,121 +152,117 @@ the singularity cache locally:</p>
 </div></blockquote>
 <ul class="simple">
 <li><dl class="simple">
-<dt>If you <strong>can’t install singularity</strong> on your laptop and you <a href="#id3"><span class="problematic" id="id4">**</span></a>want to use</dt><dd><p>apt-get**, you can use <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> to build your containers and read
+<dt>Se você <strong>não pode instalar o Singularity</strong> em seu laptop e <strong>deseja usar o apt-get</strong>,</dt><dd><p>você pode usar o <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> para construir seus containers e ler a seção
 <a class="reference internal" href="#recipe-section">Recipe_section</a>.</p>
 </dd>
 </dl>
 </li>
 </ul>
-<section id="download-containers-from-the-web">
-<h4>Download containers from the web<a class="headerlink" href="#download-containers-from-the-web" title="Link permanente para este cabeçalho"></a></h4>
-<p>Hopefully, you may not need to create containers from scratch as many have been
-already built for the most common deep learning software. You can find most of
-them on <a class="reference external" href="https://hub.docker.com/">dockerhub</a>.</p>
-<p>Go on <a class="reference external" href="https://hub.docker.com/">dockerhub</a> and select the container you want to pull.</p>
-<p>For example, if you want to get the latest PyTorch version with GPU support
-(Replace <em>runtime</em> by <em>devel</em> if you need the full Cuda toolkit):</p>
+<section id="baixando-containers-da-web">
+<h4>Baixando containers da web.<a class="headerlink" href="#baixando-containers-da-web" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Felizmente, você pode não precisar criar containers do zero, pois muitos já foram
+construídos para os softwares de deep learning mais comuns. Você pode encontrá-los
+na maioria em <a class="reference external" href="https://hub.docker.com/">dockerhub</a>.</p>
+<p>Acesse <a class="reference external" href="https://hub.docker.com/">dockerhub</a> e selecione o container que você deseja baixar</p>
+<p>Por exemplo, se você deseja obter a última versão do PyTorch com suporte para GPU
+(Substitua <em>runtime</em> por <em>devel</em> se precisar do conjunto completo de ferramentas do Cuda):</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull docker://pytorch/pytorch:1.0.1-cuda10.0-cudnn7-runtime</span>
 </pre></div>
 </div>
-<p>Or the latest TensorFlow:</p>
+<p>Ou a última versão do TensorFlow:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull docker://tensorflow/tensorflow:latest-gpu-py3</span>
 </pre></div>
 </div>
-<p>Currently the pulled image <code class="docutils literal notranslate"><span class="pre">pytorch.simg</span></code> or <code class="docutils literal notranslate"><span class="pre">tensorflow.simg</span></code> is read-only
-meaning that you won’t be able to install anything on it.  Starting now, PyTorch
-will be taken as example. If you use TensorFlow, simply replace every
-<strong>pytorch</strong> occurrences by <strong>tensorflow</strong>.</p>
+<p>Atualmente, a imagem baixada <code class="docutils literal notranslate"><span class="pre">pytorch.simg</span></code> ou <code class="docutils literal notranslate"><span class="pre">tensorflow.simg</span></code> é somente leitura,
+o que significa que você não poderá instalar nada nela. A partir de agora, o PyTorch
+será usado como exemplo. Se você estiver usando o TensorFlow, simplesmente substitua
+todas as ocorrências de <strong>pytorch</strong> por <strong>tensorflow</strong>.</p>
 </section>
-<section id="how-to-add-or-install-stuff-in-a-container">
-<h4>How to add or install stuff in a container<a class="headerlink" href="#how-to-add-or-install-stuff-in-a-container" title="Link permanente para este cabeçalho"></a></h4>
-<p>The first step is to transform your read only container
-<code class="docutils literal notranslate"><span class="pre">pytorch-1.0.1-cuda10.0-cudnn7-runtime.simg</span></code> in a writable version that will
-allow you to add packages.</p>
+<section id="como-adicionar-ou-instalar-coisas-em-um-container">
+<h4>Como adicionar ou instalar coisas em um container<a class="headerlink" href="#como-adicionar-ou-instalar-coisas-em-um-container" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>O primeiro passo é transformar o seu container somente leitura
+<code class="docutils literal notranslate"><span class="pre">pytorch-1.0.1-cuda10.0-cudnn7-runtime.simg</span></code> em uma versão gravável que
+permitirá que você adicione pacotes.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Depending on the version of singularity you are using, singularity
-will build a container with the extension .simg or .sif. If you’re using
-.sif files, replace every occurences of .simg by .sif.</p>
+<p>Dependendo da versão do singularity que você está usando, o singularity criará um container
+com a extensão .simg ou .sif. Se você estiver usando arquivos .sif, substitua todas as ocorrências
+de .simg por .sif.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Dica</p>
-<p>If you want to use <strong>apt-get</strong> you have to put <strong>sudo</strong> ahead of the
-following commands</p>
+<p>Se você quiser usar o apt-get, deve colocar sudo antes dos comandos a seguir</p>
 </div>
-<p>This command will create a writable image in the folder <code class="docutils literal notranslate"><span class="pre">pytorch</span></code>.</p>
+<p>Este comando criará uma imagem gravável na pasta <code class="docutils literal notranslate"><span class="pre">pytorch</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity build --sandbox pytorch pytorch-1.0.1-cuda10.0-cudnn7-runtime.simg</span>
 </pre></div>
 </div>
-<p>Then you’ll need the following command to log inside the container.</p>
+<p>Então você precisará do seguinte comando para fazer login dentro do container.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity shell --writable -H $HOME:/home pytorch</span>
 </pre></div>
 </div>
-<p>Once you get into the container, you can use pip and install anything you need
-(Or with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> if you built the container with sudo).</p>
+<p>Assim que você entrar no container, pode usar o pip e instalar tudo o que precisar
+(ou usar <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> se você construiu o container com sudo).</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Singularity mounts your home folder, so if you install things into
-the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> of your container, they will be installed in your real
-<code class="docutils literal notranslate"><span class="pre">$HOME</span></code>!</p>
+<p>O Singularity monta sua pasta pessoal, então se você instalar coisas no
+diretório <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> do seu container, elas serão instaladas no seu <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> real!</p>
 </div>
-<p>You should install your stuff in /usr/local instead.</p>
+<p>Você deve instalar seus pacotes em /usr/local.</p>
 </section>
-<section id="creating-useful-directories">
-<h4>Creating useful directories<a class="headerlink" href="#creating-useful-directories" title="Link permanente para este cabeçalho"></a></h4>
-<p>One of the benefits of containers is that you’ll be able to use them across
-different clusters. However for each cluster the datasets and experiments
-folder location can be different. In order to be invariant to those locations,
-we will create some useful mount points inside the container:</p>
+<section id="criando-diretorios-uteis">
+<h4>Criando diretórios úteis<a class="headerlink" href="#criando-diretorios-uteis" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Um dos benefícios dos containers é que você poderá usá-los em diferentes clusters.
+No entanto, para cada cluster, a localização das pastas de datasets e experimentos
+pode ser diferente. Para ser invariante em relação a essas localizações, criaremos
+alguns pontos de montagem úteis dentro do container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir /dataset</span>
 <span class="go">mkdir /tmp_log</span>
 <span class="go">mkdir /final_log</span>
 </pre></div>
 </div>
-<p>From now, you won’t need to worry anymore when you write your code to specify
-where to pick up your dataset. Your dataset will always be in <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>
-independently of the cluster you are using.</p>
+<p>A partir de agora, você não precisará mais se preocupar em especificar onde buscar
+seu conjunto de dados ao escrever seu código. Seu conjunto de dados estará sempre
+em <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>, independentemente do cluster que você estiver usando.</p>
 </section>
-<section id="testing">
-<h4>Testing<a class="headerlink" href="#testing" title="Link permanente para este cabeçalho"></a></h4>
-<p>If you have some code that you want to test before finalizing your container,
-you have two choices.  You can either log into your container and run Python
-code inside it with:</p>
+<section id="testes">
+<h4>Testes<a class="headerlink" href="#testes" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Se você tem algum código que deseja testar antes de finalizar o seu contêiner,
+você tem duas opções. Você pode entrar no seu contêiner e executar o código
+Python dentro dele com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity shell --nv pytorch</span>
 </pre></div>
 </div>
-<p>Or you can execute your command directly with</p>
+<p>Ou você pode executar seu comando diretamente com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv pytorch Python YOUR_CODE.py</span>
 </pre></div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Dica</p>
-<p>—nv allows the container to use gpus. You don’t need this if you
-don’t plan to use a gpu.</p>
+<p>—nv permite que o container use GPUs. Você não precisa disso se não planeja usar uma GPU.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Don’t forget to clear the cache of the packages you installed in
-the containers.</p>
+<p>Não se esqueça de limpar o cache dos pacotes que você instalou nos containers.</p>
 </div>
 </section>
-<section id="creating-a-new-image-from-the-sandbox">
-<h4>Creating a new image from the sandbox<a class="headerlink" href="#creating-a-new-image-from-the-sandbox" title="Link permanente para este cabeçalho"></a></h4>
-<p>Once everything you need is installed inside the container, you need to convert
-it back to a read-only singularity image with:</p>
+<section id="criando-uma-nova-imagem-a-partir-do-sandbox">
+<h4>Criando uma nova imagem a partir do sandbox<a class="headerlink" href="#criando-uma-nova-imagem-a-partir-do-sandbox" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Depois que tudo o que você precisa estiver instalado dentro do contêiner,
+você precisa convertê-lo de volta em uma imagem singularity somente leitura com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity build pytorch_final.simg pytorch</span>
 </pre></div>
 </div>
 </section>
 </section>
-<section id="second-way-use-recipes">
-<span id="recipe-section"></span><h3>Second way: Use recipes<a class="headerlink" href="#second-way-use-recipes" title="Link permanente para este cabeçalho"></a></h3>
-<p>A singularity recipe is a file including specifics about installation software,
-environment variables, files to add, and container metadata.  It is a starting
-point for designing any custom container. Instead of pulling a container and
-installing your packages manually, you can specify in this file the packages
-you want and then build your container from this file.</p>
-<p>Here is a toy example of a singularity recipe installing some stuff:</p>
+<section id="segunda-opcao-use-receitas">
+<span id="recipe-section"></span><h3>Segunda opção: Use receitas<a class="headerlink" href="#segunda-opcao-use-receitas" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Uma receita do Singularity é um arquivo que inclui especificações sobre a instalação
+de software, variáveis de ambiente, arquivos a serem adicionados e metadados do contêiner.
+É um ponto de partida para projetar qualquer contêiner personalizado. Em vez de baixar um
+contêiner e instalar seus pacotes manualmente, você pode especificar neste arquivo os pacotes
+que deseja e, em seguida, construir seu contêiner a partir deste arquivo.</p>
+<p>Aqui está um exemplo simples de uma receita do Singularity que instala alguns pacotes:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span><span class="c1">################ Header: Define the base system you want to use ################</span>
 <span class="gp"># </span>Reference<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>kind<span class="w"> </span>of<span class="w"> </span>base<span class="w"> </span>you<span class="w"> </span>want<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span><span class="o">(</span>e.g.,<span class="w"> </span>docker,<span class="w"> </span>debootstrap,<span class="w"> </span>shub<span class="o">)</span>.
 <span class="go">Bootstrap: docker</span>
@@ -304,35 +291,33 @@ you want and then build your container from this file.</p>
 <span class="go">        export SHELL</span>
 </pre></div>
 </div>
-<p>A recipe file contains two parts: the <code class="docutils literal notranslate"><span class="pre">header</span></code> and <code class="docutils literal notranslate"><span class="pre">sections</span></code>. In the
-<code class="docutils literal notranslate"><span class="pre">header</span></code> you specify which base system you want to use, it can be any docker
-or singularity container. In <code class="docutils literal notranslate"><span class="pre">sections</span></code>, you can list the things you want to
-install in the subsection <code class="docutils literal notranslate"><span class="pre">post</span></code> or list the environment’s variable you need
-to source at each runtime in the subsection <code class="docutils literal notranslate"><span class="pre">environment</span></code>. For a more detailed
-description, please look at the <a class="reference external" href="https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#container-recipes">singularity documentation</a>.</p>
-<p>In order to build a singularity container from a singularity recipe file, you
-should use:</p>
+<p>Um arquivo de receita contém duas partes: o “cabeçalho” (header) e “seções” (sections).
+No “cabeçalho”, você especifica qual sistema base deseja usar, pode ser qualquer contêiner
+do Docker ou do Singularity. Em “seções”, você pode listar as coisas que deseja instalar
+na subseção “post” ou listar as variáveis de ambiente que precisa carregar em cada execução
+na subseção “environment”. Para uma descrição mais detalhada, consulte <a class="reference external" href="https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#container-recipes">singularity documentation</a>.</p>
+<p>Para construir um container singularity a partir de um arquivo de receita, você deve usar:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo singularity build &lt;NAME_CONTAINER&gt; &lt;YOUR_RECIPE_FILES&gt;</span>
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>You always need to use sudo when you build a container from a
-recipe. As there is no access to sudo on the cluster, a personal computer or
-the use singularity hub is needed to build a container</p>
+<p>Você sempre precisa usar o sudo ao construir um contêiner a partir de uma receita.
+Como não há acesso ao sudo no cluster, é necessário um computador pessoal ou o uso do singularity
+hub para construir um contêiner.</p>
 </div>
-<section id="build-recipe-on-singularity-hub">
-<h4>Build recipe on singularity hub<a class="headerlink" href="#build-recipe-on-singularity-hub" title="Link permanente para este cabeçalho"></a></h4>
-<p>Singularity hub allows users to build containers from recipes directly on
-singularity-hub’s cloud meaning that you don’t need to build containers by
-yourself.  You need to register on <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> and link your
-singularity-hub account to your GitHub account, then:</p>
+<section id="construir-receita-no-singularity-hub">
+<h4>Construir receita no Singularity Hub<a class="headerlink" href="#construir-receita-no-singularity-hub" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>O Singularity Hub permite que os usuários criem contêineres a partir de receitas
+diretamente na nuvem do Singularity Hub, o que significa que você não precisa criar
+contêineres sozinho. Você precisa se registrar no <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> e vincular sua conta
+do Singularity Hub à sua conta do GitHub, e então:</p>
 <blockquote>
 <div><blockquote>
 <div><ol class="arabic simple">
-<li><p>Create a new github repository.</p></li>
-<li><p>Add a collection on <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> and select the github repository your created.</p></li>
-<li><p>Clone the github repository on your computer.</p></li>
+<li><p>Crie um novo repositório no Github.</p></li>
+<li><p>Adicione uma coleção no <a class="reference external" href="https://www.singularity-hub.org/">singularity-hub</a> e selecione o repositório do Github que você criou.</p></li>
+<li><p>Clone o repositório do Github em seu computador.</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone &lt;url&gt;
 </pre></div>
@@ -350,18 +335,17 @@ $ git push origin master
 </div>
 </div></blockquote>
 </div></blockquote>
-<p>At this point, robots from singularity-hub will build the container for you, you
-will be able to download your container from the website or directly with:</p>
+<p>Neste ponto, os robôs do singularity-hub irão construir o contêiner para você,
+e você poderá baixá-lo do site ou diretamente usando:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity pull shub://&lt;github_username&gt;/&lt;repository_name&gt;</span>
 </pre></div>
 </div>
 </section>
-<section id="example-recipe-with-openai-gym-mujoco-and-miniworld">
-<h4>Example: Recipe with OpenAI gym, MuJoCo and Miniworld<a class="headerlink" href="#example-recipe-with-openai-gym-mujoco-and-miniworld" title="Link permanente para este cabeçalho"></a></h4>
-<p>Here is an example on how you can use a singularity recipe to install complex
-environment such as OpenAI gym, MuJoCo and Miniworld on a PyTorch based
-container. In order to use MuJoCo, you’ll need to copy the key stored on the
-Mila cluster in <cite>/ai/apps/mujoco/license/mjkey.txt</cite> to your current directory.</p>
+<section id="exemplo-receita-com-openai-gym-mujoco-e-miniworld">
+<h4>Exemplo: Receita com OpenAI gym, MuJoCo e Miniworld<a class="headerlink" href="#exemplo-receita-com-openai-gym-mujoco-e-miniworld" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Aqui está um exemplo de como você pode usar uma receita do Singularity
+para instalar um ambiente complexo como o OpenAI gym, MuJoCo e Miniworld
+em um contêiner baseado em PyTorch.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>This<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>dockerfile<span class="w"> </span>that<span class="w"> </span>sets<span class="w"> </span>up<span class="w"> </span>a<span class="w"> </span>full<span class="w"> </span>Gym<span class="w"> </span>install<span class="w"> </span>with<span class="w"> </span><span class="nb">test</span><span class="w"> </span>dependencies
 <span class="go">Bootstrap: docker</span>
 
@@ -521,27 +505,24 @@ Mila cluster in <cite>/ai/apps/mujoco/license/mjkey.txt</cite> to your current d
 <span class="go">        exec /bin/bash &quot;$@&quot;</span>
 </pre></div>
 </div>
-<p>Keep in mind that those environment variables are sourced at runtime and not at
-build time. This is why, you should also define them in the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section
-since they are required to install MuJoCo.</p>
 </section>
 </section>
 </section>
-<section id="using-containers-on-clusters">
-<span id="using-containers"></span><h2>Using containers on clusters<a class="headerlink" href="#using-containers-on-clusters" title="Link permanente para este cabeçalho"></a></h2>
-<section id="how-to-use-containers-on-clusters">
-<h3>How to use containers on clusters<a class="headerlink" href="#how-to-use-containers-on-clusters" title="Link permanente para este cabeçalho"></a></h3>
-<p>On every cluster with Slurm, datasets and intermediate results should go in
-<code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> while the final experiment results should go in <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>.
-In order to use the container you built, you need to copy it on the cluster you
-want to use.</p>
+<section id="usando-conteiners-no-cluster">
+<span id="using-containers"></span><h2>Usando Conteiners no cluster<a class="headerlink" href="#usando-conteiners-no-cluster" title="Link permanente para este cabeçalho">¶</a></h2>
+<section id="como-usar-conteiners-no-cluster">
+<h3>Como usar conteiners no cluster<a class="headerlink" href="#como-usar-conteiners-no-cluster" title="Link permanente para este cabeçalho">¶</a></h3>
+<p>Em todo cluster com Slurm, os conjuntos de dados e resultados intermediários
+devem ser armazenados em <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>, enquanto os resultados finais do
+experimento devem ser salvos em <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>. Para usar o contêiner que você criou,
+é necessário copiá-lo para o cluster que deseja usar.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>You should always store your container in $SCRATCH !</p>
+<p>Você sempre deve armazenar o seu contêiner em $SCRATCH!</p>
 </div>
-<p>Then reserve a node with srun/sbatch, copy the container and your dataset on the
-node given by SLURM (i.e in <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>) and execute the code
-<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code> within the container <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> with:</p>
+<p>Em seguida, reserve um nó com srun/sbatch, copie o contêiner e o seu conjunto de
+dados para o nó fornecido pelo SLURM (ou seja, em <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>) e execute o
+código <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CODE&gt;</span></code> dentro do contêiner <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt; python &lt;YOUR_CODE&gt;</span>
 </pre></div>
 </div>
@@ -556,15 +537,25 @@ example, if you have your code in <code class="docutils literal notranslate"><sp
 specify <code class="docutils literal notranslate"><span class="pre">-H</span> <span class="pre">$HOME/Project12345/Version35:/home</span></code>, thus the container will only
 have access to the code inside <code class="docutils literal notranslate"><span class="pre">Version35</span></code>.</p>
 <p>If you want to run multiple commands inside the container you can use:</p>
+<p>Lembre-se de que <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">/tmp_log</span></code> e <code class="docutils literal notranslate"><span class="pre">/final_log</span></code> foram criados na seção anterior.
+Agora, cada vez que usarmos o singularity, estamos explicitamente dizendo a ele
+para montar <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code> no nó do cluster na pasta <code class="docutils literal notranslate"><span class="pre">/dataset</span></code> dentro do container
+com a opção <code class="docutils literal notranslate"><span class="pre">-B</span></code>, de modo que cada conjunto de dados baixado pelo PyTorch em <code class="docutils literal notranslate"><span class="pre">/dataset</span></code>
+estará disponível em <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>.</p>
+<p>Isso nos permitirá ter código e scripts que são invariantes ao ambiente do cluster.
+A opção <code class="docutils literal notranslate"><span class="pre">-H</span></code> especifica qual será o diretório raiz do container. Por exemplo, se você
+tem seu código em <code class="docutils literal notranslate"><span class="pre">$HOME/Projeto12345/Versao35/</span></code>, você pode especificar
+<code class="docutils literal notranslate"><span class="pre">-H</span> <span class="pre">$HOME/Projeto12345/Versao35:/home</span></code>, assim o container terá acesso apenas ao código dentro de <code class="docutils literal notranslate"><span class="pre">Versao35</span></code>.</p>
+<p>Se você quiser executar vários comandos dentro do container, pode usar:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">singularity exec --nv -H $HOME:/home -B $SLURM_TMPDIR:/dataset/ \</span>
 <span class="go">    -B $SLURM_TMPDIR:/tmp_log/ -B $SCRATCH:/final_log/ \</span>
 <span class="gp">    $</span>SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;pwd &amp;&amp; ls &amp;&amp; python &lt;YOUR_CODE&gt;&#39;</span>
 </pre></div>
 </div>
-<section id="example-interactive-case-srun-salloc">
-<h4>Example: Interactive case (srun/salloc)<a class="headerlink" href="#example-interactive-case-srun-salloc" title="Link permanente para este cabeçalho"></a></h4>
-<p>Once you get an interactive session with SLURM, copy <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> and
-<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_DATASET&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code></p>
+<section id="exemplo-caso-interativo-srun-salloc">
+<h4>Exemplo: Caso interativo (srun/salloc)<a class="headerlink" href="#exemplo-caso-interativo-srun-salloc" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Depois de obter uma sessão interativa com o SLURM, copie <code class="docutils literal notranslate"><span class="pre">&lt;YOUR_CONTAINER&gt;</span></code> e
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR_DATASET&gt;</span></code> para <code class="docutils literal notranslate"><span class="pre">$SLURM_TMPDIR</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">0</span>.<span class="w"> </span>Get<span class="w"> </span>an<span class="w"> </span>interactive<span class="w"> </span>session
 <span class="gp">$ </span>srun<span class="w"> </span>--gres<span class="o">=</span>gpu:1
 <span class="gp"># </span><span class="m">1</span>.<span class="w"> </span>Copy<span class="w"> </span>your<span class="w"> </span>container<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>compute<span class="w"> </span>node
@@ -573,7 +564,7 @@ have access to the code inside <code class="docutils literal notranslate"><span 
 <span class="gp">$ </span>rsync<span class="w"> </span>-avz<span class="w"> </span><span class="nv">$SCRATCH</span>/&lt;YOUR_DATASET&gt;<span class="w"> </span><span class="nv">$SLURM_TMPDIR</span>
 </pre></div>
 </div>
-<p>Then use <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">shell</span></code> to get a shell inside the container</p>
+<p>Então, use o comando <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">shell</span></code> para obter um shell dentro do contêiner.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">3</span>.<span class="w"> </span>Get<span class="w"> </span>a<span class="w"> </span>shell<span class="w"> </span><span class="k">in</span><span class="w"> </span>your<span class="w"> </span>environment
 <span class="gp">$ </span>singularity<span class="w"> </span>shell<span class="w"> </span>--nv<span class="w"> </span><span class="se">\</span>
 <span class="w">        </span>-H<span class="w"> </span><span class="nv">$HOME</span>:/home<span class="w"> </span><span class="se">\</span>
@@ -598,7 +589,7 @@ have access to the code inside <code class="docutils literal notranslate"><span 
 <span class="w">        </span>python<span class="w"> </span>&lt;YOUR_CODE&gt;
 </pre></div>
 </div>
-<p>You can create also the following alias to make your life easier.</p>
+<p>Você também pode criar o seguinte alias para facilitar sua vida:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span>alias my_env=&#39;singularity exec --nv \
         -H $HOME:/home \
         -B $SLURM_TMPDIR:/dataset/ \
@@ -607,14 +598,14 @@ have access to the code inside <code class="docutils literal notranslate"><span 
         $SLURM_TMPDIR/&lt;YOUR_CONTAINER&gt;&#39;
 </pre></div>
 </div>
-<p>This will allow you to run any code with:</p>
+<p>Isso permitirá que você execute qualquer código com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">my_env python &lt;YOUR_CODE&gt;</span>
 </pre></div>
 </div>
 </section>
-<section id="example-sbatch-case">
-<h4>Example: sbatch case<a class="headerlink" href="#example-sbatch-case" title="Link permanente para este cabeçalho"></a></h4>
-<p>You can also create a <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> script:</p>
+<section id="exemplo-caso-sbatch">
+<h4>Exemplo: caso sbatch<a class="headerlink" href="#exemplo-caso-sbatch" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Você também pode criar um script <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/bash
 <span class="gp">#</span>SBATCH<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">6</span><span class="w">         </span><span class="c1"># Ask for 6 CPUs</span>
 <span class="gp">#</span>SBATCH<span class="w"> </span>--gres<span class="o">=</span>gpu:1<span class="w">              </span><span class="c1"># Ask for 1 GPU</span>
@@ -638,21 +629,20 @@ have access to the code inside <code class="docutils literal notranslate"><span 
 </pre></div>
 </div>
 </section>
-<section id="issue-with-pybullet-and-opengl-libraries">
-<h4>Issue with PyBullet and OpenGL libraries<a class="headerlink" href="#issue-with-pybullet-and-opengl-libraries" title="Link permanente para este cabeçalho"></a></h4>
-<p>If you are running certain gym environments that require <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you may
-encounter a problem when running your singularity instance with the Nvidia
-drivers using the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag. This happens because the <code class="docutils literal notranslate"><span class="pre">--nv</span></code> flag also
-provides the OpenGL libraries:</p>
+<section id="problema-com-as-bibliotecas-pybullet-e-opengl">
+<h4>Problema com as bibliotecas PyBullet e OpenGL<a class="headerlink" href="#problema-com-as-bibliotecas-pybullet-e-opengl" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>Se você estiver executando certos ambientes do gym que requerem o <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>,
+você pode encontrar um problema ao executar sua instância do singularity
+com os drivers Nvidia usando a flag <code class="docutils literal notranslate"><span class="pre">--nv</span></code>. Isso acontece porque a flag <code class="docutils literal notranslate"><span class="pre">--nv</span></code>
+também fornece as bibliotecas do OpenGL:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">libGL.so.1 =&gt; /.singularity.d/libs/libGL.so.1</span>
 <span class="go">libGLX.so.0 =&gt; /.singularity.d/libs/libGLX.so.0</span>
 </pre></div>
 </div>
-<p>If you don’t experience those problems with <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, you probably don’t need
-to address this. Otherwise, you can resolve those problems by <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span>
-<span class="pre">-y</span> <span class="pre">libosmesa6-dev</span> <span class="pre">mesa-utils</span> <span class="pre">mesa-utils-extra</span> <span class="pre">libgl1-mesa-glx</span></code>, and then making
-sure that your <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> points to those libraries before the ones in
-<code class="docutils literal notranslate"><span class="pre">/.singularity.d/libs</span></code>.</p>
+<p>Se você não está tendo esses problemas com <code class="docutils literal notranslate"><span class="pre">pyglet</span></code>, provavelmente não precisa se
+preocupar com isso. Caso contrário, você pode resolver esses problemas com <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span>
+<span class="pre">libosmesa6-dev</span> <span class="pre">mesa-utils</span> <span class="pre">mesa-utils-extra</span> <span class="pre">libgl1-mesa-glx</span></code> e, em seguida, certificar-se de que
+seu <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> aponte para essas bibliotecas antes das que estão em <code class="docutils literal notranslate"><span class="pre">/</span> <span class="pre">.singularity.d</span> <span class="pre">/</span> <span class="pre">libs</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">%</span>environment
 <span class="gp">        # </span>...
 <span class="go">        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/mesa:$LD_LIBRARY_PATH</span>
@@ -660,16 +650,15 @@ sure that your <code class="docutils literal notranslate"><span class="pre">LD_L
 </div>
 </section>
 <section id="apuana-cluster">
-<h4>Apuana cluster<a class="headerlink" href="#apuana-cluster" title="Link permanente para este cabeçalho"></a></h4>
-<p>On the Apuana cluster <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> is not yet defined, you should add the
-experiment results you want to keep in <code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;/</span></code>. In
-order to use the sbatch script above and to match other cluster environment’s
-names, you can define <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> as an alias for
-<code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;</span></code> with:</p>
+<h4>Apuana cluster<a class="headerlink" href="#apuana-cluster" title="Link permanente para este cabeçalho">¶</a></h4>
+<p>No cluster Apuana, <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> ainda não está definido, você deve adicionar os
+resultados do experimento que deseja manter em <code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;/</span></code>.
+Para usar o script sbatch acima e para corresponder a outros nomes de ambiente de
+cluster, você pode definir <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> como um alias para <code class="docutils literal notranslate"><span class="pre">/network/scratch/&lt;u&gt;/&lt;username&gt;</span></code> com:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">echo &quot;export SCRATCH=/network/scratch/${USER:0:1}/$USER&quot; &gt;&gt; ~/.bashrc</span>
 </pre></div>
 </div>
-<p>Then, you can follow the general procedure explained above.</p>
+<p>Então, você pode seguir o procedimento geral explicado acima.</p>
 </section>
 </section>
 </section>
@@ -689,35 +678,35 @@ names, you can define <code class="docutils literal notranslate"><span class="pr
     <h3><a href="../index.html">Tabela de Conteúdo</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Singularity</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a><ul>
-<li><a class="reference internal" href="#what-is-singularity">What is Singularity?</a></li>
-<li><a class="reference internal" href="#links-to-official-documentation">Links to official documentation</a></li>
-<li><a class="reference internal" href="#overview-of-the-steps-used-in-practice">Overview of the steps used in practice</a></li>
-<li><a class="reference internal" href="#nope-not-on-macos">Nope, not on MacOS</a></li>
-<li><a class="reference internal" href="#where-to-build-images">Where to build images</a></li>
+<li><a class="reference internal" href="#visao-geral">Visão Geral</a><ul>
+<li><a class="reference internal" href="#o-que-e-singularidade">O que é singularidade</a></li>
+<li><a class="reference internal" href="#links-para-documentacao-oficial">Links para documentação oficial</a></li>
+<li><a class="reference internal" href="#visao-gerald-dos-passos-usados-na-pratica">Visão gerald dos passos usados na prática</a></li>
+<li><a class="reference internal" href="#nao-nao-no-macos">Não, não no MacOS</a></li>
+<li><a class="reference internal" href="#onde-construir-imagens">Onde construir imagens</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#building-the-containers">Building the containers</a><ul>
-<li><a class="reference internal" href="#first-way-build-and-use-a-sandbox">First way: Build and use a sandbox</a><ul>
-<li><a class="reference internal" href="#download-containers-from-the-web">Download containers from the web</a></li>
-<li><a class="reference internal" href="#how-to-add-or-install-stuff-in-a-container">How to add or install stuff in a container</a></li>
-<li><a class="reference internal" href="#creating-useful-directories">Creating useful directories</a></li>
-<li><a class="reference internal" href="#testing">Testing</a></li>
-<li><a class="reference internal" href="#creating-a-new-image-from-the-sandbox">Creating a new image from the sandbox</a></li>
+<li><a class="reference internal" href="#construindo-os-containers">Construindo os containers</a><ul>
+<li><a class="reference internal" href="#primeira-maneira-construir-e-usar-um-sandbox">Primeira maneira: construir e usar um sandbox</a><ul>
+<li><a class="reference internal" href="#baixando-containers-da-web">Baixando containers da web.</a></li>
+<li><a class="reference internal" href="#como-adicionar-ou-instalar-coisas-em-um-container">Como adicionar ou instalar coisas em um container</a></li>
+<li><a class="reference internal" href="#criando-diretorios-uteis">Criando diretórios úteis</a></li>
+<li><a class="reference internal" href="#testes">Testes</a></li>
+<li><a class="reference internal" href="#criando-uma-nova-imagem-a-partir-do-sandbox">Criando uma nova imagem a partir do sandbox</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#second-way-use-recipes">Second way: Use recipes</a><ul>
-<li><a class="reference internal" href="#build-recipe-on-singularity-hub">Build recipe on singularity hub</a></li>
-<li><a class="reference internal" href="#example-recipe-with-openai-gym-mujoco-and-miniworld">Example: Recipe with OpenAI gym, MuJoCo and Miniworld</a></li>
+<li><a class="reference internal" href="#segunda-opcao-use-receitas">Segunda opção: Use receitas</a><ul>
+<li><a class="reference internal" href="#construir-receita-no-singularity-hub">Construir receita no Singularity Hub</a></li>
+<li><a class="reference internal" href="#exemplo-receita-com-openai-gym-mujoco-e-miniworld">Exemplo: Receita com OpenAI gym, MuJoCo e Miniworld</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-containers-on-clusters">Using containers on clusters</a><ul>
-<li><a class="reference internal" href="#how-to-use-containers-on-clusters">How to use containers on clusters</a><ul>
-<li><a class="reference internal" href="#example-interactive-case-srun-salloc">Example: Interactive case (srun/salloc)</a></li>
-<li><a class="reference internal" href="#example-sbatch-case">Example: sbatch case</a></li>
-<li><a class="reference internal" href="#issue-with-pybullet-and-opengl-libraries">Issue with PyBullet and OpenGL libraries</a></li>
+<li><a class="reference internal" href="#usando-conteiners-no-cluster">Usando Conteiners no cluster</a><ul>
+<li><a class="reference internal" href="#como-usar-conteiners-no-cluster">Como usar conteiners no cluster</a><ul>
+<li><a class="reference internal" href="#exemplo-caso-interativo-srun-salloc">Exemplo: Caso interativo (srun/salloc)</a></li>
+<li><a class="reference internal" href="#exemplo-caso-sbatch">Exemplo: caso sbatch</a></li>
+<li><a class="reference internal" href="#problema-com-as-bibliotecas-pybullet-e-opengl">Problema com as bibliotecas PyBullet e OpenGL</a></li>
 <li><a class="reference internal" href="#apuana-cluster">Apuana cluster</a></li>
 </ul>
 </li>
@@ -761,7 +750,7 @@ names, you can define <code class="docutils literal notranslate"><span class="pr
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023.
-      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.1.3.
+      Criada usando <a href="https://www.sphinx-doc.org/pt_BR/master">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

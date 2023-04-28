@@ -1,12 +1,12 @@
-Multiple Nodes
-==============
+Nós Múltiplos
+=============
 
-Data Parallel
--------------
+Paralelismo de Dados
+--------------------
 
 .. image:: dataparallel.png
 
-Request 3 nodes with at least 4 GPUs each.
+Solicite 3 nós com pelo menos 4 GPUs cada um.
 
 .. code-block:: console
 
@@ -50,7 +50,7 @@ Request 3 nodes with at least 4 GPUs each.
         training_script.py
 
 
-You can find below a pytorch script outline on what a multi-node trainer could look like.
+Você pode encontrar abaixo um esboço de um script do PyTorch sobre como um treinador multi-nó pode ser elaborado.
 
 
 .. code-block:: python
@@ -161,6 +161,7 @@ You can find below a pytorch script outline on what a multi-node trainer could l
 
 
 .. note::
-
-    To bypass Python GIL (Global interpreter lock) pytorch spawn one process for each GPU.
-    In the example above this means at least 12 processes are spawn, at least 4 on each node.
+    
+    "Para contornar o GIL (Bloqueio Global do Interpretador) do Python,
+    o PyTorch cria um processo para cada GPU. No exemplo acima, isso 
+    significa que pelo menos 12 processos são criados, pelo menos 4 em cada nó."

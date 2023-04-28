@@ -32,7 +32,7 @@ language = 'pt_BR'
 
 html_theme = 'groundwork'
 html_theme_path = ["."]
-html_static_path = ['/home/barad-dur/Apuana-Cluster-Documentacao/docs/build/_static']
+html_static_path = ['/home/guilherme/Apuana-Cluster-Documentacao/docs/build/_static']
 
 #html_theme_path = [sphinx_theme.get_html_theme_path()]
-html_logo = '/home/barad-dur/Apuana-Cluster-Documentacao/docs/source/cin-logo.png'
+html_logo = '/home/guilherme/Apuana-Cluster-Documentacao/docs/source/cin-logo.png'

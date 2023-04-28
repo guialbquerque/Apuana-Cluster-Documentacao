@@ -1,72 +1,65 @@
-Parts of a computing cluster
-****************************
+Partes de um cluster de computação
+**********************************
 
-To provide high performance computation capabilities, clusters can
-combine hundreds to thousands of computers, called *nodes*, which are all
-inter-connected with a high-performance communication network. Most nodes are
-designed for high-performance computations, but clusters can also use
-specialized nodes to offer parallel file systems, databases, login nodes and
-even the cluster scheduling functionality as pictured in the image below.
+Para fornecer capacidades de computação de alto desempenho, clusters podem combinar
+centenas a milhares de computadores, chamados de nós, que são todos interconectados por
+uma rede de comunicação de alto desempenho. A maioria dos nós são projetados para cálculos
+de alto desempenho, mas clusters também podem usar nós especializados para oferecer sistemas
+de arquivos paralelos, bancos de dados, nós de login e até mesmo a funcionalidade de agendamento
+do cluster, conforme ilustrado na imagem abaixo.
 
 .. image:: cluster_overview2.png
 
-We will overview the different types of nodes which you can encounter on a
-typical cluster.
+Vamos revisar os diferentes tipos de nós que você pode encontrar em um cluster típico.
 
 
-The login nodes
+Os nós de login
 ===============
 
-To execute computing processes on a cluster, you must first connect to a
-cluster and this is accomplished through a *login node*. These so-called
-login nodes are the entry point to most clusters.
 
-Another entry point to some clusters such as the Mila cluster is the JupyterHub
-web interface, but we'll read about that later. For now let's return to the
-subject of this section; Login nodes. To connect to these, you would typically
-use a remote shell connection. The most usual tool to do so is SSH. You'll hear
-and read a lot about this tool. Imagine it as a very long (and somewhat
-magical) extension cord which connects the computer you are using now, such as
-your laptop, to a remote computer's terminal shell. You might already know what
-a terminal shell is if you ever used the command line.
+Para executar processos de computação em um cluster, você primeiro deve se conectar
+a um cluster e isso é feito através de um *nó de login*. Esses chamados nós de login
+são o ponto de entrada para a maioria dos clusters.
 
-
-The compute nodes
-=================
-
-In the field of artificial intelligence, you will usually be on the hunt for
-GPUs. In most clusters, the compute nodes are the ones with GPU capacity.
-
-While there is a general paradigm to tend towards a homogeneous configuration
-for nodes, this is not always possible in the field of artificial intelligence
-as the hardware evolve rapidly as is being complemented by new hardware and so
-on. Hence, you will often read about computational node classes. Some of which
-might have different GPU models or even no GPU at all. For the Mila cluster you
-will find this information in the :ref:`Node profile description` section. For
-now, you should note that is important to keep in mind that you should be aware
-of *which* nodes your code is running on.  More on that later.
+Outro ponto de entrada para alguns clusters, como o cluster Mila, é a interface web JupyterHub,
+mas leremos sobre isso mais tarde. Por enquanto, voltemos ao assunto desta seção: os nós de login.
+Para se conectar a eles, você normalmente usaria uma conexão de shell remoto. A ferramenta mais comum
+para fazer isso é o SSH. Você ouvirá e lerá muito sobre essa ferramenta. Imagine-a como um cabo de extensão
+muito longo (e um pouco mágico) que conecta o computador que você está usando agora, como seu laptop, ao terminal
+shell de um computador remoto. Você pode já saber o que é um terminal shell se já usou a linha de comando.
 
 
-The storage nodes
-=================
+Os nós de computação
+====================
 
-Some computers on a cluster function to only store and serve files.  While the
-name of these computers might matter to some, as a user, you'll only be
-concerned about the path to the data. More on that in the :ref:`Processing
-data` section.
+No campo da inteligência artificial, geralmente você estará à procura de GPUs.
+Na maioria dos clusters, os nós de computação são aqueles com capacidade de GPU.
+
+Embora haja um paradigma geral de tendência para uma configuração homogênea para nós,
+isso nem sempre é possível no campo da inteligência artificial, já que o hardware evolui
+rapidamente e é complementado por novos hardware, e assim por diante. Portanto, você frequentemente
+lerá sobre classes de nós computacionais. Alguns deles podem ter modelos de GPU diferentes ou até
+mesmo nenhuma GPU. 
+
+Os nós de armazenamento
+=======================
+
+Alguns computadores em um cluster funcionam apenas para armazenar e servir arquivos.
+Embora o nome desses computadores possa ser importante para alguns, como usuário,
+você só se preocupa com o caminho dos dados. Mais sobre isso na seção :ref:`Processamento de dados`.
 
 
-Different nodes for different uses
-==================================
+Nós diferentes para usos diferentes
+===================================
 
-It is important to note here the difference in intended uses between the
-compute nodes and the login nodes. While the compute nodes are meant for heavy
-computation, the login nodes are not.
+É importante notar aqui a diferença nos usos pretendidos entre os nós de computação
+e os nós de login. Enquanto os nós de computação são destinados a computação pesada,
+os nós de login não são.
 
-The login nodes however are used by everyone who uses the cluster and care must
-be taken not to overburden these nodes. Consequently, only very short and light
-processes should be run on these otherwise the cluster may become inaccessible.
-In other words, please refrain from executing long or compute intensive
-processes on login nodes because it affects all other users. In some cases, you
-will also find that doing so might get you into trouble.
+Os nós de login, no entanto, são usados por todos que usam o cluster e deve-se tomar cuidado
+para não sobrecarregá-los. Consequentemente, apenas processos muito curtos e leves devem ser
+executados nesses nós, caso contrário, o cluster pode se tornar inacessível. Em outras palavras,
+por favor, abstenha-se de executar processos longos ou de computação intensiva em nós de login,
+pois isso afeta todos os outros usuários. Em alguns casos, você também descobrirá que fazer isso
+pode lhe causar problemas.
 

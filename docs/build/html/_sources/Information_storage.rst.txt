@@ -1,6 +1,6 @@
 
-Storage
-=======
+Armazenamnto
+============
 
 
 ====================================================== =========== ====================================== =================== ====== ============
@@ -20,24 +20,17 @@ Path                                                   Performance Usage        
 ``$ARCHIVE`` or ``/network/archive/<u>/<username>/``   Low         * Long-term personal storage           500GB               no     no
 ====================================================== =========== ====================================== =================== ====== ============
 
-.. note:: The ``$HOME`` file system is backed up once a day. For any file
-   restoration request, file a request to `Apuana's IT support` with the path to the file or directory to
-   restore, with the required date.
-
-.. warning:: Currently there is no backup system for any other file systems of
-   the Mila cluster. Storage local to personal computers, Google Drive and other
-   related solutions should be used to backup important data
+.. note:: O sistema de arquivos ``$HOME`` é copiado uma vez por dia. Para solicitar a restauração de um arquivo,
+faça uma solicitação ao `suporte de TI do Apuana` com o caminho do arquivo ou diretório a ser restaurado
+e a data necessária.
 
 $HOME
 -----
 
-``$HOME`` is appropriate for codes and libraries which are small and read once,
-as well as the experimental results that would be needed at a later time (e.g.
-the weights of a network referenced in a paper).
-
-Quotas are enabled on ``$HOME`` for both disk capacity (blocks) and number of
-files (inodes). The limits for blocks and inodes are respectively 100GiB and 1
-million per user. The command to check the quota usage from a login node is:
+As quotas estão habilitadas em ``$HOME`` tanto para capacidade de disco (blocos)
+quanto para o número de arquivos (inodes). Os limites para blocos e inodes
+são, respectivamente, 100GiB e 1 milhão por usuário. O comando para verificar
+o uso da quota a partir de um nó de login é:
 
 .. code-block:: console
 
@@ -46,56 +39,60 @@ million per user. The command to check the quota usage from a login node is:
 $SCRATCH
 --------
 
-``$SCRATCH`` can be used to store processed datasets, work in progress datasets
-or temporary job results. Its block size is optimized for small files which
-minimizes the performance hit of working on extracted datasets.
+``$SCRATCH`` pode ser usado para armazenar conjuntos de dados processados, conjuntos
+de dados em andamento ou resultados temporários de trabalho. Seu tamanho de bloco
+é otimizado para arquivos pequenos, o que minimiza o impacto no desempenho ao
+trabalhar em conjuntos de dados extraídos.
 
-.. note:: **Auto-cleanup**: this file system is cleared on a weekly basis,
-   files not used for more than 90 days will be deleted.
+.. note:: **Auto-limpeza**: este sistema de arquivos é limpo semanalmente,
+    arquivos que não são usados há mais de 90 dias serão excluídos.
 
 $SLURM_TMPDIR
 -------------
 
-``$SLURM_TMPDIR`` points to the local disk of the node on which a job is
-running. It should be used to copy the data on the node at the beginning of the
-job and write intermediate checkpoints. This folder is cleared after each job.
+``$SLURM_TMPDIR`` aponta para o disco local do nó em que um trabalho está sendo executado.
+Ele deve ser usado para copiar os dados no nó no início do trabalho e gravar pontos
+de verificação intermediários. Esta pasta é limpa após cada trabalho.
 
-projects
+Projetos
 --------
 
-``projects`` can be used for collaborative projects. It aims to ease the
-sharing of data between users working on a long-term project.
+Os ``projetos`` podem ser usados para projetos colaborativos. Tem como objetivo
+facilitar o compartilhamento de dados entre usuários que trabalham em um projeto
+de longo prazo.
 
-Quotas are enabled on ``projects`` for both disk capacity (blocks) and number
-of files (inodes). The limits for blocks and inodes are respectively 200GiB and
-1 million per user and per group.
+As cotas estão habilitadas em "projetos" tanto para a capacidade do disco (blocos)
+quanto para o número de arquivos (inodes). Os limites para blocos e inodes são,
+respectivamente, de 200 GiB e 1 milhão por usuário e por grupo.
 
 $ARCHIVE
 --------
 
-``$ARCHIVE`` purpose is to store data other than datasets that has to be kept
-long-term (e.g.  generated samples, logs, data relevant for paper submission).
+O objetivo do ``$ARCHIVE`` é armazenar dados que não sejam de conjuntos de dados e 
+que precisam ser mantidos a longo prazo (por exemplo, amostras geradas, logs,
+dados relevantes para a submissão de artigos).
 
-``$ARCHIVE`` is only available on the **login** nodes. Because this file system
-is tuned for large files, it is recommended to archive your directories. For
-example, to archive the results of an experiment in
-``$SCRATCH/my_experiment_results/``, run the commands below from a login node:
+``$ARCHIVE`` está disponível apenas nos nós de login. Como esse sistema de arquivos
+é ajustado para arquivos grandes, é recomendável arquivar seus diretórios.
+Por exemplo, para arquivar os resultados de um experimento em ``$SCRATCH/my_experiment_results/``,
+execute os comandos abaixo a partir de um nó de login:
 
 .. code-block:: console
 
    cd $SCRATCH
    tar cJf $ARCHIVE/my_experiment_results.tar.xz --xattrs my_experiment_results
 
-Disk capacity quotas are enabled on ``$ARCHIVE``. The soft limit per user is
-500GB, the hard limit is 550GB. The grace time is 7 days. This means that one
-can use more than 500GB for 7 days before the file system enforces quota.
-However, it is not possible to use more than 550GB.
-The command to check the quota usage from a login node is `df`:
+As cotas de capacidade de disco estão habilitadas no ``$ARCHIVE``. O limite
+suave por usuário é de 500 GB e o limite rígido é de 550 GB. O período
+de graça é de 7 dias, o que significa que pode-se usar mais de 500 GB
+por 7 dias antes que o sistema de arquivos execute a cota. No entanto,
+não é possível usar mais de 550 GB. O comando para verificar o uso da
+cota a partir de um nó de login é `df``:
 
 .. code-block:: console
 
    df -h $ARCHIVE
 
-.. note:: There is **NO** backup of this file system.
+.. note:: **NÃO** HÁ backup deste sistema de arquivos.
 
 
