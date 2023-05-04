@@ -31,9 +31,11 @@
 
 ### As seguintes linhas em conf.py precisarao ser atualizadas:
 
-### html_static_path = ['/home/barad-dur/Apuana-Cluster-Documentacao/docs/build/_static']
-### html_logo = '/home/barad-dur/Apuana-Cluster-Documentacao/docs/source/cin-logo.png'
-### Considerando que toda a construcao foi feita num sistema linux e na home do sistema, basta alterar /home/USUARIO/Apuana-Cluster-Documentacao/docs/build/_static
+### html_static_path = ['/home/USUARIO/Apuana-Cluster-Documentacao/docs/build/_static']
+### html_logo = '/home/USUARIO/Apuana-Cluster-Documentacao/docs/source/cin-logo.png'
+### Considerando que toda a construcao foi feita num sistema linux e na home do sistema, substituir USUARIO pelo nome de usuario da máquina.
+### Caso tenha clonado em outro local, substituir pelo caminho correto.
+
 
 ### Após procedimentos acima, aplicar o seguinte comando para gerar renderização na web:
 
